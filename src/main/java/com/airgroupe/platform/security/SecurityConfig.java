@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);   // <-- ICI l'erreur disparaît si l'import est bon
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -66,7 +65,8 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedPage("/admin/login?accessDenied")
-                );
+                )
+                .csrf(csrf -> csrf.disable()); // Désactive CSRF pour simplifier (à réactiver si besoin)
 
         return http.build();
     }
@@ -78,13 +78,19 @@ public class SecurityConfig {
         http
                 .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
+                        // Pages publiques
                         .requestMatchers("/", "/services", "/realisations", "/contact", "/submit-contact").permitAll()
+                        // Ressources statiques
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        // API publique
                         .requestMatchers("/api/v1/**").permitAll()
+                        // Page de login publique - AJOUT OBLIGATOIRE pour éviter la boucle
+                        .requestMatchers("/login", "/login?error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/", true)   // Après login, retour à l'accueil
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -94,7 +100,8 @@ public class SecurityConfig {
                 .rememberMe(remember -> remember
                         .key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)
-                );
+                )
+                .csrf(csrf -> csrf.disable()); // Désactive CSRF pour simplifier
 
         return http.build();
     }

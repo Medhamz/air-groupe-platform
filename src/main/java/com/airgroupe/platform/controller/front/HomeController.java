@@ -27,7 +27,7 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model) {
         List<ServiceEntity> services = serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
-        model.addAttribute("services", services.stream().limit(4).toList()); // Top 4 pour l'accueil
+        model.addAttribute("services", services.stream().limit(4).toList());
         return "front/index";
     }
 
@@ -71,6 +71,6 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "login";   // Cette vue doit exister dans templates/login.html
     }
 }
