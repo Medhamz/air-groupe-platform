@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aïr Groupe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            <i class="fas fa-mountain"></i> Aïr Groupe
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="/services">Nos Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="/realisations">Réalisations</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                <!-- Le lien Admin est SUPPRIMÉ ici -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="footer" class="footer bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2025 Aïr Groupe - Agadez, Niger. Tous droits réservés.</p>
+        <p>
+            <i class="fas fa-phone"></i> +227 96967474 / 90967474 |
+            <i class="fas fa-envelope"></i> tidjani22686@gmail.com
+        </p>
+    </div>
+</footer>
+</body>
+</html>
