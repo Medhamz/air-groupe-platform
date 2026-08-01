@@ -3,7 +3,6 @@
 <head th:replace="~{front/fragments/layout :: head}"></head>
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
-
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Nos Réalisations</h1>
@@ -14,14 +13,13 @@
                     <img th:src="${proj.imageUrl}" alt="Projet" class="img-fluid">
                     <div class="overlay">
                         <h5 th:text="${proj.title}">Titre</h5>
-                        <p th:text="${proj.description}" class="small mb-0">Description</p>
+                        <p class="small text-secondary" th:text="${proj.description}">Description</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 </body>

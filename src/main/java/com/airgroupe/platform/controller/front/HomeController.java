@@ -1,5 +1,6 @@
 package com.airgroupe.platform.controller.front;
 
+import com.airgroupe.platform.dto.ProjectDto;
 import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
@@ -20,7 +21,8 @@ public class HomeController {
     private final ServiceRepository serviceRepository;
     private final ContactMessageRepository contactMessageRepository;
 
-    public HomeController(ServiceRepository serviceRepository, ContactMessageRepository contactMessageRepository) {
+    public HomeController(ServiceRepository serviceRepository,
+                          ContactMessageRepository contactMessageRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
     }
@@ -40,7 +42,7 @@ public class HomeController {
 
     @GetMapping("/realisations")
     public String realisations(Model model) {
-        // Données de démonstration (à remplacer par des données de la base de données plus tard)
+        // Données de démonstration (à remplacer par la base de données plus tard)
         List<ProjectDto> projects = new ArrayList<>();
         projects.add(new ProjectDto(
                 "Construction du pont de Niamey",
@@ -68,13 +70,12 @@ public class HomeController {
     }
 
     @PostMapping("/submit-contact")
-    public String submitContact(
-            @RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String phone,
-            @RequestParam String subject,
-            @RequestParam String message,
-            RedirectAttributes redirectAttributes) {
+    public String submitContact(@RequestParam String name,
+                                @RequestParam String email,
+                                @RequestParam String phone,
+                                @RequestParam String subject,
+                                @RequestParam String message,
+                                RedirectAttributes redirectAttributes) {
 
         ContactMessage msg = new ContactMessage();
         msg.setName(name);
@@ -91,23 +92,6 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";   // Cette vue doit exister dans templates/login.html (si nécessaire)
-    }
-
-    // DTO interne pour les projets (si vous n'avez pas encore d'entité Project)
-    private static class ProjectDto {
-        private String title;
-        private String description;
-        private String imageUrl;
-
-        public ProjectDto(String title, String description, String imageUrl) {
-            this.title = title;
-            this.description = description;
-            this.imageUrl = imageUrl;
-        }
-
-        public String getTitle() { return title; }
-        public String getDescription() { return description; }
-        public String getImageUrl() { return imageUrl; }
+        return "login";   // Si vous utilisez encore cette page
     }
 }

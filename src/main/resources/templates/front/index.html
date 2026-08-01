@@ -8,31 +8,31 @@
 <section class="hero text-center">
     <div class="container">
         <h1 class="display-3 fw-bold">Bienvenue chez Aïr Groupe</h1>
-        <p class="lead mx-auto" style="max-width: 700px;">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
-        <a href="/services" class="btn btn-primary btn-lg rounded-pill px-5">Découvrir nos services</a>
+        <p class="lead mx-auto">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
+        <a href="/services" class="btn btn-primary btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
     </div>
 </section>
 
 <!-- Services en avant -->
 <section class="py-5 section-animate">
     <div class="container">
-        <h2 class="text-center section-title">Nos Domaines d'Excellence</h2>
+        <div class="text-center">
+            <h2 class="section-title">Nos Domaines d'Excellence</h2>
+        </div>
         <div class="row g-4">
             <div class="col-md-3" th:each="s : ${services}">
-                <div class="card service-card h-100 text-center p-4">
-                    <div class="icon-wrapper" th:classappend="${s.iconClass}">
-                        <i class="fas" th:class="${s.iconClass}"></i>
-                    </div>
+                <div class="service-card text-center">
+                    <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
                     <h5 class="card-title" th:text="${s.name}">Service</h5>
-                    <p class="card-text small text-secondary" th:text="${s.description}">Description</p>
+                    <p class="small text-secondary" th:text="${s.description}">Description</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section à propos (statistiques) -->
-<section class="py-5 bg-light section-animate">
+<!-- Statistiques -->
+<section class="py-5 bg-white section-animate">
     <div class="container text-center">
         <div class="row g-4">
             <div class="col-md-3 col-6">
@@ -51,6 +51,93 @@
                 <h2 class="display-4 fw-bold text-primary">100%</h2>
                 <p class="text-secondary">Satisfaction client</p>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Témoignages -->
+<section class="py-5 section-animate">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Ce que disent nos clients</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Aïr Groupe a réalisé la construction de notre nouveau siège avec un professionnalisme remarquable. Délais respectés, qualité irréprochable."</p>
+                    <p class="client-name">- M. Ibrahim, Directeur Général</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"La location d'engins lourds auprès d'Aïr Groupe nous a permis de finaliser notre chantier dans les temps. Matériel fiable et équipe réactive."</p>
+                    <p class="client-name">- Mme Aïcha, Responsable logistique</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Un partenaire de confiance pour nos prestations de transport. Ponctualité, sécurité et tarifs compétitifs."</p>
+                    <p class="client-name">- M. Oumar, Entrepreneur</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5 bg-white section-animate">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Questions fréquentes</h2>
+        </div>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Quels types de services proposez-vous ?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Nous couvrons le BTP, l'hydraulique, le commerce général, la location et vente d'engins lourds, ainsi que le transport et la logistique.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Travaillez-vous uniquement à Agadez ?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Nous intervenons sur tout le Niger, avec une expérience particulière dans la région d'Agadez et les zones rurales.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Comment puis-je obtenir un devis ?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Vous pouvez nous contacter via le formulaire de contact ou par téléphone. Nous vous répondrons dans les 24h.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 section-animate">
+    <div class="container">
+        <div class="newsletter text-center">
+            <h3 class="text-white">Restez informé</h3>
+            <p>Recevez nos actualités et nos offres spéciales.</p>
+            <form id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3">
+                <input type="email" placeholder="Votre email" required>
+                <button type="submit" class="btn">S'abonner</button>
+            </form>
         </div>
     </div>
 </section>

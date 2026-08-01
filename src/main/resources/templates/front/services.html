@@ -3,25 +3,21 @@
 <head th:replace="~{front/fragments/layout :: head}"></head>
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
-
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Nos Services</h1>
         <p class="text-center text-secondary mb-5">Découvrez l'ensemble de nos prestations de qualité.</p>
         <div class="row g-4">
             <div class="col-md-4" th:each="s : ${services}">
-                <div class="card service-card h-100 text-center p-4">
-                    <div class="icon-wrapper" th:classappend="${s.iconClass}">
-                        <i class="fas" th:class="${s.iconClass}"></i>
-                    </div>
+                <div class="service-card text-center p-4">
+                    <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
                     <h5 class="card-title" th:text="${s.name}"></h5>
-                    <p class="card-text small text-secondary" th:text="${s.description}"></p>
+                    <p class="small text-secondary" th:text="${s.description}"></p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 </body>
