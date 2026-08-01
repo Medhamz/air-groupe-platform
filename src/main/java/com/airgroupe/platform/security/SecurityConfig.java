@@ -43,7 +43,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // ========== ADMIN BACK-OFFICE ==========
+    // ========== ADMIN BACK-OFFICE (protégé) ==========
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
@@ -66,42 +66,29 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .accessDeniedPage("/admin/login?accessDenied")
                 )
-                .csrf(csrf -> csrf.disable()); // Désactive CSRF pour simplifier (à réactiver si besoin)
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-    // ========== PUBLIC FRONT-OFFICE ==========
+    // ========== PUBLIC FRONT-OFFICE (totalement ouvert) ==========
     @Bean
     @Order(2)
     public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
-                        // Pages publiques
-                        .requestMatchers("/", "/services", "/realisations", "/contact", "/submit-contact").permitAll()
-                        // Ressources statiques
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        // API publique
-                        .requestMatchers("/api/v1/**").permitAll()
-                        // Page de login publique - AJOUT OBLIGATOIRE pour éviter la boucle
-                        .requestMatchers("/login", "/login?error").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()   // 🔥 TOUT le site est public
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)   // Après login, retour à l'accueil
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .rememberMe(remember -> remember
-                        .key("uniqueAndSecret")
-                        .tokenValiditySeconds(86400)
-                )
-                .csrf(csrf -> csrf.disable()); // Désactive CSRF pour simplifier
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
