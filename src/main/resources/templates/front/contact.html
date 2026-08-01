@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{front/fragments/layout :: head}"></head>
+<body>
+<div th:replace="~{front/fragments/layout :: navbar}"></div>
+
+<section class="py-5 section-animate">
+    <div class="container">
+        <h1 class="text-center section-title">Contactez-nous</h1>
+        <p class="text-center text-secondary mb-5">Nous sommes à votre disposition pour tout renseignement.</p>
+
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="contact-form">
+                    <form th:action="@{/submit-contact}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Nom complet</label>
+                            <input type="text" name="name" class="form-control" placeholder="Votre nom" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Votre email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Téléphone</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="Votre téléphone">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sujet</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Sujet">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Votre message..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5">Envoyer</button>
+                    </form>
+                    <div th:if="${success}" class="alert alert-success mt-3" role="alert">
+                        <i class="fas fa-check-circle me-2"></i><span th:text="${success}">Message envoyé</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="contact-info">
+                    <h4>Nos coordonnées</h4>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>Agadez, quartier aéroport, Niger</p>
+                    <p><i class="fas fa-phone me-2"></i>+227 96 96 74 74 / +227 90 96 74 74</p>
+                    <p><i class="fas fa-envelope me-2"></i>tidjani22686@gmail.com</p>
+                    <p><i class="fas fa-clock me-2"></i>Lundi - Vendredi: 8h - 18h</p>
+                    <hr>
+                    <h5>Nos services</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-primary me-2"></i>BTP & Hydraulique</li>
+                        <li><i class="fas fa-check-circle text-primary me-2"></i>Location d'engins lourds</li>
+                        <li><i class="fas fa-check-circle text-primary me-2"></i>Transport et logistique</li>
+                        <li><i class="fas fa-check-circle text-primary me-2"></i>Commerce général</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{front/fragments/layout :: footer}"></div>
+<div th:replace="~{front/fragments/layout :: scripts}"></div>
+</body>
+</html>
