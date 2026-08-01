@@ -2,104 +2,86 @@
    VARIABLES & RESET
 ============================================ */
 :root {
-    --primary: #4facfe;
-    --secondary: #00f2fe;
-    --accent: #f093fb;
-    --dark: #2d3436;
-    --light: #f8f9fa;
-    --gradient-main: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
+    --primary: #1a2a3a;          /* Bleu nuit profond */
+    --primary-light: #2c3e50;
+    --gold: #d4af37;             /* Or */
+    --gold-light: #f1c40f;
+    --white: #f8f9fa;
+    --gray: #6c757d;
+    --gradient-main: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
+    --shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     --radius: 16px;
-    --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: #f0f4f8;
-    color: var(--dark);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+    color: var(--primary);
     padding-top: 76px;
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
 /* ============================================
-   TYPOGRAPHIE & LIENS
+   TYPOGRAPHIE
 ============================================ */
-h1, h2, h3, h4 {
-    font-weight: 700;
-    letter-spacing: -0.02em;
-}
-a {
-    text-decoration: none;
-    transition: color var(--transition);
-}
-a:hover {
-    color: var(--primary);
-}
+h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
+a { text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--gold); }
 
 /* ============================================
    BOUTONS
 ============================================ */
-.btn-gradient {
-    background: var(--gradient-main);
+.btn-gold {
+    background: var(--gradient-gold);
     border: none;
-    padding: 12px 36px;
+    padding: 14px 40px;
     border-radius: 50px;
-    color: #fff;
-    font-weight: 600;
+    color: #1a2a3a;
+    font-weight: 700;
     transition: all var(--transition);
-    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.35);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
 }
-.btn-gradient:hover {
-    transform: scale(1.04);
-    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
-    color: #fff;
+.btn-gold:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+    color: #1a2a3a;
 }
-.btn-outline-gradient {
+.btn-outline-gold {
     background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    padding: 10px 30px;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 12px 35px;
     border-radius: 50px;
-    font-weight: 600;
+    font-weight: 700;
     transition: all var(--transition);
 }
-.btn-outline-gradient:hover {
-    background: var(--gradient-main);
-    color: #fff;
-    border-color: transparent;
+.btn-outline-gold:hover {
+    background: var(--gold);
+    color: #1a2a3a;
 }
 
 /* ============================================
    NAVBAR
 ============================================ */
 .navbar {
-    backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.80) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(20px);
+    background: rgba(26, 42, 58, 0.85) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 .navbar-brand {
     font-weight: 800;
-    font-size: 1.6rem;
-    background: var(--gradient-main);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent !important;
+    font-size: 1.8rem;
+    color: var(--gold) !important;
 }
-.navbar-brand i {
-    color: var(--accent);
-    margin-right: 6px;
-}
+.navbar-brand i { color: var(--gold); margin-right: 8px; }
 .nav-link {
     font-weight: 600;
-    color: var(--dark) !important;
-    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin: 0 12px;
     position: relative;
     transition: color var(--transition);
 }
@@ -110,17 +92,13 @@ a:hover {
     left: 0;
     width: 0;
     height: 3px;
-    background: var(--gradient-main);
+    background: var(--gradient-gold);
     border-radius: 4px;
     transition: width var(--transition);
 }
 .nav-link:hover::after,
-.nav-link.active::after {
-    width: 100%;
-}
-.nav-link:hover {
-    color: var(--primary) !important;
-}
+.nav-link.active::after { width: 100%; }
+.nav-link:hover { color: var(--gold) !important; }
 
 /* ============================================
    HERO
@@ -139,47 +117,44 @@ a:hover {
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 500px;
-    height: 500px;
-    background: rgba(255, 255, 255, 0.12);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%);
     border-radius: 50%;
-    pointer-events: none;
 }
 .hero::after {
     content: '';
     position: absolute;
     bottom: -20%;
     left: -5%;
-    width: 400px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.08);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
     border-radius: 50%;
-    pointer-events: none;
 }
 .hero h1 {
-    font-size: 4rem;
+    font-size: 4.2rem;
     font-weight: 800;
     letter-spacing: -2px;
     animation: fadeUp 0.8s ease;
 }
+.hero h1 span { color: var(--gold); }
 .hero p {
     font-size: 1.4rem;
-    opacity: 0.95;
+    opacity: 0.9;
     max-width: 700px;
     margin: 20px auto 30px;
     animation: fadeUp 0.8s ease 0.2s both;
 }
-.hero .btn {
-    animation: fadeUp 0.8s ease 0.4s both;
-}
+.hero .btn { animation: fadeUp 0.8s ease 0.4s both; }
 
 /* ============================================
-   SECTIONS
+   SECTION TITLE
 ============================================ */
 .section-title {
     font-size: 2.8rem;
     font-weight: 800;
-    color: var(--dark);
+    color: var(--primary);
     position: relative;
     display: inline-block;
     margin-bottom: 50px;
@@ -189,7 +164,7 @@ a:hover {
     display: block;
     width: 80px;
     height: 5px;
-    background: var(--gradient-main);
+    background: var(--gradient-gold);
     margin: 12px auto 0;
     border-radius: 4px;
 }
@@ -198,13 +173,10 @@ a:hover {
     transform: translateY(50px);
     transition: all 0.9s ease;
 }
-.section-animate.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+.section-animate.visible { opacity: 1; transform: translateY(0); }
 
 /* ============================================
-   CARTES SERVICES
+   CARDS SERVICES
 ============================================ */
 .service-card {
     background: #fff;
@@ -212,18 +184,18 @@ a:hover {
     padding: 30px 20px;
     box-shadow: var(--shadow);
     transition: all var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(26, 42, 58, 0.05);
     text-align: center;
 }
 .service-card:hover {
     transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(79, 172, 254, 0.18);
+    box-shadow: 0 20px 50px rgba(26, 42, 58, 0.15);
 }
 .service-card .icon-wrapper {
     width: 80px;
     height: 80px;
-    background: var(--gradient-main);
-    color: #fff;
+    background: var(--gradient-gold);
+    color: #1a2a3a;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -232,20 +204,12 @@ a:hover {
     margin: 0 auto 20px;
     transition: transform var(--transition);
 }
-.service-card:hover .icon-wrapper {
-    transform: scale(1.1) rotate(-6deg);
-}
-.service-card .card-title {
-    font-weight: 700;
-    font-size: 1.2rem;
-}
-.service-card .card-text {
-    color: #636e72;
-    font-size: 0.95rem;
-}
+.service-card:hover .icon-wrapper { transform: scale(1.1) rotate(-4deg); }
+.service-card .card-title { font-weight: 700; color: var(--primary); }
+.service-card .card-text { color: var(--gray); }
 
 /* ============================================
-   PROJETS (GALERIE)
+   PROJECT CARDS
 ============================================ */
 .project-card {
     border-radius: var(--radius);
@@ -254,60 +218,33 @@ a:hover {
     box-shadow: var(--shadow);
     transition: all var(--transition);
 }
-.project-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-}
+.project-card:hover { transform: scale(1.02); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
 .project-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
     transition: transform var(--transition);
 }
-.project-card:hover img {
-    transform: scale(1.05);
-}
-.project-card .overlay {
-    padding: 18px 20px;
-    background: #fff;
-}
-.project-card .overlay h5 {
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-.project-card .overlay p {
-    color: #636e72;
-    font-size: 0.9rem;
-    margin-bottom: 0;
-}
+.project-card:hover img { transform: scale(1.05); }
+.project-card .overlay { padding: 18px 20px; background: #fff; }
+.project-card .overlay h5 { font-weight: 700; color: var(--primary); }
+.project-card .overlay p { color: var(--gray); }
 
 /* ============================================
-   TEMOIGNAGES
+   TESTIMONIALS
 ============================================ */
 .testimonial-card {
     background: #fff;
     border-radius: var(--radius);
     padding: 30px;
     box-shadow: var(--shadow);
-    border-left: 6px solid var(--primary);
-    transition: transform var(--transition);
+    border-left: 6px solid var(--gold);
 }
-.testimonial-card:hover {
-    transform: translateY(-6px);
-}
-.testimonial-card .stars {
-    color: #fdcb6e;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-.testimonial-card .client-name {
-    font-weight: 700;
-    margin-top: 12px;
-    color: var(--primary);
-}
+.testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 10px; }
+.testimonial-card .client-name { font-weight: 700; color: var(--gold); margin-top: 12px; }
 
 /* ============================================
-   FAQ (ACCORDÉON)
+   FAQ
 ============================================ */
 .accordion-item {
     border: none;
@@ -319,17 +256,8 @@ a:hover {
 .accordion-button:not(.collapsed) {
     background: var(--gradient-main);
     color: #fff;
-    box-shadow: none;
 }
-.accordion-button:focus {
-    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.25);
-}
-.accordion-button::after {
-    filter: brightness(0.8);
-}
-.accordion-button:not(.collapsed)::after {
-    filter: brightness(10);
-}
+.accordion-button:focus { box-shadow: 0 0 0 3px rgba(212,175,55,0.3); }
 
 /* ============================================
    NEWSLETTER
@@ -341,9 +269,6 @@ a:hover {
     color: #fff;
     text-align: center;
 }
-.newsletter h3 {
-    font-weight: 800;
-}
 .newsletter input[type="email"] {
     border: none;
     border-radius: 50px;
@@ -351,29 +276,21 @@ a:hover {
     width: 100%;
     max-width: 400px;
     outline: none;
-    font-size: 1rem;
 }
 .newsletter .btn {
     border-radius: 50px;
     padding: 14px 40px;
-    background: #fff;
-    color: var(--primary);
+    background: var(--gold);
+    color: #1a2a3a;
     font-weight: 700;
     transition: all var(--transition);
 }
-.newsletter .btn:hover {
-    background: var(--accent);
-    color: #fff;
-}
+.newsletter .btn:hover { background: var(--gold-light); }
 
 /* ============================================
    CONTACT
 ============================================ */
-.contact-info i {
-    color: var(--primary);
-    width: 30px;
-    font-size: 1.2rem;
-}
+.contact-info i { color: var(--gold); width: 30px; }
 .contact-form .form-control {
     border-radius: 12px;
     border: 1px solid #dfe6e9;
@@ -381,17 +298,8 @@ a:hover {
     transition: all var(--transition);
 }
 .contact-form .form-control:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.15);
-}
-.contact-info ul li i {
-    color: var(--primary);
-}
-.contact-info iframe {
-    border-radius: 12px;
-    width: 100%;
-    height: 200px;
-    border: 0;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
 }
 
 /* ============================================
@@ -403,59 +311,45 @@ a:hover {
     right: 30px;
     width: 50px;
     height: 50px;
-    background: var(--gradient-main);
-    color: #fff;
+    background: var(--gradient-gold);
+    color: #1a2a3a;
     border: none;
     border-radius: 50%;
     font-size: 22px;
-    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    box-shadow: 0 4px 20px rgba(212,175,55,0.4);
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition);
     cursor: pointer;
     z-index: 999;
 }
-.back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-.back-to-top:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
-}
+.back-to-top.visible { opacity: 1; visibility: visible; }
+.back-to-top:hover { transform: translateY(-4px) scale(1.05); }
 
 /* ============================================
    FOOTER
 ============================================ */
 .footer {
-    background: #2d3436;
-    color: #b2bec3;
+    background: #1a2a3a;
+    color: #b0bec5;
     padding: 50px 0 30px;
     margin-top: 60px;
 }
-.footer a {
-    color: #b2bec3;
-    transition: color var(--transition);
-}
-.footer a:hover {
-    color: #fff;
-}
+.footer a { color: #b0bec5; transition: color var(--transition); }
+.footer a:hover { color: var(--gold); }
 .footer .social-links a {
     display: inline-block;
     width: 40px;
     height: 40px;
     line-height: 40px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255,255,255,0.08);
     border-radius: 50%;
     margin: 0 5px;
     transition: all var(--transition);
-    color: #b2bec3;
+    color: #b0bec5;
 }
-.footer .social-links a:hover {
-    background: var(--gradient-main);
-    color: #fff;
-}
+.footer .social-links a:hover { background: var(--gold); color: #1a2a3a; }
 
 /* ============================================
    ANIMATIONS
@@ -468,9 +362,7 @@ a:hover {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-14px); }
 }
-.floating {
-    animation: float 3s ease-in-out infinite;
-}
+.floating { animation: float 3s ease-in-out infinite; }
 
 /* ============================================
    RESPONSIVE
@@ -479,5 +371,4 @@ a:hover {
     .hero h1 { font-size: 2.5rem; }
     .hero { padding: 80px 0 60px; }
     .section-title { font-size: 2rem; }
-    .newsletter { padding: 30px 20px; }
 }

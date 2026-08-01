@@ -1,9 +1,7 @@
 (function() {
     'use strict';
 
-    // ========================================
-    // 1. SCROLL REVEAL
-    // ========================================
+    // Scroll reveal
     const sections = document.querySelectorAll('.section-animate');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -12,41 +10,29 @@
             }
         });
     }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
-
     sections.forEach(section => observer.observe(section));
 
-    // ========================================
-    // 2. BACK TO TOP
-    // ========================================
+    // Back to top
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                backBtn.classList.add('visible');
-            } else {
-                backBtn.classList.remove('visible');
-            }
+            backBtn.classList.toggle('visible', window.scrollY > 400);
         });
         backBtn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
-    // ========================================
-    // 3. ACTIVE NAV LINK
-    // ========================================
+    // Active nav link
     const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-    navLinks.forEach(link => {
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentPath || (currentPath === '/' && href === '/')) {
             link.classList.add('active');
         }
     });
 
-    // ========================================
-    // 4. SMOOTH SCROLL
-    // ========================================
+    // Smooth scroll for anchors
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -59,9 +45,7 @@
         });
     });
 
-    // ========================================
-    // 5. NEWSLETTER
-    // ========================================
+    // Newsletter
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', function(e) {
@@ -74,9 +58,7 @@
         });
     }
 
-    // ========================================
-    // 6. ALERT SUCCESS AUTO-HIDE
-    // ========================================
+    // Auto-hide success alert
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
         setTimeout(() => {
@@ -86,9 +68,7 @@
         }, 5000);
     }
 
-    // ========================================
-    // 7. PARALLAX EFFECT ON HERO (optionnel)
-    // ========================================
+    // Parallax on hero
     const hero = document.querySelector('.hero');
     if (hero) {
         window.addEventListener('scroll', () => {

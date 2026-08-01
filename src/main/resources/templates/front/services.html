@@ -10,7 +10,6 @@
         <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez l'ensemble de nos prestations de qualité.</p>
 
         <div class="row g-4">
-            <!-- Affichage dynamique depuis la base -->
             <div class="col-md-4" th:each="s : ${services}">
                 <div class="service-card p-4">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
@@ -18,10 +17,8 @@
                     <p class="card-text" th:text="${s.description}">Description détaillée du service.</p>
                 </div>
             </div>
-
-            <!-- Si aucun service en base, afficher des exemples -->
             <div th:if="${services.isEmpty()}" class="col-12 text-center">
-                <p class="text-secondary">Aucun service enregistré pour le moment. Veuillez en ajouter via l'interface d'administration.</p>
+                <p class="text-secondary">Aucun service enregistré pour le moment.</p>
             </div>
         </div>
     </div>
