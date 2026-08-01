@@ -2,7 +2,7 @@
     'use strict';
 
     // ========================================
-    // 1. SCROLL REVEAL (Intersection Observer)
+    // 1. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
     const observer = new IntersectionObserver((entries) => {
@@ -16,7 +16,7 @@
     sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 2. BACK TO TOP BUTTON
+    // 2. BACK TO TOP
     // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
@@ -33,7 +33,7 @@
     }
 
     // ========================================
-    // 3. ACTIVE NAV LINK (amélioré)
+    // 3. ACTIVE NAV LINK
     // ========================================
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -45,7 +45,7 @@
     });
 
     // ========================================
-    // 4. SMOOTH SCROLL FOR ANCHOR LINKS
+    // 4. SMOOTH SCROLL
     // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -60,7 +60,7 @@
     });
 
     // ========================================
-    // 5. NEWSLETTER FORM (simulation)
+    // 5. NEWSLETTER
     // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
@@ -68,14 +68,14 @@
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             if (email) {
-                alert('Merci ! Vous êtes maintenant inscrit à notre newsletter.');
+                alert('Merci ! Vous êtes désormais inscrit à notre newsletter.');
                 this.reset();
             }
         });
     }
 
     // ========================================
-    // 6. CONTACT FORM SUCCESS MESSAGE (auto-hide after 5s)
+    // 6. ALERT SUCCESS AUTO-HIDE
     // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
@@ -86,4 +86,14 @@
         }, 5000);
     }
 
+    // ========================================
+    // 7. PARALLAX EFFECT ON HERO (optionnel)
+    // ========================================
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+        });
+    }
 })();

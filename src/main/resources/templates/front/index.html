@@ -8,8 +8,8 @@
 <section class="hero text-center">
     <div class="container">
         <h1 class="display-3 fw-bold">Bienvenue chez Aïr Groupe</h1>
-        <p class="lead mx-auto">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
-        <a href="/services" class="btn btn-primary btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
+        <p class="lead">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
+        <a href="/services" class="btn btn-gradient btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
     </div>
 </section>
 
@@ -21,10 +21,10 @@
         </div>
         <div class="row g-4">
             <div class="col-md-3" th:each="s : ${services}">
-                <div class="service-card text-center">
+                <div class="service-card">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
                     <h5 class="card-title" th:text="${s.name}">Service</h5>
-                    <p class="small text-secondary" th:text="${s.description}">Description</p>
+                    <p class="card-text" th:text="${s.description}">Description</p>
                 </div>
             </div>
         </div>
@@ -131,8 +131,8 @@
 <!-- Newsletter -->
 <section class="py-5 section-animate">
     <div class="container">
-        <div class="newsletter text-center">
-            <h3 class="text-white">Restez informé</h3>
+        <div class="newsletter">
+            <h3>Restez informé</h3>
             <p>Recevez nos actualités et nos offres spéciales.</p>
             <form id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3">
                 <input type="email" placeholder="Votre email" required>
