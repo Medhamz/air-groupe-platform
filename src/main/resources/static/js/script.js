@@ -1,18 +1,29 @@
 (function() {
     'use strict';
 
-    // Scroll reveal
+    // ========================================
+    // 1. SCROLL REVEAL (avec opacité initiale contrôlée)
+    // ========================================
+    // On ajoute la classe 'hidden-start' à toutes les sections .section-animate
     const sections = document.querySelectorAll('.section-animate');
+    sections.forEach(section => {
+        section.classList.add('hidden-start');
+    });
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                entry.target.classList.remove('hidden-start');
                 entry.target.classList.add('visible');
             }
         });
     }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
     sections.forEach(section => observer.observe(section));
 
-    // Back to top
+    // ========================================
+    // 2. BACK TO TOP
+    // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
         window.addEventListener('scroll', () => {
@@ -23,7 +34,9 @@
         });
     }
 
-    // Active nav link
+    // ========================================
+    // 3. ACTIVE NAV LINK
+    // ========================================
     const currentPath = window.location.pathname;
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
         const href = link.getAttribute('href');
@@ -32,7 +45,9 @@
         }
     });
 
-    // Smooth scroll for anchors
+    // ========================================
+    // 4. SMOOTH SCROLL
+    // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -45,7 +60,9 @@
         });
     });
 
-    // Newsletter
+    // ========================================
+    // 5. NEWSLETTER
+    // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', function(e) {
@@ -58,7 +75,9 @@
         });
     }
 
-    // Auto-hide success alert
+    // ========================================
+    // 6. AUTO-HIDE ALERT
+    // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
         setTimeout(() => {
@@ -68,7 +87,9 @@
         }, 5000);
     }
 
-    // Parallax on hero
+    // ========================================
+    // 7. PARALLAX HERO
+    // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
         window.addEventListener('scroll', () => {

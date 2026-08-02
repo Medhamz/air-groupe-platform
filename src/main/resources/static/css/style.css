@@ -2,9 +2,9 @@
    VARIABLES & RESET
 ============================================ */
 :root {
-    --primary: #1a2a3a;          /* Bleu nuit profond */
+    --primary: #1a2a3a;
     --primary-light: #2c3e50;
-    --gold: #d4af37;             /* Or */
+    --gold: #d4af37;
     --gold-light: #f1c40f;
     --white: #f8f9fa;
     --gray: #6c757d;
@@ -26,7 +26,7 @@ body {
 }
 
 /* ============================================
-   TYPOGRAPHIE
+   TYPOGRAPHIE & LIENS
 ============================================ */
 h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
 a { text-decoration: none; transition: color var(--transition); }
@@ -138,7 +138,18 @@ a:hover { color: var(--gold); }
     letter-spacing: -2px;
     animation: fadeUp 0.8s ease;
 }
-.hero h1 span { color: var(--gold); }
+.hero h1 .gold-text {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
 .hero p {
     font-size: 1.4rem;
     opacity: 0.9;
@@ -168,12 +179,25 @@ a:hover { color: var(--gold); }
     margin: 12px auto 0;
     border-radius: 4px;
 }
+
+/* ============================================
+   ANIMATIONS DE SECTION (SCROLL REVEAL)
+   On utilise une classe .section-animate qui sera visible
+   et animée via JS (translateY + opacity)
+============================================ */
 .section-animate {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.9s ease;
+    opacity: 1;  /* ← ON VOIT LE CONTENU DIRECTEMENT */
+    transform: translateY(0);
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
-.section-animate.visible { opacity: 1; transform: translateY(0); }
+.section-animate.hidden-start {
+    opacity: 0;
+    transform: translateY(40px);
+}
+.section-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 /* ============================================
    CARDS SERVICES
