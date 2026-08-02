@@ -5,7 +5,10 @@
     // 1. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
-    sections.forEach(s => s.classList.add('hidden-start'));
+    sections.forEach(section => {
+        section.classList.add('hidden-start');
+    });
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -14,93 +17,48 @@
             }
         });
     }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
-    sections.forEach(s => observer.observe(s));
+
+    sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 2. COMPTEURS ANIMÉS
+    // 2. COMPTEURS ANIMÉS (statistiques)
     // ========================================
-    const counters = document.querySelectorAll('.counter-number');
-    let countersAnimated = false;
+    const statElements = document.querySelectorAll('.stat-number');
+    let countersStarted = false;
 
     function animateCounters() {
-        if (countersAnimated) return;
-        countersAnimated = true;
-        counters.forEach(counter => {
-            const target = parseInt(counter.textContent);
-            if (isNaN(target)) return;
-            let current = 0;
-            const increment = target / 60;
-            const updateCounter = () => {
-                current += increment;
-                if (current < target) {
-                    counter.textContent = Math.ceil(current);
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    counter.textContent = target;
-                }
-            };
-            updateCounter();
-        });
-    }
+        if (countersStarted) return;
+        const statsSection = document.querySelector('.stats-section');
+        if (!statsSection) return;
 
-    // Déclencher les compteurs quand la section est visible
-    const counterSection = document.querySelector('.counter-section');
-    if (counterSection) {
-        const counterObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                animateCounters();
-                counterObserver.disconnect();
-            }
-        }, { threshold: 0.3 });
-        counterObserver.observe(counterSection);
-    }
-
-    // ========================================
-    // 3. FILTRES PROJETS
-    // ========================================
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-    if (filterButtons.length) {
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterButtons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const filter = this.getAttribute('data-filter');
-                projectCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeUp 0.6s ease';
+        const rect = statsSection.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            countersStarted = true;
+            statElements.forEach(el => {
+                const target = parseInt(el.getAttribute('data-target'), 10);
+                if (isNaN(target)) return;
+                let current = 0;
+                const increment = Math.ceil(target / 60);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        el.textContent = target + '+';
+                        clearInterval(timer);
                     } else {
-                        card.style.display = 'none';
+                        el.textContent = current + '+';
                     }
-                });
+                }, 30);
             });
-        });
-    }
-
-    // ========================================
-    // 4. THEME TOGGLE
-    // ========================================
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            this.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            showToast(`Thème ${newTheme === 'dark' ? 'sombre' : 'clair'} activé`);
-        });
-        // Restaurer le thème depuis localStorage
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
     }
 
+    // Lancer les compteurs au scroll
+    window.addEventListener('scroll', animateCounters);
+    // Vérifier immédiatement si la section est déjà visible
+    setTimeout(animateCounters, 500);
+
     // ========================================
-    // 5. BACK TO TOP
+    // 3. BACK TO TOP
     // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
@@ -113,7 +71,7 @@
     }
 
     // ========================================
-    // 6. ACTIVE NAV LINK
+    // 4. ACTIVE NAV LINK
     // ========================================
     const currentPath = window.location.pathname;
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
@@ -124,7 +82,7 @@
     });
 
     // ========================================
-    // 7. SMOOTH SCROLL
+    // 5. SMOOTH SCROLL
     // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -139,22 +97,24 @@
     });
 
     // ========================================
-    // 8. NEWSLETTER
+    // 6. NEWSLETTER
     // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
-            if (email) {
-                showToast('Merci pour votre inscription à la newsletter !');
+            if (email && email.includes('@')) {
+                alert('✅ Merci ! Vous êtes désormais inscrit à notre newsletter.');
                 this.reset();
+            } else {
+                alert('⚠️ Veuillez entrer une adresse email valide.');
             }
         });
     }
 
     // ========================================
-    // 9. AUTO-HIDE ALERT
+    // 7. AUTO-HIDE ALERT
     // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
@@ -162,45 +122,46 @@
             successAlert.style.transition = 'opacity 0.6s';
             successAlert.style.opacity = '0';
             setTimeout(() => successAlert.remove(), 600);
-        }, 5000);
+        }, 6000);
     }
 
     // ========================================
-    // 10. PARALLAX HERO
+    // 8. PARALLAX HERO
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
         window.addEventListener('scroll', () => {
             const scrolled = window.scrollY;
-            hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+            if (scrolled < 600) {
+                hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+            }
         });
     }
 
     // ========================================
-    // 11. TOAST NOTIFICATION SYSTEM
+    // 9. NAVBAR SCROLL EFFECT
     // ========================================
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer') || (() => {
-            const c = document.createElement('div');
-            c.id = 'toastContainer';
-            c.className = 'toast-container';
-            document.body.appendChild(c);
-            return c;
-        })();
-        const toast = document.createElement('div');
-        toast.className = 'toast-custom';
-        const icon = type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
-        toast.innerHTML = `<i class="fas ${icon} toast-icon"></i> ${message}`;
-        container.appendChild(toast);
-        // Déclencher l'apparition
-        requestAnimationFrame(() => toast.classList.add('show'));
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500);
-        }, 4000);
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('navbar-scrolled', window.scrollY > 80);
+        });
     }
 
-    // Exposer showToast globalement pour l'utiliser dans d'autres scripts
-    window.showToast = showToast;
-
+    // ========================================
+    // 10. SEARCH FILTER FOR SERVICES
+    // ========================================
+    const searchInput = document.getElementById('serviceSearch');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            const query = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+                const desc = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
+                const match = title.includes(query) || desc.includes(query);
+                card.style.display = match ? '' : 'none';
+            });
+        });
+    }
 })();

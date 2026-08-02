@@ -7,26 +7,28 @@
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Nos Réalisations</h1>
-        <p class="text-center text-secondary mb-4" style="font-size:1.2rem;">Quelques-uns de nos projets récents.</p>
+        <p class="text-center section-subtitle">Quelques-uns de nos projets récents.</p>
 
-        <!-- Filtres -->
-        <div class="filter-buttons text-center mb-4">
-            <button class="btn active filter-btn" data-filter="all">Tous</button>
-            <button class="btn filter-btn" data-filter="infrastructure">Infrastructure</button>
-            <button class="btn filter-btn" data-filter="agricole">Agricole</button>
-            <button class="btn filter-btn" data-filter="location">Location d'engins</button>
-        </div>
-
-        <div class="row g-4" id="projectsList">
-            <div class="col-md-4 project-card" data-category="infrastructure" th:each="proj : ${projects}">
-                <img th:src="${proj.imageUrl}" alt="Projet" class="img-fluid" th:alt="${proj.title}">
-                <div class="overlay">
-                    <h5 th:text="${proj.title}">Titre</h5>
-                    <p th:text="${proj.description}" class="small mb-0">Description</p>
+        <div class="row g-4">
+            <div class="col-md-4" th:each="proj : ${projects}">
+                <div class="project-card">
+                    <img th:src="${proj.imageUrl}" alt="Projet" class="img-fluid" th:alt="${proj.title}">
+                    <div class="overlay">
+                        <h5 th:text="${proj.title}">Titre</h5>
+                        <p th:text="${proj.description}" class="small mb-0">Description</p>
+                        <!-- Boutons de partage social -->
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn share-btn-facebook" th:onclick="'window.open(\'https://www.facebook.com/sharer/sharer.php?u=' + window.location.href + '\',\'_blank\')'"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="share-btn share-btn-twitter" th:onclick="'window.open(\'https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + ${proj.title} + '\',\'_blank\')'"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="share-btn share-btn-linkedin" th:onclick="'window.open(\'https://www.linkedin.com/sharing/share-offsite/?url=' + window.location.href + '\',\'_blank\')'"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="share-btn share-btn-whatsapp" th:onclick="'window.open(\'https://api.whatsapp.com/send?text=' + ${proj.title} + ' - ' + window.location.href + '\',\'_blank\')'"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div th:if="${projects.isEmpty()}" class="col-12 text-center">
-                <p class="text-secondary">Aucune réalisation à afficher pour le moment.</p>
+            <div th:if="${projects.isEmpty()}" class="col-12 text-center py-5">
+                <i class="fas fa-images" style="font-size: 4rem; color: var(--gray);"></i>
+                <p class="text-secondary mt-3">Aucune réalisation à afficher pour le moment.</p>
             </div>
         </div>
     </div>

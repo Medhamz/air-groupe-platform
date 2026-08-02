@@ -18,6 +18,7 @@
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Nos Domaines d'Excellence</h2>
+            <p class="section-subtitle">Découvrez notre savoir-faire dans les métiers du BTP, de l'hydraulique et de la logistique.</p>
         </div>
         <div class="row g-4">
             <div class="col-md-3" th:each="s : ${services}">
@@ -31,75 +32,116 @@
     </div>
 </section>
 
-<!-- Compteurs (Chiffres clés) -->
-<section class="py-5 bg-light counter-section section-animate">
+<!-- Statistiques (avec compteurs animés) -->
+<section class="py-5 bg-white stats-section section-animate">
     <div class="container text-center">
-        <h2 class="section-title">Aïr Groupe en chiffres</h2>
         <div class="row g-4">
-            <div class="col-md-3 col-6 counter-item">
-                <div class="counter-number" data-target="10">0</div>
-                <div class="counter-label">Années d'expérience</div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="stat-number" data-target="10">0</div>
+                    <p class="stat-label">Années d'expérience</p>
+                </div>
             </div>
-            <div class="col-md-3 col-6 counter-item">
-                <div class="counter-number" data-target="50">0</div>
-                <div class="counter-label">Projets réalisés</div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-hard-hat"></i></div>
+                    <div class="stat-number" data-target="50">0</div>
+                    <p class="stat-label">Projets réalisés</p>
+                </div>
             </div>
-            <div class="col-md-3 col-6 counter-item">
-                <div class="counter-number" data-target="20">0</div>
-                <div class="counter-label">Engins en parc</div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tractor"></i></div>
+                    <div class="stat-number" data-target="20">0</div>
+                    <p class="stat-label">Engins en parc</p>
+                </div>
             </div>
-            <div class="col-md-3 col-6 counter-item">
-                <div class="counter-number" data-target="100">0</div>
-                <div class="counter-label">% Satisfaction client</div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-smile"></i></div>
+                    <div class="stat-number" data-target="100">0</div>
+                    <p class="stat-label">% Satisfaction client</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Témoignages (Carrousel) -->
+<!-- Témoignages -->
 <section class="py-5 section-animate">
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Ce que disent nos clients</h2>
         </div>
-        <div id="testimonialCarousel" class="carousel slide testimonial-carousel" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="testimonial-card mx-auto" style="max-width:700px;">
-                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p>"Aïr Groupe a réalisé la construction de notre nouveau siège avec un professionnalisme remarquable. Délais respectés, qualité irréprochable."</p>
-                        <p class="client-name">- M. Ibrahim, Directeur Général</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="testimonial-card mx-auto" style="max-width:700px;">
-                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p>"La location d'engins lourds auprès d'Aïr Groupe nous a permis de finaliser notre chantier dans les temps. Matériel fiable et équipe réactive."</p>
-                        <p class="client-name">- Mme Aïcha, Responsable logistique</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="testimonial-card mx-auto" style="max-width:700px;">
-                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p>"Un partenaire de confiance pour nos prestations de transport. Ponctualité, sécurité et tarifs compétitifs."</p>
-                        <p class="client-name">- M. Oumar, Entrepreneur</p>
-                    </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Aïr Groupe a réalisé la construction de notre nouveau siège avec un professionnalisme remarquable. Délais respectés, qualité irréprochable."</p>
+                    <p class="client-name">- M. Ibrahim, Directeur Général</p>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Précédent</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Suivant</span>
-            </button>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"La location d'engins lourds auprès d'Aïr Groupe nous a permis de finaliser notre chantier dans les temps. Matériel fiable et équipe réactive."</p>
+                    <p class="client-name">- Mme Aïcha, Responsable logistique</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Un partenaire de confiance pour nos prestations de transport. Ponctualité, sécurité et tarifs compétitifs."</p>
+                    <p class="client-name">- M. Oumar, Entrepreneur</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Équipe -->
+<section class="py-5 bg-white section-animate">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Notre Équipe</h2>
+            <p class="section-subtitle">Des professionnels dévoués à votre service.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="team-name">M. Tijani</div>
+                    <div class="team-role">Directeur Général</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="team-name">Mme Fatima</div>
+                    <div class="team-role">Responsable Administrative</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="team-name">M. Abdoulaye</div>
+                    <div class="team-role">Ingénieur Principal</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="team-name">Mme Ramatou</div>
+                    <div class="team-role">Responsable Logistique</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- FAQ -->
-<section class="py-5 bg-white section-animate">
+<section class="py-5 section-animate">
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Questions fréquentes</h2>
@@ -132,7 +174,7 @@
                     </button>
                 </h2>
                 <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">Vous pouvez nous contacter via le formulaire de contact, notre page devis express, ou par téléphone. Nous vous répondrons dans les 24h.</div>
+                    <div class="accordion-body">Vous pouvez nous contacter via le formulaire de contact ou par téléphone. Nous vous répondrons dans les 24h.</div>
                 </div>
             </div>
         </div>
