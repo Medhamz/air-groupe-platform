@@ -94,4 +94,22 @@ public class HomeController {
     public String login() {
         return "login";   // Si vous utilisez encore cette page
     }
+
+    @GetMapping("/devis")
+    public String devis() {
+        return "front/devis";
+    }
+
+    @PostMapping("/submit-devis")
+    public String submitDevis(@RequestParam String nom,
+                              @RequestParam String email,
+                              @RequestParam(required = false) String telephone,
+                              @RequestParam String service,
+                              @RequestParam String description,
+                              RedirectAttributes redirectAttributes) {
+        // Ici, vous pouvez enregistrer en base ou envoyer un email.
+        // Pour l'exemple, on ajoute un flash success.
+        redirectAttributes.addFlashAttribute("devisSuccess", true);
+        return "redirect:/devis";
+    }
 }

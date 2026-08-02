@@ -9,7 +9,7 @@
         <h1 class="text-center section-title">Nos Services</h1>
         <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez l'ensemble de nos prestations de qualité.</p>
 
-        <div class="row g-4">
+        <div class="row g-4" id="servicesList">
             <div class="col-md-4" th:each="s : ${services}">
                 <div class="service-card p-4">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
@@ -20,6 +20,19 @@
             <div th:if="${services.isEmpty()}" class="col-12 text-center">
                 <p class="text-secondary">Aucun service enregistré pour le moment.</p>
             </div>
+        </div>
+
+        <!-- Pagination (si plus de 6 services) -->
+        <div th:if="${services.size() > 6}" class="d-flex justify-content-center mt-5">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item disabled"><a class="page-link" href="#">Précédent</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+                </ul>
+            </nav>
         </div>
     </div>
 </section>
