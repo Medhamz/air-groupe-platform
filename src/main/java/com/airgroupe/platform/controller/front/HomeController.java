@@ -37,11 +37,6 @@ public class HomeController {
     @GetMapping("/services")
     public String services(Model model) {
         List<ServiceEntity> services = serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
-
-        // Si la base est vide, on ajoute des services par défaut
-        if (services.isEmpty()) {
-            services = getDefaultServices();
-        }
         model.addAttribute("services", services);
         return "front/services";
     }
@@ -64,17 +59,6 @@ public class HomeController {
                 "4 pelles hydrauliques et 3 bulldozers pour les travaux de terrassement.",
                 "https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format"
         ));
-        projects.add(new ProjectDto(
-                "Aménagement hydraulique dans la région de Tahoua",
-                "Construction de 5 forages et 2 retenues d'eau pour l'agriculture.",
-                "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&auto=format"
-        ));
-        projects.add(new ProjectDto(
-                "Transport de matériaux pour le chantier de la centrale solaire",
-                "Logistique de 500 tonnes de matériel sur 3 mois.",
-                "https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format"
-        ));
-
         model.addAttribute("projects", projects);
         return "front/realisations";
     }
@@ -105,64 +89,28 @@ public class HomeController {
         return "redirect:/contact";
     }
 
+    @GetMapping("/devis")
+    public String devis() {
+        return "front/devis";
+    }
+
+    @PostMapping("/submit-devis")
+    public String submitDevis(@RequestParam String name,
+                              @RequestParam String email,
+                              @RequestParam String phone,
+                              @RequestParam String serviceType,
+                              @RequestParam String description,
+                              @RequestParam(required = false) String budget,
+                              RedirectAttributes redirectAttributes) {
+
+        // Ici vous pouvez enregistrer la demande de devis dans la base de données
+        // ou envoyer un email. Pour l'instant, on affiche juste un message.
+        redirectAttributes.addFlashAttribute("devisSuccess", "Votre demande de devis a été envoyée avec succès !");
+        return "redirect:/devis";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    // ===== SERVICES PAR DÉFAUT =====
-    private List<ServiceEntity> getDefaultServices() {
-        List<ServiceEntity> defaults = new ArrayList<>();
-
-        ServiceEntity s1 = new ServiceEntity();
-        s1.setName("BTP & Construction");
-        s1.setDescription("Construction de bâtiments, routes, ponts et infrastructures publiques avec des normes de qualité internationales.");
-        s1.setIconClass("fa-building");
-        s1.setDisplayOrder(1);
-        s1.setIsActive(true);
-
-        ServiceEntity s2 = new ServiceEntity();
-        s2.setName("Hydraulique");
-        s2.setDescription("Forages, adductions d'eau, systèmes d'irrigation et aménagement hydraulique pour les zones rurales et urbaines.");
-        s2.setIconClass("fa-water");
-        s2.setDisplayOrder(2);
-        s2.setIsActive(true);
-
-        ServiceEntity s3 = new ServiceEntity();
-        s3.setName("Location d'engins lourds");
-        s3.setDescription("Pelles hydrauliques, bulldozers, chargeuses, grues et camions avec chauffeurs qualifiés pour vos chantiers.");
-        s3.setIconClass("fa-tractor");
-        s3.setDisplayOrder(3);
-        s3.setIsActive(true);
-
-        ServiceEntity s4 = new ServiceEntity();
-        s4.setName("Transport & Logistique");
-        s4.setDescription("Transport de marchandises, de matériaux de construction, logistique de chantier et gestion de flotte.");
-        s4.setIconClass("fa-truck");
-        s4.setDisplayOrder(4);
-        s4.setIsActive(true);
-
-        ServiceEntity s5 = new ServiceEntity();
-        s5.setName("Commerce général");
-        s5.setDescription("Fourniture de matériaux de construction, équipements, outillage et produits pour le BTP et l'hydraulique.");
-        s5.setIconClass("fa-store");
-        s5.setDisplayOrder(5);
-        s5.setIsActive(true);
-
-        ServiceEntity s6 = new ServiceEntity();
-        s6.setName("Prestations de services");
-        s6.setDescription("Études, conseils, assistance technique et maîtrise d'œuvre pour vos projets de construction et d'hydraulique.");
-        s6.setIconClass("fa-handshake");
-        s6.setDisplayOrder(6);
-        s6.setIsActive(true);
-
-        defaults.add(s1);
-        defaults.add(s2);
-        defaults.add(s3);
-        defaults.add(s4);
-        defaults.add(s5);
-        defaults.add(s6);
-
-        return defaults;
     }
 }

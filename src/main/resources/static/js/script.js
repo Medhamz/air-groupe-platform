@@ -5,9 +5,7 @@
     // 1. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
-    sections.forEach(section => {
-        section.classList.add('hidden-start');
-    });
+    sections.forEach(section => section.classList.add('hidden-start'));
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -21,44 +19,7 @@
     sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 2. COMPTEURS ANIMÉS (statistiques)
-    // ========================================
-    const statElements = document.querySelectorAll('.stat-number');
-    let countersStarted = false;
-
-    function animateCounters() {
-        if (countersStarted) return;
-        const statsSection = document.querySelector('.stats-section');
-        if (!statsSection) return;
-
-        const rect = statsSection.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            countersStarted = true;
-            statElements.forEach(el => {
-                const target = parseInt(el.getAttribute('data-target'), 10);
-                if (isNaN(target)) return;
-                let current = 0;
-                const increment = Math.ceil(target / 60);
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        el.textContent = target + '+';
-                        clearInterval(timer);
-                    } else {
-                        el.textContent = current + '+';
-                    }
-                }, 30);
-            });
-        }
-    }
-
-    // Lancer les compteurs au scroll
-    window.addEventListener('scroll', animateCounters);
-    // Vérifier immédiatement si la section est déjà visible
-    setTimeout(animateCounters, 500);
-
-    // ========================================
-    // 3. BACK TO TOP
+    // 2. BACK TO TOP
     // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
@@ -71,7 +32,7 @@
     }
 
     // ========================================
-    // 4. ACTIVE NAV LINK
+    // 3. ACTIVE NAV LINK
     // ========================================
     const currentPath = window.location.pathname;
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
@@ -82,7 +43,7 @@
     });
 
     // ========================================
-    // 5. SMOOTH SCROLL
+    // 4. SMOOTH SCROLL
     // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -97,24 +58,22 @@
     });
 
     // ========================================
-    // 6. NEWSLETTER
+    // 5. NEWSLETTER
     // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
-            if (email && email.includes('@')) {
-                alert('✅ Merci ! Vous êtes désormais inscrit à notre newsletter.');
+            if (email) {
+                alert('Merci ! Vous êtes désormais inscrit à notre newsletter.');
                 this.reset();
-            } else {
-                alert('⚠️ Veuillez entrer une adresse email valide.');
             }
         });
     }
 
     // ========================================
-    // 7. AUTO-HIDE ALERT
+    // 6. AUTO-HIDE ALERT
     // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
@@ -122,46 +81,55 @@
             successAlert.style.transition = 'opacity 0.6s';
             successAlert.style.opacity = '0';
             setTimeout(() => successAlert.remove(), 600);
-        }, 6000);
+        }, 5000);
     }
 
     // ========================================
-    // 8. PARALLAX HERO
+    // 7. PARALLAX HERO
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
         window.addEventListener('scroll', () => {
             const scrolled = window.scrollY;
-            if (scrolled < 600) {
-                hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+            hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+        });
+    }
+
+    // ========================================
+    // 8. ANIMATION DES STATISTIQUES (comptage)
+    // ========================================
+    function animateNumbers() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            const duration = 1500;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    current = target;
+                }
+                stat.textContent = Math.floor(current) + (stat.getAttribute('data-suffix') || '');
+            }, stepTime);
+        });
+    }
+
+    // Déclencher l'animation des statistiques quand elles deviennent visibles
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumbers();
+                statObserver.disconnect(); // une seule fois
             }
         });
-    }
+    }, { threshold: 0.3 });
 
-    // ========================================
-    // 9. NAVBAR SCROLL EFFECT
-    // ========================================
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('navbar-scrolled', window.scrollY > 80);
-        });
-    }
-
-    // ========================================
-    // 10. SEARCH FILTER FOR SERVICES
-    // ========================================
-    const searchInput = document.getElementById('serviceSearch');
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function() {
-            const query = this.value.toLowerCase();
-            const cards = document.querySelectorAll('.service-card');
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-                const desc = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
-                const match = title.includes(query) || desc.includes(query);
-                card.style.display = match ? '' : 'none';
-            });
-        });
+    const statSection = document.querySelector('.stats-section');
+    if (statSection) {
+        statObserver.observe(statSection);
     }
 })();

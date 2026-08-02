@@ -6,49 +6,52 @@
 
 <section class="py-5 section-animate">
     <div class="container">
-        <h1 class="text-center section-title">Demande de devis express</h1>
-        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Remplissez ce formulaire pour recevoir un devis personnalisé sous 24h.</p>
+        <h1 class="text-center section-title">Demande de devis</h1>
+        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Remplissez ce formulaire pour obtenir un devis personnalisé.</p>
 
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="contact-form glass-card p-5">
-                    <form id="devisForm" method="post" th:action="@{/submit-devis}">
+                <div class="devis-form">
+                    <form th:action="@{/submit-devis}" method="post">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label">Nom complet *</label>
-                                <input type="text" name="nom" class="form-control" placeholder="Votre nom" required>
+                                <label class="form-label">Nom complet</label>
+                                <input type="text" name="name" class="form-control" placeholder="Votre nom" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Email *</label>
+                                <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" placeholder="Votre email" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Téléphone</label>
-                                <input type="tel" name="telephone" class="form-control" placeholder="Votre téléphone">
+                                <input type="tel" name="phone" class="form-control" placeholder="Votre téléphone">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Type de service souhaité *</label>
-                                <select name="service" class="form-select" required>
-                                    <option value="">Choisir...</option>
-                                    <option value="btp">BTP</option>
+                                <label class="form-label">Type de service</label>
+                                <select name="serviceType" class="form-select">
+                                    <option value="btp">BTP & Construction</option>
                                     <option value="hydraulique">Hydraulique</option>
-                                    <option value="location">Location d'engins</option>
-                                    <option value="transport">Transport</option>
+                                    <option value="engins">Location d'engins</option>
+                                    <option value="transport">Transport & Logistique</option>
                                     <option value="commerce">Commerce général</option>
-                                    <option value="autre">Autre</option>
+                                    <option value="prestations">Prestations de services</option>
                                 </select>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Description du projet ou besoins *</label>
-                                <textarea name="description" class="form-control" rows="5" placeholder="Décrivez votre projet, les engins nécessaires, la durée, etc." required></textarea>
+                                <label class="form-label">Description du projet</label>
+                                <textarea name="description" class="form-control" rows="5" placeholder="Décrivez votre projet ou vos besoins..." required></textarea>
                             </div>
-                            <div class="col-12 text-center mt-4">
+                            <div class="col-12">
+                                <label class="form-label">Budget estimé (CFA)</label>
+                                <input type="text" name="budget" class="form-control" placeholder="Ex: 5 000 000">
+                            </div>
+                            <div class="col-12">
                                 <button type="submit" class="btn btn-gold rounded-pill px-5">Envoyer la demande <i class="fas fa-paper-plane ms-2"></i></button>
                             </div>
                         </div>
                     </form>
-                    <div th:if="${devisSuccess}" class="alert alert-success mt-4">
-                        <i class="fas fa-check-circle me-2"></i> Votre demande de devis a été envoyée avec succès. Nous vous répondrons rapidement.
+                    <div th:if="${devisSuccess}" class="alert alert-success mt-3">
+                        <i class="fas fa-check-circle me-2"></i><span th:text="${devisSuccess}">Votre demande a été envoyée avec succès !</span>
                     </div>
                 </div>
             </div>
