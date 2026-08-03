@@ -30,7 +30,8 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model) {
         List<ServiceEntity> services = serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
-        model.addAttribute("services", services.stream().limit(4).toList());
+        // Si la base est vide, on passe une liste vide, le template gère le fallback
+        model.addAttribute("services", services);
         return "front/index";
     }
 
@@ -41,8 +42,9 @@ public class HomeController {
         return "front/services";
     }
 
-    @GetMapping("/realisations")
-    public String realisations(Model model) {
+    @GetMapping("/projets")
+    public String projets(Model model) {
+        // Données de démonstration (à remplacer par la base de données plus tard)
         List<ProjectDto> projects = new ArrayList<>();
         projects.add(new ProjectDto(
                 "Construction du pont de Niamey",
@@ -60,7 +62,12 @@ public class HomeController {
                 "https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format"
         ));
         model.addAttribute("projects", projects);
-        return "front/realisations";
+        return "front/projets";
+    }
+
+    @GetMapping("/actualites")
+    public String actualites() {
+        return "front/actualites";
     }
 
     @GetMapping("/contact")
@@ -112,5 +119,11 @@ public class HomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    // Ancienne page réalisations redirigée vers projets (optionnel)
+    @GetMapping("/realisations")
+    public String redirectRealisations() {
+        return "redirect:/projets";
     }
 }

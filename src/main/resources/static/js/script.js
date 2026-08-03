@@ -19,7 +19,45 @@
     sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 2. BACK TO TOP
+    // 2. ANIMATION DES STATISTIQUES
+    // ========================================
+    function animateNumbers() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            const suffix = stat.getAttribute('data-suffix') || '';
+            const duration = 1500;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    current = target;
+                }
+                stat.textContent = Math.floor(current) + suffix;
+            }, stepTime);
+        });
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumbers();
+                statObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const statSection = document.querySelector('.stats-section');
+    if (statSection) {
+        statObserver.observe(statSection);
+    }
+
+    // ========================================
+    // 3. BACK TO TOP
     // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
@@ -32,7 +70,7 @@
     }
 
     // ========================================
-    // 3. ACTIVE NAV LINK
+    // 4. ACTIVE NAV LINK
     // ========================================
     const currentPath = window.location.pathname;
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
@@ -43,7 +81,7 @@
     });
 
     // ========================================
-    // 4. SMOOTH SCROLL
+    // 5. SMOOTH SCROLL
     // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -58,7 +96,7 @@
     });
 
     // ========================================
-    // 5. NEWSLETTER
+    // 6. NEWSLETTER
     // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
@@ -73,7 +111,7 @@
     }
 
     // ========================================
-    // 6. AUTO-HIDE ALERT
+    // 7. AUTO-HIDE ALERT
     // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
@@ -85,7 +123,7 @@
     }
 
     // ========================================
-    // 7. PARALLAX HERO
+    // 8. PARALLAX HERO
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
@@ -93,43 +131,5 @@
             const scrolled = window.scrollY;
             hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
         });
-    }
-
-    // ========================================
-    // 8. ANIMATION DES STATISTIQUES (comptage)
-    // ========================================
-    function animateNumbers() {
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            const target = parseInt(stat.getAttribute('data-count'));
-            const duration = 1500;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-            let current = 0;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    clearInterval(timer);
-                    current = target;
-                }
-                stat.textContent = Math.floor(current) + (stat.getAttribute('data-suffix') || '');
-            }, stepTime);
-        });
-    }
-
-    // Déclencher l'animation des statistiques quand elles deviennent visibles
-    const statObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateNumbers();
-                statObserver.disconnect(); // une seule fois
-            }
-        });
-    }, { threshold: 0.3 });
-
-    const statSection = document.querySelector('.stats-section');
-    if (statSection) {
-        statObserver.observe(statSection);
     }
 })();

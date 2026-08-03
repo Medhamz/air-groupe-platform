@@ -13,11 +13,11 @@
             <div class="col-md-4" th:each="s : ${services}">
                 <div class="service-card p-4">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
-                    <h5 class="card-title" th:text="${s.name}">Nom du service</h5>
-                    <p class="card-text" th:text="${s.description}">Description détaillée du service.</p>
+                    <h5 class="card-title" th:text="${s.name}">Service</h5>
+                    <p class="card-text" th:text="${s.description}">Description</p>
                 </div>
             </div>
-            <!-- Si aucun service en base, on affiche des exemples -->
+            <!-- Fallback -->
             <div th:if="${services.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-4">

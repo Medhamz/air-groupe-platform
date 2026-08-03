@@ -13,50 +13,115 @@
     </div>
 </section>
 
-<!-- Services aperçu -->
+<!-- Pourquoi nous choisir -->
 <section class="py-5 section-animate">
     <div class="container">
         <div class="text-center">
-            <h2 class="section-title">Nos Domaines d'Excellence</h2>
+            <h2 class="section-title">Pourquoi nous choisir</h2>
         </div>
         <div class="row g-4">
-            <div class="col-md-3" th:each="s : ${services}">
+            <div class="col-md-4">
                 <div class="service-card">
-                    <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
-                    <h5 class="card-title" th:text="${s.name}">Service</h5>
-                    <p class="card-text" th:text="${s.description}">Description</p>
+                    <div class="icon-wrapper"><i class="fas fa-medal"></i></div>
+                    <h5 class="card-title">Excellence</h5>
+                    <p class="card-text">Des années d'expérience et des réalisations de référence au Niger.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper"><i class="fas fa-handshake"></i></div>
+                    <h5 class="card-title">Confiance</h5>
+                    <p class="card-text">Des partenaires de confiance et une satisfaction client reconnue.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper"><i class="fas fa-leaf"></i></div>
+                    <h5 class="card-title">Innovation</h5>
+                    <p class="card-text">Des solutions modernes et durables pour vos projets.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Statistiques (animées) -->
-<section class="py-5 bg-white stats-section section-animate">
+<!-- Services en avant -->
+<section class="py-5 bg-white section-animate">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Nos Domaines d'Excellence</h2>
+        </div>
+        <div class="row g-4">
+            <div th:each="s : ${services}" class="col-md-3">
+                <div class="service-card">
+                    <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
+                    <h5 class="card-title" th:text="${s.name}">Service</h5>
+                    <p class="card-text" th:text="${s.description}">Description</p>
+                </div>
+            </div>
+            <!-- Fallback si aucun service en base -->
+            <div th:if="${services.isEmpty()}" class="col-12">
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="service-card">
+                            <div class="icon-wrapper"><i class="fas fa-hard-hat"></i></div>
+                            <h5 class="card-title">BTP & Construction</h5>
+                            <p class="card-text">Bâtiments, routes, ponts et infrastructures.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="service-card">
+                            <div class="icon-wrapper"><i class="fas fa-tint"></i></div>
+                            <h5 class="card-title">Hydraulique</h5>
+                            <p class="card-text">Forage, adduction d'eau, irrigation.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="service-card">
+                            <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
+                            <h5 class="card-title">Transport & Logistique</h5>
+                            <p class="card-text">Transport de marchandises, logistique.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="service-card">
+                            <div class="icon-wrapper"><i class="fas fa-cogs"></i></div>
+                            <h5 class="card-title">Location d'engins</h5>
+                            <p class="card-text">Pelles, bulldozers, grues, camions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistiques -->
+<section class="py-5 stats-section section-animate">
     <div class="container text-center">
         <div class="row g-4">
             <div class="col-md-3 col-6">
                 <h2 class="stat-number" data-count="10" data-suffix="+">0+</h2>
-                <p class="text-secondary">Années d'expérience</p>
+                <p class="stat-label">Années d'expérience</p>
             </div>
             <div class="col-md-3 col-6">
                 <h2 class="stat-number" data-count="50" data-suffix="+">0+</h2>
-                <p class="text-secondary">Projets réalisés</p>
+                <p class="stat-label">Projets réalisés</p>
             </div>
             <div class="col-md-3 col-6">
                 <h2 class="stat-number" data-count="20" data-suffix="+">0+</h2>
-                <p class="text-secondary">Engins en parc</p>
+                <p class="stat-label">Engins en parc</p>
             </div>
             <div class="col-md-3 col-6">
                 <h2 class="stat-number" data-count="100" data-suffix="%">0%</h2>
-                <p class="text-secondary">Satisfaction client</p>
+                <p class="stat-label">Satisfaction client</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Témoignages -->
-<section class="py-5 section-animate">
+<section class="py-5 bg-white section-animate">
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Ce que disent nos clients</h2>
@@ -88,7 +153,7 @@
 </section>
 
 <!-- FAQ -->
-<section class="py-5 bg-white section-animate">
+<section class="py-5 section-animate">
     <div class="container">
         <div class="text-center">
             <h2 class="section-title">Questions fréquentes</h2>
@@ -129,7 +194,7 @@
 </section>
 
 <!-- Newsletter -->
-<section class="py-5 section-animate">
+<section class="py-5 bg-white section-animate">
     <div class="container">
         <div class="newsletter">
             <h3>Restez informé</h3>
