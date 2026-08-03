@@ -2,11 +2,12 @@
     'use strict';
 
     // ========================================
-    // 1. GESTION DU MODE NUIT
+    // 1. GESTION DU MODE NUIT (réparé)
     // ========================================
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
 
+    // Appliquer le thème sauvegardé
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         body.classList.add('dark-mode');
@@ -15,6 +16,7 @@
         }
     }
 
+    // Gérer le clic sur le bouton
     if (themeToggle) {
         themeToggle.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
@@ -25,7 +27,50 @@
     }
 
     // ========================================
-    // 2. BARRE DE RECHERCHE
+    // 2. STATISTIQUES ANIMÉES
+    // ========================================
+    function animateNumbers() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            // Récupérer la valeur cible depuis l'attribut data-count
+            const target = parseInt(stat.getAttribute('data-count'));
+            const suffix = stat.getAttribute('data-suffix') || '';
+            if (isNaN(target)) return;
+            const duration = 1500;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+            // Commencer à 0 pour l'animation
+            stat.textContent = '0' + suffix;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    current = target;
+                }
+                stat.textContent = Math.floor(current) + suffix;
+            }, stepTime);
+        });
+    }
+
+    // Observer pour déclencher l'animation quand la section devient visible
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumbers();
+                statObserver.disconnect(); // une seule fois
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const statSection = document.querySelector('.stats-section');
+    if (statSection) {
+        statObserver.observe(statSection);
+    }
+
+    // ========================================
+    // 3. BARRE DE RECHERCHE
     // ========================================
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -58,7 +103,7 @@
     }
 
     // ========================================
-    // 3. SCROLL REVEAL
+    // 4. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
     sections.forEach(section => section.classList.add('hidden-start'));
@@ -73,44 +118,6 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
 
     sections.forEach(section => observer.observe(section));
-
-    // ========================================
-    // 4. STATISTIQUES
-    // ========================================
-    function animateNumbers() {
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            const target = parseInt(stat.getAttribute('data-count'));
-            const suffix = stat.getAttribute('data-suffix') || '';
-            const duration = 1500;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-            let current = 0;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    clearInterval(timer);
-                    current = target;
-                }
-                stat.textContent = Math.floor(current) + suffix;
-            }, stepTime);
-        });
-    }
-
-    const statObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateNumbers();
-                statObserver.disconnect();
-            }
-        });
-    }, { threshold: 0.3 });
-
-    const statSection = document.querySelector('.stats-section');
-    if (statSection) {
-        statObserver.observe(statSection);
-    }
 
     // ========================================
     // 5. BACK TO TOP
@@ -179,7 +186,7 @@
     }
 
     // ========================================
-    // 10. PARALLAX HERO (optionnel)
+    // 10. PARALLAX HERO
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
