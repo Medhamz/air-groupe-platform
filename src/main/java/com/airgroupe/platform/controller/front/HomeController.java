@@ -30,7 +30,6 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model) {
         List<ServiceEntity> services = serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
-        // Si la base est vide, on passe une liste vide, le template gère le fallback
         model.addAttribute("services", services);
         return "front/index";
     }
@@ -44,21 +43,20 @@ public class HomeController {
 
     @GetMapping("/projets")
     public String projets(Model model) {
-        // Données de démonstration (à remplacer par la base de données plus tard)
         List<ProjectDto> projects = new ArrayList<>();
         projects.add(new ProjectDto(
-                "Construction du pont de Niamey",
-                "Pont moderne de 200m pour désengorger la circulation.",
+                "Pont d'Agadez",
+                "Construction d'un pont moderne sur le fleuve à Agadez.",
                 "https://images.unsplash.com/photo-1546548970-7171f7188d67?w=600&auto=format"
         ));
         projects.add(new ProjectDto(
-                "Piste agricole dans la région de Tillabéri",
-                "Aménagement de 15 km de piste pour faciliter l'accès aux marchés.",
+                "Piste agricole d'Agadez",
+                "Aménagement de 15 km de piste dans la région d'Agadez.",
                 "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&auto=format"
         ));
         projects.add(new ProjectDto(
-                "Location d'engins pour le chantier de la nouvelle université",
-                "4 pelles hydrauliques et 3 bulldozers pour les travaux de terrassement.",
+                "Location d'engins à Agadez",
+                "Location de pelles et bulldozers pour les chantiers à Agadez.",
                 "https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format"
         ));
         model.addAttribute("projects", projects);
@@ -68,6 +66,16 @@ public class HomeController {
     @GetMapping("/actualites")
     public String actualites() {
         return "front/actualites";
+    }
+
+    @GetMapping("/equipe")
+    public String equipe() {
+        return "front/equipe";
+    }
+
+    @GetMapping("/galerie")
+    public String galerie() {
+        return "front/galerie";
     }
 
     @GetMapping("/contact")
@@ -110,8 +118,6 @@ public class HomeController {
                               @RequestParam(required = false) String budget,
                               RedirectAttributes redirectAttributes) {
 
-        // Ici vous pouvez enregistrer la demande de devis dans la base de données
-        // ou envoyer un email. Pour l'instant, on affiche juste un message.
         redirectAttributes.addFlashAttribute("devisSuccess", "Votre demande de devis a été envoyée avec succès !");
         return "redirect:/devis";
     }
@@ -119,16 +125,5 @@ public class HomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    // Ancienne page réalisations redirigée vers projets (optionnel)
-    @GetMapping("/realisations")
-    public String redirectRealisations() {
-        return "redirect:/projets";
-    }
-
-    @GetMapping("/equipe")
-    public String equipe() {
-        return "front/equipe";
     }
 }

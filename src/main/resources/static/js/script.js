@@ -20,33 +20,33 @@
         themeToggle.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
             const isDark = body.classList.contains('dark-mode');
-            // Changer l'icône
             this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            // Sauvegarder la préférence
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
     }
 
     // ========================================
-    // 2. BARRE DE RECHERCHE (filtrage des services)
+    // 2. BARRE DE RECHERCHE
     // ========================================
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('keyup', function() {
             const filter = this.value.toLowerCase().trim();
-            const serviceCards = document.querySelectorAll('.service-card');
+            const serviceCards = document.querySelectorAll('.service-card-wrapper');
             let found = false;
-            serviceCards.forEach(card => {
-                const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-                const desc = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
-                if (title.includes(filter) || desc.includes(filter)) {
-                    card.style.display = '';
-                    found = true;
-                } else {
-                    card.style.display = 'none';
+            serviceCards.forEach(wrapper => {
+                const card = wrapper.querySelector('.service-card');
+                if (card) {
+                    const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+                    const desc = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
+                    if (title.includes(filter) || desc.includes(filter)) {
+                        wrapper.style.display = '';
+                        found = true;
+                    } else {
+                        wrapper.style.display = 'none';
+                    }
                 }
             });
-            // Afficher un message si aucun résultat
             const noResult = document.getElementById('noResult');
             if (noResult) {
                 if (!found && filter.length > 0) {
@@ -76,7 +76,7 @@
     sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 4. ANIMATION DES STATISTIQUES
+    // 4. STATISTIQUES
     // ========================================
     function animateNumbers() {
         const stats = document.querySelectorAll('.stat-number');

@@ -7,7 +7,7 @@
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Nos Projets</h1>
-        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez quelques-uns de nos projets récents.</p>
+        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez nos réalisations à Agadez et dans tout le Niger.</p>
 
         <div class="row g-4">
             <div class="col-md-4" th:each="proj : ${projects}">
@@ -20,8 +20,36 @@
                 </div>
             </div>
             <!-- Fallback -->
-            <div th:if="${projects.isEmpty()}" class="col-12 text-center">
-                <p class="text-secondary">Aucun projet à afficher pour le moment.</p>
+            <div th:if="${projects.isEmpty()}" class="col-12">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1546548970-7171f7188d67?w=600&auto=format" alt="Pont" class="img-fluid">
+                            <div class="project-body">
+                                <h5>Pont d'Agadez</h5>
+                                <p class="small mb-0">Construction d'un pont moderne sur le fleuve à Agadez.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&auto=format" alt="Piste" class="img-fluid">
+                            <div class="project-body">
+                                <h5>Piste agricole</h5>
+                                <p class="small mb-0">Aménagement de 15 km de piste dans la région d'Agadez.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format" alt="Engins" class="img-fluid">
+                            <div class="project-body">
+                                <h5>Location d'engins</h5>
+                                <p class="small mb-0">Location de pelles et bulldozers pour les chantiers à Agadez.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -26,6 +26,7 @@ body.dark-mode {
     --shadow: 0 15px 40px rgba(255, 255, 255, 0.05);
     --primary: #d4af37;
     --primary-light: #f1c40f;
+    --gray: #a0a0a0;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,6 +38,44 @@ body {
     padding-top: 76px;
     line-height: 1.8;
     transition: background 0.4s ease, color 0.4s ease;
+    position: relative;
+}
+
+/* ============================================
+   ANIMATION DE LUMIÈRE (sur toute la page d'accueil)
+============================================ */
+body.home-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.03) 0%,
+        rgba(212, 175, 55, 0.08) 30%,
+        rgba(212, 175, 55, 0.03) 60%,
+        rgba(212, 175, 55, 0.08) 100%
+    );
+    background-size: 400% 400%;
+    animation: lightFlow 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+@keyframes lightFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+body.dark-mode.home-page::before {
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.02) 0%,
+        rgba(212, 175, 55, 0.06) 30%,
+        rgba(212, 175, 55, 0.02) 60%,
+        rgba(212, 175, 55, 0.06) 100%
+    );
 }
 
 /* ============================================
@@ -64,9 +103,22 @@ a:hover { color: var(--gold); }
     box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
     color: #1a2a3a;
 }
+.btn-outline-gold {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: all var(--transition);
+}
+.btn-outline-gold:hover {
+    background: var(--gold);
+    color: #1a2a3a;
+}
 
 /* ============================================
-   NAVBAR (avec le toggle jour/nuit)
+   NAVBAR
 ============================================ */
 .navbar {
     backdrop-filter: blur(20px);
@@ -105,7 +157,7 @@ body.dark-mode .navbar {
 .nav-link.active::after { width: 100%; }
 .nav-link:hover { color: var(--gold) !important; }
 
-/* --- Icône de changement de thème (Lune / Soleil) --- */
+/* --- Icône de changement de thème --- */
 .theme-toggle {
     background: rgba(255, 255, 255, 0.15);
     border: none;
@@ -184,7 +236,7 @@ body.dark-mode .search-bar .search-icon {
 }
 
 /* ============================================
-   HERO AVEC EFFET SHIMMER (lumière qui monte)
+   HERO AVEC EFFET SHIMMER
 ============================================ */
 .hero {
     background: var(--gradient-main);
@@ -209,37 +261,161 @@ body.dark-mode .search-bar .search-icon {
     100% { background-position: 200% center; }
 }
 
-/* Effet de lumière qui monte (sur le texte de l'accueil) */
-.hero .light-sweep {
+/* ============================================
+   SECTIONS
+============================================ */
+.section-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--text-color);
     position: relative;
     display: inline-block;
+    margin-bottom: 50px;
 }
-.hero .light-sweep::before {
+.section-title::after {
     content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(255, 215, 0, 0.15) 40%,
-        rgba(255, 215, 0, 0.3) 50%,
-        rgba(255, 215, 0, 0.15) 60%,
-        transparent 100%
-    );
-    animation: lightSweep 4s ease-in-out infinite;
-    pointer-events: none;
+    display: block;
+    width: 80px;
+    height: 5px;
+    background: var(--gradient-gold);
+    margin: 12px auto 0;
+    border-radius: 4px;
 }
-@keyframes lightSweep {
-    0% { transform: translateY(-100%); }
-    50% { transform: translateY(100%); }
-    100% { transform: translateY(-100%); }
+.section-title .gold-text {
+    color: var(--gold);
+}
+
+.section-animate {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.section-animate.hidden-start {
+    opacity: 0;
+    transform: translateY(40px);
+}
+.section-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ============================================
-   CARTES MEMBRES DE L'ÉQUIPE
+   CARTES (page d'accueil)
+============================================ */
+.service-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 30px 20px;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+    border: 1px solid rgba(0,0,0,0.03);
+    text-align: center;
+    color: var(--text-color);
+}
+.service-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 50px rgba(26, 42, 58, 0.15);
+}
+.service-card .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-gold);
+    color: #1a2a3a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin: 0 auto 20px;
+    transition: transform var(--transition);
+}
+.service-card:hover .icon-wrapper { transform: scale(1.1) rotate(-4deg); }
+.service-card .card-title {
+    font-weight: 700;
+    color: var(--gold);  /* TITRE EN OR */
+}
+.service-card .card-text {
+    color: var(--gray);
+}
+body.dark-mode .service-card .card-title {
+    color: var(--gold-light);
+}
+
+/* ============================================
+   STATISTIQUES
+============================================ */
+.stat-number {
+    font-size: 3.8rem;
+    font-weight: 800;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transition: all 0.6s ease;
+}
+.stat-label {
+    color: var(--gray);
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* ============================================
+   PROJETS ET ACTUALITÉS (avec images locales)
+============================================ */
+.project-card, .article-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-card);
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+}
+.project-card:hover, .article-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+}
+.project-card img, .article-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform var(--transition);
+}
+.project-card:hover img, .article-card:hover img { transform: scale(1.05); }
+.project-card .project-body, .article-card .article-body {
+    padding: 20px;
+    background: var(--bg-card);
+}
+.project-card .project-body h5, .article-card .article-body h5 {
+    font-weight: 700;
+    color: var(--text-color);
+}
+.project-card .project-body p, .article-card .article-body p {
+    color: var(--gray);
+}
+.article-card .article-body .date {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   TEMOIGNAGES
+============================================ */
+.testimonial-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    border-left: 6px solid var(--gold);
+    transition: transform var(--transition);
+    color: var(--text-color);
+}
+.testimonial-card:hover { transform: translateY(-6px); }
+.testimonial-card .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 10px; }
+.testimonial-card .client-name { font-weight: 700; color: var(--gold); margin-top: 12px; }
+
+/* ============================================
+   ÉQUIPE
 ============================================ */
 .team-card {
     background: var(--bg-card);
@@ -249,6 +425,7 @@ body.dark-mode .search-bar .search-icon {
     box-shadow: var(--shadow);
     transition: all var(--transition);
     border: 1px solid rgba(0,0,0,0.03);
+    color: var(--text-color);
 }
 .team-card:hover {
     transform: translateY(-10px);
@@ -267,27 +444,125 @@ body.dark-mode .search-bar .search-icon {
     color: #1a2a3a;
     font-weight: 700;
 }
-.team-card h5 {
-    font-weight: 700;
+.team-card h5 { font-weight: 700; color: var(--text-color); }
+.team-card .role { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+
+/* ============================================
+   FAQ & NEWSLETTER
+============================================ */
+.accordion-item {
+    border: none;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+.accordion-button:not(.collapsed) {
+    background: var(--gradient-main);
+    color: #fff;
+}
+.accordion-button:focus { box-shadow: 0 0 0 3px rgba(212,175,55,0.3); }
+.accordion-button, .accordion-body {
+    background: var(--bg-card);
     color: var(--text-color);
 }
-.team-card .role {
-    color: var(--gold);
-    font-weight: 600;
-    font-size: 0.9rem;
+body.dark-mode .accordion-button {
+    background: var(--bg-card);
+    color: var(--text-color);
 }
-body.dark-mode .team-card {
-    border-color: rgba(255,255,255,0.05);
+
+.newsletter {
+    background: var(--gradient-main);
+    border-radius: var(--radius);
+    padding: 50px 30px;
+    color: #fff;
+    text-align: center;
 }
-body.dark-mode .team-card:hover {
-    box-shadow: 0 20px 50px rgba(212, 175, 55, 0.08);
+.newsletter input[type="email"] {
+    border: none;
+    border-radius: 50px;
+    padding: 14px 24px;
+    width: 100%;
+    max-width: 400px;
+    outline: none;
+}
+.newsletter .btn {
+    border-radius: 50px;
+    padding: 14px 40px;
+    background: var(--gold);
+    color: #1a2a3a;
+    font-weight: 700;
+    transition: all var(--transition);
+}
+.newsletter .btn:hover { background: var(--gold-light); }
+
+/* ============================================
+   CONTACT & DEVIS
+============================================ */
+.contact-info i { color: var(--gold); width: 30px; }
+.contact-form .form-control,
+.devis-form .form-control {
+    border-radius: 12px;
+    border: 1px solid #dfe6e9;
+    padding: 14px 18px;
+    transition: all var(--transition);
+    background: var(--bg-card);
+    color: var(--text-color);
+}
+.contact-form .form-control:focus,
+.devis-form .form-control:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
 }
 
 /* ============================================
-   LES AUTRES STYLES (services, projets, etc.)
-   ... (gardez tous vos styles existants ici) ...
+   BACK TO TOP
 ============================================ */
-/* ... (je ne réécris pas tout, mais assurez-vous de conserver vos styles précédents) ... */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-gold);
+    color: #1a2a3a;
+    border: none;
+    border-radius: 50%;
+    font-size: 22px;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition);
+    cursor: pointer;
+    z-index: 999;
+}
+.back-to-top.visible { opacity: 1; visibility: visible; }
+.back-to-top:hover { transform: translateY(-4px) scale(1.05); }
+
+/* ============================================
+   FOOTER
+============================================ */
+.footer {
+    background: #1a2a3a;
+    color: #b0bec5;
+    padding: 50px 0 30px;
+    margin-top: 60px;
+}
+.footer a { color: #b0bec5; transition: color var(--transition); }
+.footer a:hover { color: var(--gold); }
+.footer .social-links a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: all var(--transition);
+    color: #b0bec5;
+}
+.footer .social-links a:hover { background: var(--gold); color: #1a2a3a; }
 
 /* ============================================
    RESPONSIVE
@@ -295,6 +570,8 @@ body.dark-mode .team-card:hover {
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5rem; }
     .hero { padding: 80px 0 60px; }
+    .section-title { font-size: 2rem; }
+    .stat-number { font-size: 2.8rem; }
     .search-bar { max-width: 100%; }
     .theme-toggle { margin-left: 5px; width: 36px; height: 36px; font-size: 1rem; }
 }
