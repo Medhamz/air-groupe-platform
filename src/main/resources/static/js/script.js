@@ -2,12 +2,11 @@
     'use strict';
 
     // ========================================
-    // 1. GESTION DU MODE NUIT (Dark Mode)
+    // 1. GESTION DU MODE NUIT
     // ========================================
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
 
-    // Vérifier si un thème est stocké dans localStorage
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         body.classList.add('dark-mode');
