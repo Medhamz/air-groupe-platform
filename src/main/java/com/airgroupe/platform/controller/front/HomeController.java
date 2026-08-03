@@ -126,4 +126,9 @@ public class HomeController {
     public String redirectRealisations() {
         return "redirect:/projets";
     }
+
+    @GetMapping("/equipe")
+    public String equipe() {
+        return "front/equipe";
+    }
 }

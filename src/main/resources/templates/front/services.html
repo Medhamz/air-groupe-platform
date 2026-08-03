@@ -7,10 +7,16 @@
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Nos Services</h1>
-        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez l'ensemble de nos prestations de qualité.</p>
+        <p class="text-center text-secondary mb-4" style="font-size:1.2rem;">Découvrez l'ensemble de nos prestations de qualité.</p>
 
-        <div class="row g-4">
-            <div class="col-md-4" th:each="s : ${services}">
+        <!-- Barre de recherche sur la page Services -->
+        <div class="search-bar mx-auto mb-4" style="max-width: 500px;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
+        </div>
+
+        <div class="row g-4" id="servicesContainer">
+            <div class="col-md-4 service-card-wrapper" th:each="s : ${services}">
                 <div class="service-card p-4">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
                     <h5 class="card-title" th:text="${s.name}">Service</h5>
@@ -20,42 +26,42 @@
             <!-- Fallback -->
             <div th:if="${services.isEmpty()}" class="col-12">
                 <div class="row g-4">
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-hard-hat"></i></div>
                             <h5 class="card-title">BTP & Construction</h5>
                             <p class="card-text">Construction de bâtiments, routes, ponts et infrastructures.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-tint"></i></div>
                             <h5 class="card-title">Hydraulique</h5>
                             <p class="card-text">Forage, adduction d'eau, irrigation et assainissement.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
                             <h5 class="card-title">Transport & Logistique</h5>
                             <p class="card-text">Transport de marchandises, logistique et chaîne d'approvisionnement.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-cogs"></i></div>
                             <h5 class="card-title">Location d'engins lourds</h5>
                             <p class="card-text">Pelles, bulldozers, grues, camions et engins de chantier.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-store"></i></div>
                             <h5 class="card-title">Commerce général</h5>
                             <p class="card-text">Fourniture de matériaux, équipements et consommables.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 service-card-wrapper">
                         <div class="service-card p-4">
                             <div class="icon-wrapper"><i class="fas fa-handshake"></i></div>
                             <h5 class="card-title">Prestations de services</h5>
@@ -64,6 +70,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Message "aucun résultat" -->
+        <div id="noResult" class="text-center mt-4" style="display: none;">
+            <p class="text-secondary"><i class="fas fa-search-minus me-2"></i>Aucun service ne correspond à votre recherche.</p>
         </div>
     </div>
 </section>

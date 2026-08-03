@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{front/fragments/layout :: head}"></head>
+<body>
+<div th:replace="~{front/fragments/layout :: navbar}"></div>
+
+<section class="py-5 section-animate">
+    <div class="container">
+        <h1 class="text-center section-title">Notre Équipe</h1>
+        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Des professionnels dévoués à votre service.</p>
+
+        <div class="row g-4">
+            <!-- Membre 1 : Tijani -->
+            <div class="col-md-3 col-sm-6">
+                <div class="team-card">
+                    <div class="avatar">AT</div>
+                    <h5>Tijani</h5>
+                    <p class="role">Amadou Tidjani Hamza - Directeur Général</p>
+                </div>
+            </div>
+            <!-- Membre 2 : Issa Abdou Issa -->
+            <div class="col-md-3 col-sm-6">
+                <div class="team-card">
+                    <div class="avatar">IA</div>
+                    <h5>Issa Abdou Issa</h5>
+                    <p class="role">Comptable</p>
+                </div>
+            </div>
+            <!-- Membre 3 : Sidi Ali Harouna -->
+            <div class="col-md-3 col-sm-6">
+                <div class="team-card">
+                    <div class="avatar">SA</div>
+                    <h5>Sidi Ali Harouna</h5>
+                    <p class="role">Conducteur engin</p>
+                </div>
+            </div>
+            <!-- Membre 4 : Noura Michel -->
+            <div class="col-md-3 col-sm-6">
+                <div class="team-card">
+                    <div class="avatar">NM</div>
+                    <h5>Noura Michel</h5>
+                    <p class="role">Aide conducteur</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{front/fragments/layout :: footer}"></div>
+<div th:replace="~{front/fragments/layout :: scripts}"></div>
+</body>
+</html>

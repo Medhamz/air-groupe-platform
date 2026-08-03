@@ -7,9 +7,21 @@
 <!-- Hero -->
 <section class="hero text-center">
     <div class="container">
-        <h1 class="display-3 fw-bold">Bienvenue chez <span class="gold-text">Aïr Groupe</span></h1>
+        <h1 class="display-3 fw-bold">
+            Bienvenue chez <span class="gold-text light-sweep">Aïr Groupe</span>
+        </h1>
         <p class="lead">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
         <a href="/services" class="btn btn-gold btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
+    </div>
+</section>
+
+<!-- Barre de recherche sur la page d'accueil (mobile-friendly) -->
+<section class="py-3 bg-white" style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+    <div class="container">
+        <div class="search-bar mx-auto" style="max-width: 500px;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
+        </div>
     </div>
 </section>
 
@@ -51,8 +63,8 @@
         <div class="text-center">
             <h2 class="section-title">Nos Domaines d'Excellence</h2>
         </div>
-        <div class="row g-4">
-            <div th:each="s : ${services}" class="col-md-3">
+        <div class="row g-4" id="servicesContainer">
+            <div th:each="s : ${services}" class="col-md-3 service-card-wrapper">
                 <div class="service-card">
                     <div class="icon-wrapper"><i class="fas" th:class="${s.iconClass}"></i></div>
                     <h5 class="card-title" th:text="${s.name}">Service</h5>
@@ -62,28 +74,28 @@
             <!-- Fallback si aucun service en base -->
             <div th:if="${services.isEmpty()}" class="col-12">
                 <div class="row g-4">
-                    <div class="col-md-3">
+                    <div class="col-md-3 service-card-wrapper">
                         <div class="service-card">
                             <div class="icon-wrapper"><i class="fas fa-hard-hat"></i></div>
                             <h5 class="card-title">BTP & Construction</h5>
                             <p class="card-text">Bâtiments, routes, ponts et infrastructures.</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 service-card-wrapper">
                         <div class="service-card">
                             <div class="icon-wrapper"><i class="fas fa-tint"></i></div>
                             <h5 class="card-title">Hydraulique</h5>
                             <p class="card-text">Forage, adduction d'eau, irrigation.</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 service-card-wrapper">
                         <div class="service-card">
                             <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
                             <h5 class="card-title">Transport & Logistique</h5>
                             <p class="card-text">Transport de marchandises, logistique.</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 service-card-wrapper">
                         <div class="service-card">
                             <div class="icon-wrapper"><i class="fas fa-cogs"></i></div>
                             <h5 class="card-title">Location d'engins</h5>
@@ -92,6 +104,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Message "aucun résultat" -->
+        <div id="noResult" class="text-center mt-4" style="display: none;">
+            <p class="text-secondary"><i class="fas fa-search-minus me-2"></i>Aucun service ne correspond à votre recherche.</p>
         </div>
     </div>
 </section>

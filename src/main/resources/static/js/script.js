@@ -2,7 +2,64 @@
     'use strict';
 
     // ========================================
-    // 1. SCROLL REVEAL
+    // 1. GESTION DU MODE NUIT (Dark Mode)
+    // ========================================
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Vérifier si un thème est stocké dans localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        if (themeToggle) {
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            // Changer l'icône
+            this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            // Sauvegarder la préférence
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    }
+
+    // ========================================
+    // 2. BARRE DE RECHERCHE (filtrage des services)
+    // ========================================
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            const filter = this.value.toLowerCase().trim();
+            const serviceCards = document.querySelectorAll('.service-card');
+            let found = false;
+            serviceCards.forEach(card => {
+                const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+                const desc = card.querySelector('.card-text')?.textContent?.toLowerCase() || '';
+                if (title.includes(filter) || desc.includes(filter)) {
+                    card.style.display = '';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            // Afficher un message si aucun résultat
+            const noResult = document.getElementById('noResult');
+            if (noResult) {
+                if (!found && filter.length > 0) {
+                    noResult.style.display = 'block';
+                } else {
+                    noResult.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    // ========================================
+    // 3. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
     sections.forEach(section => section.classList.add('hidden-start'));
@@ -19,7 +76,7 @@
     sections.forEach(section => observer.observe(section));
 
     // ========================================
-    // 2. ANIMATION DES STATISTIQUES
+    // 4. ANIMATION DES STATISTIQUES
     // ========================================
     function animateNumbers() {
         const stats = document.querySelectorAll('.stat-number');
@@ -57,7 +114,7 @@
     }
 
     // ========================================
-    // 3. BACK TO TOP
+    // 5. BACK TO TOP
     // ========================================
     const backBtn = document.getElementById('backToTop');
     if (backBtn) {
@@ -70,7 +127,7 @@
     }
 
     // ========================================
-    // 4. ACTIVE NAV LINK
+    // 6. ACTIVE NAV LINK
     // ========================================
     const currentPath = window.location.pathname;
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
@@ -81,7 +138,7 @@
     });
 
     // ========================================
-    // 5. SMOOTH SCROLL
+    // 7. SMOOTH SCROLL
     // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -96,7 +153,7 @@
     });
 
     // ========================================
-    // 6. NEWSLETTER
+    // 8. NEWSLETTER
     // ========================================
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
@@ -111,7 +168,7 @@
     }
 
     // ========================================
-    // 7. AUTO-HIDE ALERT
+    // 9. AUTO-HIDE ALERT
     // ========================================
     const successAlert = document.querySelector('.alert-success');
     if (successAlert) {
@@ -123,7 +180,7 @@
     }
 
     // ========================================
-    // 8. PARALLAX HERO
+    // 10. PARALLAX HERO
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {
