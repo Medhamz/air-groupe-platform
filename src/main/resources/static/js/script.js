@@ -179,7 +179,7 @@
     }
 
     // ========================================
-    // 10. PARALLAX HERO
+    // 10. PARALLAX HERO (optionnel)
     // ========================================
     const hero = document.querySelector('.hero');
     if (hero) {

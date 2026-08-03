@@ -45,21 +45,24 @@ public class HomeController {
     public String projets(Model model) {
         List<ProjectDto> projects = new ArrayList<>();
         projects.add(new ProjectDto(
-                "Pont d'Agadez",
-                "Construction d'un pont moderne sur le fleuve à Agadez.",
-                "https://images.unsplash.com/photo-1546548970-7171f7188d67?w=600&auto=format"
+                "Aménagement de pistes rurales",
+                "Réhabilitation de 15 km de pistes dans la région d'Agadez.",
+                ""
         ));
         projects.add(new ProjectDto(
-                "Piste agricole d'Agadez",
-                "Aménagement de 15 km de piste dans la région d'Agadez.",
-                "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&auto=format"
+                "Location d'engins lourds",
+                "Fourniture de pelles et bulldozers pour les chantiers locaux.",
+                ""
         ));
         projects.add(new ProjectDto(
-                "Location d'engins à Agadez",
-                "Location de pelles et bulldozers pour les chantiers à Agadez.",
-                "https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format"
+                "Projets hydrauliques",
+                "Forage et adduction d'eau potable dans les villages d'Agadez.",
+                ""
         ));
-        model.addAttribute("projects", projects);
+        // On passe une liste vide si vous voulez afficher le fallback
+        // model.addAttribute("projects", projects);
+        // Pour afficher le fallback, commentez la ligne ci-dessus et décommentez celle-ci :
+        model.addAttribute("projects", new ArrayList<>());
         return "front/projets";
     }
 

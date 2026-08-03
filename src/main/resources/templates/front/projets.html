@@ -11,42 +11,34 @@
 
         <div class="row g-4">
             <div class="col-md-4" th:each="proj : ${projects}">
-                <div class="project-card">
-                    <img th:src="${proj.imageUrl}" alt="Projet" class="img-fluid" th:alt="${proj.title}">
-                    <div class="project-body">
-                        <h5 th:text="${proj.title}">Titre</h5>
-                        <p th:text="${proj.description}" class="small mb-0">Description</p>
-                    </div>
+                <div class="card-no-image">
+                    <div class="card-icon"><i class="fas fa-building"></i></div>
+                    <h5 th:text="${proj.title}">Titre</h5>
+                    <p th:text="${proj.description}">Description</p>
                 </div>
             </div>
-            <!-- Fallback avec images de paysage sahélien -->
+            <!-- Fallback -->
             <div th:if="${projects.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="project-card">
-                            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&auto=format" alt="Paysage sahélien" class="img-fluid">
-                            <div class="project-body">
-                                <h5>Pont d'Agadez</h5>
-                                <p class="small mb-0">Construction d'un pont moderne sur le fleuve à Agadez.</p>
-                            </div>
+                        <div class="card-no-image">
+                            <div class="card-icon"><i class="fas fa-road"></i></div>
+                            <h5>Aménagement de pistes rurales</h5>
+                            <p>Réhabilitation de 15 km de pistes dans la région d'Agadez.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="project-card">
-                            <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&auto=format" alt="Piste agricole" class="img-fluid">
-                            <div class="project-body">
-                                <h5>Piste agricole d'Agadez</h5>
-                                <p class="small mb-0">Aménagement de 15 km de piste dans la région d'Agadez.</p>
-                            </div>
+                        <div class="card-no-image">
+                            <div class="card-icon"><i class="fas fa-truck"></i></div>
+                            <h5>Location d'engins lourds</h5>
+                            <p>Fourniture de pelles et bulldozers pour les chantiers locaux.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="project-card">
-                            <img src="https://images.unsplash.com/photo-1511452887600-c0b1b06b490a?w=600&auto=format" alt="Engins" class="img-fluid">
-                            <div class="project-body">
-                                <h5>Location d'engins à Agadez</h5>
-                                <p class="small mb-0">Location de pelles et bulldozers pour les chantiers à Agadez.</p>
-                            </div>
+                        <div class="card-no-image">
+                            <div class="card-icon"><i class="fas fa-water"></i></div>
+                            <h5>Projets hydrauliques</h5>
+                            <p>Forage et adduction d'eau potable dans les villages d'Agadez.</p>
                         </div>
                     </div>
                 </div>
