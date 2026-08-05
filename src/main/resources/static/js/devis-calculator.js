@@ -5,48 +5,45 @@
     const surfaceInput = document.getElementById('surface');
     const durationInput = document.getElementById('duration');
     const estimateAmount = document.getElementById('estimateAmount');
+    const surfaceValue = document.getElementById('surfaceValue');
+    const durationValue = document.getElementById('durationValue');
 
-    if (serviceSelect && surfaceInput && durationInput && estimateAmount) {
-        function calculateEstimate() {
-            const service = serviceSelect.value;
-            const surface = parseFloat(surfaceInput.value) || 0;
-            const duration = parseFloat(durationInput.value) || 0;
+    if (!serviceSelect || !surfaceInput || !durationInput || !estimateAmount) return;
 
-            // Tarifs indicatifs par service (en CFA)
-            const rates = {
-                'btp': 25000,
-                'hydraulique': 30000,
-                'engins': 15000,
-                'transport': 12000,
-                'commerce': 20000,
-                'prestations': 22000
-            };
+    function calculateEstimate() {
+        const service = serviceSelect.value;
+        const surface = parseFloat(surfaceInput.value) || 0;
+        const duration = parseFloat(durationInput.value) || 0;
 
-            const rate = rates[service] || 20000;
-            let estimate = 0;
+        const rates = {
+            'btp': 25000,
+            'hydraulique': 30000,
+            'engins': 15000,
+            'transport': 12000,
+            'commerce': 20000,
+            'prestations': 22000
+        };
 
-            if (service === 'engins' || service === 'transport') {
-                // Pour les engins et transport, on se base sur la durée
-                estimate = rate * duration;
-            } else {
-                // Pour les autres, on se base sur la surface
-                estimate = rate * surface;
-            }
+        const rate = rates[service] || 20000;
+        let estimate = 0;
 
-            // Appliquer un minimum
-            if (estimate < 100000) estimate = 100000;
-
-            // Arrondir à 1000
-            estimate = Math.ceil(estimate / 1000) * 1000;
-
-            estimateAmount.textContent = estimate.toLocaleString('fr-FR') + ' FCFA';
+        if (service === 'engins' || service === 'transport') {
+            estimate = rate * duration;
+        } else {
+            estimate = rate * surface;
         }
 
-        serviceSelect.addEventListener('change', calculateEstimate);
-        surfaceInput.addEventListener('input', calculateEstimate);
-        durationInput.addEventListener('input', calculateEstimate);
+        if (estimate < 100000) estimate = 100000;
+        estimate = Math.ceil(estimate / 1000) * 1000;
 
-        // Calcul initial
-        calculateEstimate();
+        estimateAmount.textContent = estimate.toLocaleString('fr-FR') + ' FCFA';
+        if (surfaceValue) surfaceValue.textContent = surface + ' m²';
+        if (durationValue) durationValue.textContent = duration + ' heures';
     }
+
+    serviceSelect.addEventListener('change', calculateEstimate);
+    surfaceInput.addEventListener('input', calculateEstimate);
+    durationInput.addEventListener('input', calculateEstimate);
+
+    calculateEstimate();
 })();

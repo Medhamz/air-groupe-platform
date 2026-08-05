@@ -11,24 +11,18 @@
 </head>
 <body>
 
-<!-- PARTICULES EN FOND (chargées via JS) -->
+<!-- PARTICULES EN FOND (via JS) -->
 
 <!-- Navbar -->
 <nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid px-4">
-        <!-- Logo / Nom de l'entreprise -->
         <a class="navbar-brand" href="/">
             <i class="fas fa-mountain"></i> Afrique équipements et services
         </a>
-
-        <!-- Bouton de bascule pour mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- Menu + recherche + thème -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Liens de navigation (centrés) -->
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
@@ -36,18 +30,15 @@
                 <li class="nav-item"><a class="nav-link" href="/actualites">Actualités</a></li>
                 <li class="nav-item"><a class="nav-link" href="/equipe">Équipe</a></li>
                 <li class="nav-item"><a class="nav-link" href="/galerie">Galerie</a></li>
+                <li class="nav-item"><a class="nav-link" href="/devis-calculator">Estimation</a></li>
                 <li class="nav-item"><a class="nav-link" href="/devis">Devis</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
             </ul>
-
-            <!-- Zone de droite : recherche + thème -->
             <div class="d-flex align-items-center gap-2">
-                <!-- Barre de recherche moderne -->
                 <div class="search-bar search-bar-header">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
                 </div>
-                <!-- Bouton de thème -->
                 <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -63,17 +54,17 @@
 </button>
 <div id="chatbotWindow" class="chatbot-window">
     <div class="chatbot-header">
-        <h6><i class="fas fa-robot me-2"></i>Assistant Aïr Groupe</h6>
+        <h6><i class="fas fa-robot me-2"></i>Assistant</h6>
         <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
     </div>
     <div id="chatMessages" class="chatbot-messages"></div>
     <div class="chatbot-input">
-        <input type="text" id="chatInput" placeholder="Posez votre question..." aria-label="Message">
+        <input type="text" id="chatInput" placeholder="Votre question...">
         <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
-<!-- Back to Top -->
+<!-- BACK TO TOP -->
 <button id="backToTop" class="back-to-top"><i class="fas fa-chevron-up"></i></button>
 
 <!-- Footer -->
@@ -83,7 +74,7 @@
             <div class="col-lg-4">
                 <h5 class="text-white">Afrique équipements et services</h5>
                 <p>Leader au Niger dans les services intégrés : BTP, hydraulique, commerce, location d'engins, transport et logistique.</p>
-                <!-- BOUTONS DE PARTAGE SOCIAL -->
+                <!-- Boutons de partage social -->
                 <div class="share-buttons mt-3">
                     <button class="share-btn facebook" data-platform="facebook"><i class="fab fa-facebook-f"></i></button>
                     <button class="share-btn twitter" data-platform="twitter"><i class="fab fa-twitter"></i></button>
@@ -100,6 +91,7 @@
                     <li><a href="/actualites">Actualités</a></li>
                     <li><a href="/equipe">Équipe</a></li>
                     <li><a href="/galerie">Galerie</a></li>
+                    <li><a href="/devis-calculator">Estimation</a></li>
                     <li><a href="/devis">Devis</a></li>
                     <li><a href="/contact">Contact</a></li>
                 </ul>

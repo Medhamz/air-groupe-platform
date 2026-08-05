@@ -13,8 +13,7 @@
         <p class="lead">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a href="/services" class="btn btn-gold btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
-            <!-- Bouton mode lecture -->
-            <button id="readingModeBtn" class="btn btn-outline-gold btn-lg rounded-pill px-4">
+            <button id="readingModeBtn" class="btn btn-outline-gold btn-lg rounded-pill px-4" onclick="toggleReadingMode()">
                 <i class="fas fa-expand"></i> Lecture
             </button>
         </div>
@@ -26,7 +25,7 @@
     <div class="container">
         <div class="search-bar mx-auto" style="max-width: 500px;">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
+            <input type="text" id="searchInput" placeholder="Rechercher un service...">
         </div>
     </div>
 </section>
@@ -77,7 +76,6 @@
                     <p class="card-text" th:text="${s.description}">Description</p>
                 </div>
             </div>
-            <!-- Fallback -->
             <div th:if="${services.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-3 service-card-wrapper">

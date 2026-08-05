@@ -59,10 +59,7 @@ public class HomeController {
                 "Forage et adduction d'eau potable dans les villages d'Agadez.",
                 ""
         ));
-        // On passe une liste vide si vous voulez afficher le fallback
-        // model.addAttribute("projects", projects);
-        // Pour afficher le fallback, commentez la ligne ci-dessus et décommentez celle-ci :
-        model.addAttribute("projects", new ArrayList<>());
+        model.addAttribute("projects", projects);
         return "front/projets";
     }
 
@@ -79,6 +76,11 @@ public class HomeController {
     @GetMapping("/galerie")
     public String galerie() {
         return "front/galerie";
+    }
+
+    @GetMapping("/devis-calculator")
+    public String devisCalculator() {
+        return "front/devis-calculator";
     }
 
     @GetMapping("/contact")
@@ -128,10 +130,5 @@ public class HomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/devis-calculator")
-    public String devisCalculator() {
-        return "front/devis-calculator";
     }
 }

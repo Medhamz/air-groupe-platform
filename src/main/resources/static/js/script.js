@@ -2,12 +2,11 @@
     'use strict';
 
     // ========================================
-    // 1. GESTION DU MODE NUIT (réparé)
+    // 1. GESTION DU MODE NUIT
     // ========================================
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
 
-    // Appliquer le thème sauvegardé
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         body.classList.add('dark-mode');
@@ -16,7 +15,6 @@
         }
     }
 
-    // Gérer le clic sur le bouton
     if (themeToggle) {
         themeToggle.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
@@ -27,50 +25,7 @@
     }
 
     // ========================================
-    // 2. STATISTIQUES ANIMÉES
-    // ========================================
-    function animateNumbers() {
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            // Récupérer la valeur cible depuis l'attribut data-count
-            const target = parseInt(stat.getAttribute('data-count'));
-            const suffix = stat.getAttribute('data-suffix') || '';
-            if (isNaN(target)) return;
-            const duration = 1500;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-            let current = 0;
-            // Commencer à 0 pour l'animation
-            stat.textContent = '0' + suffix;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    clearInterval(timer);
-                    current = target;
-                }
-                stat.textContent = Math.floor(current) + suffix;
-            }, stepTime);
-        });
-    }
-
-    // Observer pour déclencher l'animation quand la section devient visible
-    const statObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateNumbers();
-                statObserver.disconnect(); // une seule fois
-            }
-        });
-    }, { threshold: 0.3 });
-
-    const statSection = document.querySelector('.stats-section');
-    if (statSection) {
-        statObserver.observe(statSection);
-    }
-
-    // ========================================
-    // 3. BARRE DE RECHERCHE
+    // 2. BARRE DE RECHERCHE
     // ========================================
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -103,7 +58,7 @@
     }
 
     // ========================================
-    // 4. SCROLL REVEAL
+    // 3. SCROLL REVEAL
     // ========================================
     const sections = document.querySelectorAll('.section-animate');
     sections.forEach(section => section.classList.add('hidden-start'));
@@ -118,6 +73,45 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
 
     sections.forEach(section => observer.observe(section));
+
+    // ========================================
+    // 4. STATISTIQUES ANIMÉES
+    // ========================================
+    function animateNumbers() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            const suffix = stat.getAttribute('data-suffix') || '';
+            if (isNaN(target)) return;
+            const duration = 1500;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    current = target;
+                }
+                stat.textContent = Math.floor(current) + suffix;
+            }, stepTime);
+        });
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumbers();
+                statObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const statSection = document.querySelector('.stats-section');
+    if (statSection) {
+        statObserver.observe(statSection);
+    }
 
     // ========================================
     // 5. BACK TO TOP
@@ -167,38 +161,14 @@
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             if (email) {
-                alert('Merci ! Vous êtes désormais inscrit à notre newsletter.');
+                showToast('Merci ! Vous êtes désormais inscrit à notre newsletter.', 'success');
                 this.reset();
             }
         });
     }
 
     // ========================================
-    // 9. AUTO-HIDE ALERT
-    // ========================================
-    const successAlert = document.querySelector('.alert-success');
-    if (successAlert) {
-        setTimeout(() => {
-            successAlert.style.transition = 'opacity 0.6s';
-            successAlert.style.opacity = '0';
-            setTimeout(() => successAlert.remove(), 600);
-        }, 5000);
-    }
-
-    // ========================================
-    // 10. PARALLAX HERO
-    // ========================================
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
-        });
-    }
-})();
-
-    // ========================================
-    // 11. NOTIFICATIONS TOAST
+    // 9. NOTIFICATIONS TOAST
     // ========================================
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer') || (function() {
@@ -220,25 +190,24 @@
         `;
         container.appendChild(toast);
 
-        // Auto-fermeture après 5 secondes
         const timeout = setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => toast.remove(), 400);
         }, 5000);
 
-        // Fermeture manuelle
         toast.querySelector('.toast-close').addEventListener('click', () => {
             clearTimeout(timeout);
             toast.style.opacity = '0';
             setTimeout(() => toast.remove(), 400);
         });
     }
+    window.showToast = showToast;
 
     // ========================================
-    // 12. BOUTONS DE PARTAGE SOCIAL
+    // 10. BOUTONS DE PARTAGE SOCIAL
     // ========================================
     document.querySelectorAll('.share-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function() {
             const url = encodeURIComponent(window.location.href);
             const text = encodeURIComponent('Découvrez Afrique équipements et services - Leader au Niger !');
             let shareUrl = '';
@@ -267,22 +236,44 @@
     });
 
     // ========================================
-    // 13. MODE LECTURE
+    // 11. MODE LECTURE
     // ========================================
-    const readingBtn = document.getElementById('readingModeBtn');
-    if (readingBtn) {
-        readingBtn.addEventListener('click', function() {
-            const content = document.querySelector('.container');
-            if (content) {
-                content.classList.toggle('reading-mode');
-                const isReading = content.classList.contains('reading-mode');
-                this.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
-                showToast(isReading ? 'Mode lecture activé' : 'Mode normal', 'success');
-            }
+    function toggleReadingMode() {
+        const content = document.querySelector('.container');
+        if (!content) {
+            document.body.classList.toggle('reading-mode');
+        } else {
+            content.classList.toggle('reading-mode');
+        }
+        const btn = document.getElementById('readingModeBtn');
+        const isReading = document.body.classList.contains('reading-mode') || content?.classList.contains('reading-mode');
+        if (btn) {
+            btn.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
+        }
+        showToast(isReading ? 'Mode lecture activé' : 'Mode normal', 'success');
+    }
+    window.toggleReadingMode = toggleReadingMode;
+
+    // ========================================
+    // 12. PARALLAX HERO
+    // ========================================
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
         });
     }
 
     // ========================================
-    // 14. DÉTECTION DU SCROLL POUR ANIMATIONS (particules déjà chargées)
+    // 13. AUTO-HIDE ALERT (pour les messages flash)
     // ========================================
-    console.log('Afrique équipements et services - Site moderne chargé avec succès !');
+    const successAlert = document.querySelector('.alert-success');
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.style.transition = 'opacity 0.6s';
+            successAlert.style.opacity = '0';
+            setTimeout(() => successAlert.remove(), 600);
+        }, 5000);
+    }
+})();

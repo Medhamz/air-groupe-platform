@@ -1,7 +1,6 @@
 (function() {
     'use strict';
 
-    // Créer le conteneur de particules
     const container = document.createElement('div');
     container.id = 'particles-container';
     document.body.prepend(container);
