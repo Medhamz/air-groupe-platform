@@ -196,3 +196,93 @@
         });
     }
 })();
+
+    // ========================================
+    // 11. NOTIFICATIONS TOAST
+    // ========================================
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer') || (function() {
+            const c = document.createElement('div');
+            c.id = 'toastContainer';
+            c.className = 'toast-container';
+            document.body.appendChild(c);
+            return c;
+        })();
+
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+        const color = type === 'success' ? '#27ae60' : '#e74c3c';
+        toast.innerHTML = `
+            <span class="toast-icon" style="color: ${color}"><i class="${icon}"></i></span>
+            <span>${message}</span>
+            <button class="toast-close"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(toast);
+
+        // Auto-fermeture après 5 secondes
+        const timeout = setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 400);
+        }, 5000);
+
+        // Fermeture manuelle
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            clearTimeout(timeout);
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 400);
+        });
+    }
+
+    // ========================================
+    // 12. BOUTONS DE PARTAGE SOCIAL
+    // ========================================
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Découvrez Afrique équipements et services - Leader au Niger !');
+            let shareUrl = '';
+            const platform = this.dataset.platform;
+
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+                    break;
+            }
+
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+                showToast('Partage ouvert avec succès !', 'success');
+            }
+        });
+    });
+
+    // ========================================
+    // 13. MODE LECTURE
+    // ========================================
+    const readingBtn = document.getElementById('readingModeBtn');
+    if (readingBtn) {
+        readingBtn.addEventListener('click', function() {
+            const content = document.querySelector('.container');
+            if (content) {
+                content.classList.toggle('reading-mode');
+                const isReading = content.classList.contains('reading-mode');
+                this.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
+                showToast(isReading ? 'Mode lecture activé' : 'Mode normal', 'success');
+            }
+        });
+    }
+
+    // ========================================
+    // 14. DÉTECTION DU SCROLL POUR ANIMATIONS (particules déjà chargées)
+    // ========================================
+    console.log('Afrique équipements et services - Site moderne chargé avec succès !');

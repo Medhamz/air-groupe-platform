@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{front/fragments/layout :: head}"></head>
+<body>
+<div th:replace="~{front/fragments/layout :: navbar}"></div>
+
+<section class="py-5 section-animate">
+    <div class="container">
+        <h1 class="text-center section-title">Estimation de devis en ligne</h1>
+        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Obtenez une estimation rapide pour votre projet.</p>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="calculator-section">
+                    <form id="calculatorForm">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Type de service</label>
+                            <select id="serviceTypeCalc" class="form-select">
+                                <option value="btp">BTP & Construction</option>
+                                <option value="hydraulique">Hydraulique</option>
+                                <option value="engins">Location d'engins lourds</option>
+                                <option value="transport">Transport & Logistique</option>
+                                <option value="commerce">Commerce général</option>
+                                <option value="prestations">Prestations de services</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4" id="surfaceGroup">
+                            <label class="form-label fw-bold">Surface (m²) <span class="text-secondary" style="font-weight:400;">pour BTP, hydraulique, commerce, prestations</span></label>
+                            <input type="range" id="surface" class="form-range" min="10" max="1000" value="100" step="10">
+                            <div class="d-flex justify-content-between">
+                                <span>10 m²</span>
+                                <span id="surfaceValue" class="fw-bold">100 m²</span>
+                                <span>1000 m²</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4" id="durationGroup">
+                            <label class="form-label fw-bold">Durée (heures) <span class="text-secondary" style="font-weight:400;">pour location d'engins et transport</span></label>
+                            <input type="range" id="duration" class="form-range" min="1" max="100" value="8" step="1">
+                            <div class="d-flex justify-content-between">
+                                <span>1 heure</span>
+                                <span id="durationValue" class="fw-bold">8 heures</span>
+                                <span>100 heures</span>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="calculator-result mt-4">
+                        <p class="mb-1">Estimation indicative</p>
+                        <div class="amount" id="estimateAmount">250 000 FCFA</div>
+                        <p class="mb-0 small opacity-75">*Cette estimation est indicative. Un devis personnalisé vous sera fourni sur demande.</p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="/contact" class="btn btn-gold rounded-pill px-5">Demander un devis personnalisé <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{front/fragments/layout :: footer}"></div>
+<div th:replace="~{front/fragments/layout :: scripts}"></div>
+</body>
+</html>

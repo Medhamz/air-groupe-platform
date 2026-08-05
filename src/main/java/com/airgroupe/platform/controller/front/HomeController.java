@@ -129,4 +129,9 @@ public class HomeController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("/devis-calculator")
+    public String devisCalculator() {
+        return "front/devis-calculator";
+    }
 }
