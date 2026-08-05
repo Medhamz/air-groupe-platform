@@ -48,20 +48,22 @@
     </div>
 </nav>
 
-<!-- CHATBOT (visible et fonctionnel) -->
-<button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
-    <i class="fas fa-comment-dots"></i>
-    <span class="notification-dot"></span>
-</button>
-<div id="chatbotWindow" class="chatbot-window">
-    <div class="chatbot-header">
-        <h6><i class="fas fa-robot me-2"></i>Assistant Afrique Équipements</h6>
-        <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="chatMessages" class="chatbot-messages"></div>
-    <div class="chatbot-input">
-        <input type="text" id="chatInput" placeholder="Posez votre question...">
-        <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+<!-- CHATBOT (fragment) -->
+<div th:fragment="chatbot">
+    <button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
+        <i class="fas fa-comment-dots"></i>
+        <span class="notification-dot"></span>
+    </button>
+    <div id="chatbotWindow" class="chatbot-window">
+        <div class="chatbot-header">
+            <h6><i class="fas fa-robot me-2"></i>Assistant Afrique Équipements</h6>
+            <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatMessages" class="chatbot-messages"></div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Posez votre question...">
+            <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
 </div>
 
