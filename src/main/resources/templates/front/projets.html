@@ -11,34 +11,38 @@
 
         <div class="row g-4">
             <div class="col-md-4" th:each="proj : ${projects}">
-                <div class="card-no-image">
-                    <div class="card-icon"><i class="fas fa-building"></i></div>
-                    <h5 th:text="${proj.title}">Titre</h5>
-                    <p th:text="${proj.description}">Description</p>
+                <div class="project-card">
+                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
+                        <h5 th:text="${proj.title}">Titre</h5>
+                        <p th:text="${proj.description}" class="small mb-0">Description</p>
+                    </div>
                 </div>
             </div>
             <!-- Fallback -->
             <div th:if="${projects.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="card-no-image">
-                            <div class="card-icon"><i class="fas fa-road"></i></div>
-                            <h5>Aménagement de pistes rurales</h5>
-                            <p>Réhabilitation de 15 km de pistes dans la région d'Agadez.</p>
+                        <div class="project-card">
+                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
+                                <h5>Pont d'Agadez</h5>
+                                <p class="small mb-0">Construction d'un pont moderne sur le fleuve à Agadez.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-no-image">
-                            <div class="card-icon"><i class="fas fa-truck"></i></div>
-                            <h5>Location d'engins lourds</h5>
-                            <p>Fourniture de pelles et bulldozers pour les chantiers locaux.</p>
+                        <div class="project-card">
+                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
+                                <h5>Piste agricole d'Agadez</h5>
+                                <p class="small mb-0">Aménagement de 15 km de piste dans la région d'Agadez.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-no-image">
-                            <div class="card-icon"><i class="fas fa-water"></i></div>
-                            <h5>Projets hydrauliques</h5>
-                            <p>Forage et adduction d'eau potable dans les villages d'Agadez.</p>
+                        <div class="project-card">
+                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
+                                <h5>Location d'engins à Agadez</h5>
+                                <p class="small mb-0">Location de pelles et bulldozers pour les chantiers à Agadez.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
