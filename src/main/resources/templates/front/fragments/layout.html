@@ -13,13 +13,21 @@
 
 <!-- Navbar -->
 <nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="/"><i class="fas fa-mountain"></i> Afrique équipements et services</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <div class="container-fluid px-4">
+        <!-- Logo / Nom de l'entreprise -->
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-mountain"></i> Afrique équipements et services
+        </a>
+
+        <!-- Bouton de bascule pour mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Menu + recherche + thème -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <!-- Liens de navigation (centrés) -->
+            <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="/projets">Projets</a></li>
@@ -29,14 +37,19 @@
                 <li class="nav-item"><a class="nav-link" href="/devis">Devis</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
             </ul>
-            <!-- Barre de recherche – visible sur tous les écrans -->
-            <div class="search-bar search-bar-header ms-3">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
+
+            <!-- Zone de droite : recherche + thème -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- Barre de recherche moderne -->
+                <div class="search-bar search-bar-header">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher un service..." aria-label="Rechercher">
+                </div>
+                <!-- Bouton de thème -->
+                <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
-            <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème">
-                <i class="fas fa-moon"></i>
-            </button>
         </div>
     </div>
 </nav>
