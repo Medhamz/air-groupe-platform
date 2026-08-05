@@ -4,8 +4,23 @@
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
 
-<!-- CHATBOT -->
-<div th:replace="~{front/fragments/layout :: chatbot}"></div>
+<!-- ====== CHATBOT intégré directement ====== -->
+<button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
+    <i class="fas fa-comment-dots"></i>
+    <span class="notification-dot"></span>
+</button>
+<div id="chatbotWindow" class="chatbot-window">
+    <div class="chatbot-header">
+        <h6><i class="fas fa-robot me-2"></i>Assistant Afrique Équipements</h6>
+        <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="chatMessages" class="chatbot-messages"></div>
+    <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="Posez votre question...">
+        <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+<!-- ======================================== -->
 
 <!-- Hero -->
 <section class="hero text-center">
@@ -266,5 +281,92 @@
 
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
+
+<!-- Script du chatbot intégré (en plus de ceux de layout) -->
+<script>
+    console.log('✅ Script chatbot direct intégré dans index.html');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('chatbotToggle');
+        const windowChat = document.getElementById('chatbotWindow');
+        const close = document.getElementById('closeChat');
+        const input = document.getElementById('chatInput');
+        const send = document.getElementById('chatSend');
+        const messages = document.getElementById('chatMessages');
+
+        if (!toggle || !windowChat) {
+            console.error('❌ Chatbot elements not found');
+            return;
+        }
+
+        console.log('✅ Chatbot elements found, attaching events.');
+
+        toggle.addEventListener('click', function() {
+            windowChat.classList.toggle('active');
+            if (windowChat.classList.contains('active')) {
+                input?.focus();
+            }
+        });
+
+        if (close) {
+            close.addEventListener('click', function() {
+                windowChat.classList.remove('active');
+            });
+        }
+
+        function sendMessage() {
+            const text = input?.value.trim();
+            if (!text) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chatbot-message user';
+            userMsg.textContent = text;
+            messages.appendChild(userMsg);
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chatbot-message bot';
+                const replies = {
+                    'bonjour': 'Bonjour ! Comment puis-je vous aider ?',
+                    'services': 'Nous proposons BTP, hydraulique, commerce, location d\'engins, transport et logistique.',
+                    'devis': 'Vous pouvez demander un devis en ligne.',
+                    'contact': 'Contactez-nous au +227 96 96 74 74.',
+                    'agadez': 'Nous sommes basés à Agadez, Niger.',
+                    'merci': 'Avec plaisir !',
+                    'au revoir': 'Au revoir !'
+                };
+                const lower = text.toLowerCase();
+                let reply = 'Je n\'ai pas compris. Essayez : bonjour, services, devis, contact, agadez.';
+                for (const [key, val] of Object.entries(replies)) {
+                    if (lower.includes(key)) {
+                        reply = val;
+                        break;
+                    }
+                }
+                botMsg.textContent = reply;
+                messages.appendChild(botMsg);
+                messages.scrollTop = messages.scrollHeight;
+            }, 600);
+        }
+
+        if (send) send.addEventListener('click', sendMessage);
+        if (input) input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Message de bienvenue
+        setTimeout(() => {
+            if (messages) {
+                const welcome = document.createElement('div');
+                welcome.className = 'chatbot-message bot';
+                welcome.textContent = 'Bonjour ! Je suis l\'assistant. Posez-moi vos questions.';
+                messages.appendChild(welcome);
+            }
+        }, 600);
+    });
+</script>
+
 </body>
 </html>
