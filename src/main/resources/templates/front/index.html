@@ -4,7 +4,7 @@
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
 
-<!-- ====== CHATBOT intégré directement ====== -->
+<!-- ====== CHATBOT ====== -->
 <button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
     <i class="fas fa-comment-dots"></i>
     <span class="notification-dot"></span>
@@ -20,7 +20,6 @@
         <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
-<!-- ======================================== -->
 
 <!-- Hero -->
 <section class="hero text-center">
@@ -282,11 +281,64 @@
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 
-<!-- Script du chatbot intégré (en plus de ceux de layout) -->
+<!-- ========================================== -->
+<!-- SCRIPT UNIQUE (chatbot + particules + mode lecture) -->
+<!-- ========================================== -->
 <script>
-    console.log('✅ Script chatbot direct intégré dans index.html');
-
     document.addEventListener('DOMContentLoaded', function() {
+
+        // ========================================
+        // 1. PARTICULES LUMINEUSES
+        // ========================================
+        try {
+            const container = document.createElement('div');
+            container.id = 'particles-container';
+            container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:hidden;';
+            document.body.prepend(container);
+
+            const colors = ['#d4af37', '#f1c40f', '#ffd700', '#e6b800', '#ffec8b', '#ffffff'];
+            const particleCount = window.innerWidth < 768 ? 30 : 60;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                particle.style.cssText = `
+                    position:absolute;
+                    width:${size}px;
+                    height:${size}px;
+                    left:${Math.random() * 100}%;
+                    background:${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius:50%;
+                    opacity:0.3;
+                    animation: particleFloat ${Math.random() * 15 + 10}s linear infinite;
+                    animation-delay:${Math.random() * 20}s;
+                `;
+                container.appendChild(particle);
+            }
+
+            // Ajout de la clé d'animation si elle n'existe pas
+            if (!document.getElementById('particle-style')) {
+                const style = document.createElement('style');
+                style.id = 'particle-style';
+                style.textContent = `
+                    @keyframes particleFloat {
+                        0% { transform: translateY(100vh) scale(0); opacity: 0; }
+                        10% { opacity: 0.3; }
+                        90% { opacity: 0.3; }
+                        100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            console.log('✅ Particules lumineuses créées.');
+        } catch (e) {
+            console.warn('⚠️ Erreur particules:', e);
+        }
+
+        // ========================================
+        // 2. CHATBOT AMÉLIORÉ
+        // ========================================
         const toggle = document.getElementById('chatbotToggle');
         const windowChat = document.getElementById('chatbotWindow');
         const close = document.getElementById('closeChat');
@@ -294,77 +346,116 @@
         const send = document.getElementById('chatSend');
         const messages = document.getElementById('chatMessages');
 
-        if (!toggle || !windowChat) {
-            console.error('❌ Chatbot elements not found');
-            return;
-        }
-
-        console.log('✅ Chatbot elements found, attaching events.');
-
-        toggle.addEventListener('click', function() {
-            windowChat.classList.toggle('active');
-            if (windowChat.classList.contains('active')) {
-                input?.focus();
-            }
-        });
-
-        if (close) {
-            close.addEventListener('click', function() {
-                windowChat.classList.remove('active');
+        if (toggle && windowChat) {
+            toggle.addEventListener('click', function() {
+                windowChat.classList.toggle('active');
+                if (windowChat.classList.contains('active')) {
+                    input?.focus();
+                }
             });
-        }
+            if (close) {
+                close.addEventListener('click', function() {
+                    windowChat.classList.remove('active');
+                });
+            }
 
-        function sendMessage() {
-            const text = input?.value.trim();
-            if (!text) return;
+            // ========================================
+            // RÉPONSES INTELLIGENTES
+            // ========================================
+            const responses = [
+                { keywords: ['bonjour', 'salut', 'hello', 'coucou'], response: 'Bonjour ! Comment puis-je vous aider aujourd\'hui ?' },
+                { keywords: ['nom', 'appelle', 'entreprise', 'société', 'vous êtes', 'c\'est quoi'], response: 'Nous sommes **Afrique équipements et services**, une entreprise leader au Niger dans les services intégrés.' },
+                { keywords: ['services', 'proposez', 'offrez', 'prestations'], response: 'Nous proposons : BTP, hydraulique, commerce général, location d\'engins lourds, transport et logistique.' },
+                { keywords: ['devis', 'tarif', 'prix', 'coût', 'estimation'], response: 'Vous pouvez demander un devis via notre formulaire en ligne ou nous contacter directement.' },
+                { keywords: ['contact', 'téléphone', 'email', 'adresse', 'joindre'], response: 'Contactez-nous au +227 96 96 74 74 / 90 96 74 74 ou par email à tidjani22686@gmail.com. Nous sommes à Agadez, quartier aéroport.' },
+                { keywords: ['agadez', 'localisation', 'où', 'adresse'], response: 'Nous sommes basés à Agadez, quartier aéroport, Niger. Nous intervenons dans tout le pays.' },
+                { keywords: ['merci', 'thanks', 'ok'], response: 'Avec plaisir ! N\'hésitez pas si vous avez d\'autres questions.' },
+                { keywords: ['au revoir', 'bye', 'à plus'], response: 'Au revoir ! Revenez quand vous voulez.' }
+            ];
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chatbot-message user';
-            userMsg.textContent = text;
-            messages.appendChild(userMsg);
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
-
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'chatbot-message bot';
-                const replies = {
-                    'bonjour': 'Bonjour ! Comment puis-je vous aider ?',
-                    'services': 'Nous proposons BTP, hydraulique, commerce, location d\'engins, transport et logistique.',
-                    'devis': 'Vous pouvez demander un devis en ligne.',
-                    'contact': 'Contactez-nous au +227 96 96 74 74.',
-                    'agadez': 'Nous sommes basés à Agadez, Niger.',
-                    'merci': 'Avec plaisir !',
-                    'au revoir': 'Au revoir !'
-                };
-                const lower = text.toLowerCase();
-                let reply = 'Je n\'ai pas compris. Essayez : bonjour, services, devis, contact, agadez.';
-                for (const [key, val] of Object.entries(replies)) {
-                    if (lower.includes(key)) {
-                        reply = val;
-                        break;
+            function findResponse(text) {
+                const lowerText = text.toLowerCase();
+                for (const item of responses) {
+                    for (const keyword of item.keywords) {
+                        if (lowerText.includes(keyword)) {
+                            return item.response;
+                        }
                     }
                 }
-                botMsg.textContent = reply;
-                messages.appendChild(botMsg);
+                // Si la question contient "afrique" ou "equipement"
+                if (lowerText.includes('afrique') || lowerText.includes('équipement') || lowerText.includes('equipement')) {
+                    return 'Afrique équipements et services est une société nigérienne spécialisée dans le BTP, l\'hydraulique, la location d\'engins, le transport et la logistique.';
+                }
+                return null;
+            }
+
+            function sendMessage() {
+                const text = input?.value.trim();
+                if (!text) return;
+
+                const userMsg = document.createElement('div');
+                userMsg.className = 'chatbot-message user';
+                userMsg.textContent = text;
+                messages.appendChild(userMsg);
+                input.value = '';
                 messages.scrollTop = messages.scrollHeight;
+
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'chatbot-message bot';
+                    const reply = findResponse(text);
+                    if (reply) {
+                        botMsg.innerHTML = reply; // permet le gras
+                    } else {
+                        botMsg.textContent = 'Je n\'ai pas bien compris. Voici quelques sujets : le nom de l\'entreprise, nos services, devis, contact, localisation.';
+                    }
+                    messages.appendChild(botMsg);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 600);
+            }
+
+            if (send) send.addEventListener('click', sendMessage);
+            if (input) input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Message de bienvenue
+            setTimeout(() => {
+                if (messages) {
+                    const welcome = document.createElement('div');
+                    welcome.className = 'chatbot-message bot';
+                    welcome.textContent = 'Bonjour ! Je suis l\'assistant d\'Afrique équipements et services. Posez-moi vos questions !';
+                    messages.appendChild(welcome);
+                }
             }, 600);
+        } else {
+            console.warn('⚠️ Chatbot : éléments non trouvés.');
         }
 
-        if (send) send.addEventListener('click', sendMessage);
-        if (input) input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        // Message de bienvenue
-        setTimeout(() => {
-            if (messages) {
-                const welcome = document.createElement('div');
-                welcome.className = 'chatbot-message bot';
-                welcome.textContent = 'Bonjour ! Je suis l\'assistant. Posez-moi vos questions.';
-                messages.appendChild(welcome);
+        // ========================================
+        // 3. MODE LECTURE (fonction globale)
+        // ========================================
+        window.toggleReadingMode = function() {
+            try {
+                const body = document.body;
+                const content = document.querySelector('.container');
+                body.classList.toggle('reading-mode');
+                if (content) {
+                    content.classList.toggle('reading-mode');
+                }
+                const btn = document.getElementById('readingModeBtn');
+                const isReading = body.classList.contains('reading-mode');
+                if (btn) {
+                    btn.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
+                }
+                // Utiliser une notification simple
+                alert(isReading ? 'Mode lecture activé' : 'Mode normal');
+            } catch (e) {
+                console.warn('Erreur mode lecture:', e);
             }
-        }, 600);
+        };
+
+        console.log('✅ Tous les scripts sont prêts.');
     });
 </script>
 
