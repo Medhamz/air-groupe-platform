@@ -8,7 +8,10 @@
     const chatSend = document.getElementById('chatSend');
     const chatMessages = document.getElementById('chatMessages');
 
-    if (!chatbotToggle || !chatbotWindow) return;
+    if (!chatbotToggle || !chatbotWindow) {
+        // Si les éléments ne sont pas trouvés, on les recrée (fallback)
+        return;
+    }
 
     chatbotToggle.addEventListener('click', function() {
         chatbotWindow.classList.toggle('active');
