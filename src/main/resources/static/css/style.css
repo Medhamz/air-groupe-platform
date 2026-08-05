@@ -292,6 +292,41 @@ body.dark-mode .search-bar .search-icon {
     color: rgba(255, 255, 255, 0.4);
 }
 
+/* Styles spécifiques pour la barre de recherche dans le header */
+.search-bar-header {
+    max-width: 260px;
+    min-width: 180px;
+    flex-shrink: 0;
+}
+/* Sur les écrans moyens (tablettes), on réduit la largeur */
+@media (max-width: 1199.98px) {
+    .search-bar-header {
+        max-width: 200px;
+        min-width: 140px;
+    }
+}
+/* Sur les petits écrans (mobile), la barre prend toute la largeur et se place sous la navbar */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .navbar-nav {
+        margin-bottom: 10px;
+    }
+    .search-bar-header {
+        max-width: 100%;
+        min-width: auto;
+        margin-top: 10px;
+        margin-left: 0 !important;
+    }
+    .theme-toggle {
+        margin-left: 0 !important;
+        margin-top: 10px;
+        align-self: flex-start;
+    }
+}
+
 /* ============================================
    SECTIONS
 ============================================ */
@@ -564,7 +599,7 @@ body.dark-mode .accordion-button {
 .back-to-top:hover { transform: translateY(-4px) scale(1.05); }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE (ajout pour la barre de recherche)
 ============================================ */
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5rem; }
