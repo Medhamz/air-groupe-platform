@@ -288,21 +288,26 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         // ========================================
-        // 1. PARTICULES LUMINEUSES
+        // 1. PARTICULES LUMINEUSES VISIBLES
         // ========================================
         try {
             const container = document.createElement('div');
             container.id = 'particles-container';
-            container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:hidden;';
+            container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;';
             document.body.prepend(container);
 
-            const colors = ['#d4af37', '#f1c40f', '#ffd700', '#e6b800', '#ffec8b', '#ffffff'];
-            const particleCount = window.innerWidth < 768 ? 30 : 60;
+            // Couleurs lumineuses (or, blanc, doré clair)
+            const colors = ['#ffd700', '#f1c40f', '#ffeaa7', '#fff9e6', '#ffffff', '#ffec8b'];
+            const particleCount = window.innerWidth < 768 ? 40 : 80;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                const size = Math.random() * 4 + 2;
+                const size = Math.random() * 6 + 3; // taille entre 3 et 9px
+                const opacity = Math.random() * 0.5 + 0.3; // opacité entre 0.3 et 0.8
+                const duration = Math.random() * 20 + 15; // durée entre 15 et 35s
+                const delay = Math.random() * 25;
+
                 particle.style.cssText = `
                     position:absolute;
                     width:${size}px;
@@ -310,9 +315,10 @@
                     left:${Math.random() * 100}%;
                     background:${colors[Math.floor(Math.random() * colors.length)]};
                     border-radius:50%;
-                    opacity:0.3;
-                    animation: particleFloat ${Math.random() * 15 + 10}s linear infinite;
-                    animation-delay:${Math.random() * 20}s;
+                    opacity:${opacity};
+                    box-shadow: 0 0 10px rgba(255,215,0,0.3);
+                    animation: particleFloat ${duration}s linear infinite;
+                    animation-delay:${delay}s;
                 `;
                 container.appendChild(particle);
             }
@@ -323,17 +329,17 @@
                 style.id = 'particle-style';
                 style.textContent = `
                     @keyframes particleFloat {
-                        0% { transform: translateY(100vh) scale(0); opacity: 0; }
-                        10% { opacity: 0.3; }
-                        90% { opacity: 0.3; }
-                        100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+                        0% { transform: translateY(100vh) scale(0.2) rotate(0deg); opacity: 0; }
+                        20% { opacity: 0.8; }
+                        80% { opacity: 0.8; }
+                        100% { transform: translateY(-100vh) scale(1) rotate(720deg); opacity: 0; }
                     }
                 `;
                 document.head.appendChild(style);
             }
-            console.log('✅ Particules lumineuses créées.');
+            console.log('✅ Particules lumineuses créées avec succès.');
         } catch (e) {
-            console.warn('⚠️ Erreur particules:', e);
+            console.warn('⚠️ Erreur lors de la création des particules:', e);
         }
 
         // ========================================
@@ -382,7 +388,6 @@
                         }
                     }
                 }
-                // Si la question contient "afrique" ou "equipement"
                 if (lowerText.includes('afrique') || lowerText.includes('équipement') || lowerText.includes('equipement')) {
                     return 'Afrique équipements et services est une société nigérienne spécialisée dans le BTP, l\'hydraulique, la location d\'engins, le transport et la logistique.';
                 }
@@ -405,7 +410,7 @@
                     botMsg.className = 'chatbot-message bot';
                     const reply = findResponse(text);
                     if (reply) {
-                        botMsg.innerHTML = reply; // permet le gras
+                        botMsg.innerHTML = reply;
                     } else {
                         botMsg.textContent = 'Je n\'ai pas bien compris. Voici quelques sujets : le nom de l\'entreprise, nos services, devis, contact, localisation.';
                     }
@@ -419,7 +424,6 @@
                 if (e.key === 'Enter') sendMessage();
             });
 
-            // Message de bienvenue
             setTimeout(() => {
                 if (messages) {
                     const welcome = document.createElement('div');
@@ -448,7 +452,6 @@
                 if (btn) {
                     btn.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
                 }
-                // Utiliser une notification simple
                 alert(isReading ? 'Mode lecture activé' : 'Mode normal');
             } catch (e) {
                 console.warn('Erreur mode lecture:', e);
