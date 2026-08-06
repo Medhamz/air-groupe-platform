@@ -382,3 +382,117 @@
     }
 
 })();
+
+// ============================================
+// 1. LOADER POUR LES CHANGEMENTS DE PAGE
+// ============================================
+(function initLoader() {
+    const loader = document.createElement('div');
+    loader.id = 'loader';
+    loader.innerHTML = '<div class="loader-spinner"></div>';
+    document.body.prepend(loader);
+
+    // Afficher le loader lors des clics sur les liens internes
+    document.querySelectorAll('a[href^="/"]:not([href*="logout"]):not([href*="login"])').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('target') !== '_blank') {
+                loader.classList.add('active');
+            }
+        });
+    });
+
+    // Cacher le loader quand la page est complètement chargée
+    window.addEventListener('load', () => {
+        loader.classList.remove('active');
+    });
+
+    // En cas d'erreur, cacher après 5s
+    window.addEventListener('error', () => {
+        setTimeout(() => loader.classList.remove('active'), 5000);
+    });
+})();
+
+// ============================================
+// 2. MODE SOMBRE AUTOMATIQUE + MANUEL
+// ============================================
+(function darkMode() {
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Détection du système
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+
+    // Appliquer le thème sauvegardé ou celui du système
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        body.classList.add('dark-mode');
+        if (themeToggle) {
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    }
+
+    // Bouton manuel
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    }
+})();
+
+// ============================================
+// 3. PARALLAXE AVANCÉ
+// ============================================
+(function parallax() {
+    const sections = document.querySelectorAll('.parallax-section');
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        sections.forEach(section => {
+            const speed = section.getAttribute('data-speed') || 0.3;
+            const offset = scrollY * speed;
+            section.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+        });
+    });
+})();
+
+// ============================================
+// 4. COMPTEUR DE VISITEURS (simulé)
+// ============================================
+(function visitorCounter() {
+    const counterElement = document.getElementById('visitorCount');
+    if (!counterElement) return;
+
+    let count = parseInt(localStorage.getItem('visitorCount')) || 0;
+    // Incrémenter une seule fois par session
+    if (!sessionStorage.getItem('visited')) {
+        count += 1;
+        localStorage.setItem('visitorCount', count);
+        sessionStorage.setItem('visited', 'true');
+    }
+
+    // Arrondir pour l'affichage (ex: 1.2k)
+    const displayCount = count >= 1000 ? (count / 1000).toFixed(1) + 'k' : count;
+    counterElement.textContent = displayCount;
+})();
+
+// ============================================
+// 5. NOTIFICATIONS TOAST AVEC SON
+// ============================================
+(function enhanceToast() {
+    const originalShowToast = window.showToast;
+    if (originalShowToast) {
+        window.showToast = function(message, type = 'success') {
+            // Jouer un son (si disponible)
+            try {
+                const audio = new Audio('/sounds/toast.mp3');
+                audio.volume = 0.3;
+                audio.play().catch(() => {});
+            } catch (e) {}
+
+            // Appeler la fonction originale
+            originalShowToast(message, type);
+        };
+    }
+})();

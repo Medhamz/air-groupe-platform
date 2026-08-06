@@ -282,13 +282,13 @@
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 
 <!-- ========================================== -->
-<!-- SCRIPT UNIQUE (particules sophistiquées + chatbot + mode lecture) -->
+<!-- SCRIPT UNIQUE (particules sophistiquées + chatbot + mode lecture + loader + dark mode auto + compteur + accès admin) -->
 <!-- ========================================== -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
         // ========================================
-        // 1. PARTICULES SOPHISTIQUÉES
+        // 1. PARTICULES SOPHISTIQUÉES (inchangé)
         // ========================================
         try {
             const container = document.createElement('div');
@@ -296,26 +296,24 @@
             container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;';
             document.body.prepend(container);
 
-            // Couleurs lumineuses avec reflets
             const colors = [
                 '#ffd700', '#f1c40f', '#ffeaa7', '#fff9e6',
                 '#ffb300', '#ffcc02', '#ffffff', '#ffec8b',
                 '#ffdd59', '#f9ca24', '#f6b93b'
             ];
 
-            // Nombre de particules : plus sur desktop
             const isMobile = window.innerWidth < 768;
             const particleCount = isMobile ? 60 : 120;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                const size = Math.random() * 10 + 5; // taille entre 5 et 15px
-                const opacity = Math.random() * 0.6 + 0.4; // entre 0.4 et 1.0
-                const duration = Math.random() * 25 + 18; // entre 18 et 43s
+                const size = Math.random() * 10 + 5;
+                const opacity = Math.random() * 0.6 + 0.4;
+                const duration = Math.random() * 25 + 18;
                 const delay = Math.random() * 30;
                 const xPos = Math.random() * 100;
-                const wobble = Math.random() * 30 - 15; // oscillation horizontale
+                const wobble = Math.random() * 30 - 15;
 
                 particle.style.cssText = `
                     position:absolute;
@@ -333,7 +331,6 @@
                 container.appendChild(particle);
             }
 
-            // Animation avancée avec oscillation horizontale et rotation
             if (!document.getElementById('particle-style')) {
                 const style = document.createElement('style');
                 style.id = 'particle-style';
@@ -465,6 +462,67 @@
                 console.warn('Erreur mode lecture:', e);
             }
         };
+
+        // ========================================
+        // 4. LOADER (indicateur de chargement)
+        // ========================================
+        (function initLoader() {
+            const loader = document.createElement('div');
+            loader.id = 'loader';
+            loader.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(26,42,58,0.9);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(4px);';
+            loader.innerHTML = '<div class="loader-spinner" style="width:60px;height:60px;border:6px solid rgba(212,175,55,0.2);border-top:6px solid #d4af37;border-radius:50%;animation:spin 1s linear infinite;"></div>';
+            document.body.prepend(loader);
+
+            // Ajouter l'animation spin si elle n'existe pas
+            if (!document.getElementById('loader-style')) {
+                const style = document.createElement('style');
+                style.id = 'loader-style';
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Afficher le loader sur les clics internes
+            document.querySelectorAll('a[href^="/"]:not([href*="logout"]):not([href*="login"])').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('target') !== '_blank') {
+                        loader.style.display = 'flex';
+                    }
+                });
+            });
+
+            // Cacher au chargement complet
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
+
+            // Fallback : cacher après 5s
+            window.addEventListener('error', () => {
+                setTimeout(() => loader.style.display = 'none', 5000);
+            });
+        })();
+
+        // ========================================
+        // 5. COMPTEUR DE VISITEURS
+        // ========================================
+        (function visitorCounter() {
+            const counterElement = document.getElementById('visitorCount');
+            if (!counterElement) return;
+
+            let count = parseInt(localStorage.getItem('visitorCount')) || 0;
+            if (!sessionStorage.getItem('visited')) {
+                count += 1;
+                localStorage.setItem('visitorCount', count);
+                sessionStorage.setItem('visited', 'true');
+            }
+
+            const displayCount = count >= 1000 ? (count / 1000).toFixed(1) + 'k' : count;
+            counterElement.textContent = displayCount;
+        })();
 
         console.log('✅ Tous les scripts sont prêts.');
     });
