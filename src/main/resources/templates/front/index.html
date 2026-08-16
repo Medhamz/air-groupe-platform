@@ -21,28 +21,33 @@
     </div>
 </div>
 
-<!-- Hero -->
-<section class="hero text-center">
+<!-- Hero Section avec Carte 3D -->
+<section class="hero">
     <div class="container">
-        <h1 class="display-3 fw-bold">
-            Bienvenue chez <span class="gold-text">Afrique équipements et services</span>
-        </h1>
-        <p class="lead">Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="/services" class="btn btn-gold btn-lg rounded-pill px-5">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
-            <button id="readingModeBtn" class="btn btn-outline-gold btn-lg rounded-pill px-4" onclick="toggleReadingMode()">
-                <i class="fas fa-expand"></i> Lecture
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- Barre de recherche -->
-<section class="py-3 bg-white" style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-    <div class="container">
-        <div class="search-bar mx-auto" style="max-width: 500px;">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Rechercher un service...">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-lg-start text-center mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold">
+                    Bienvenue chez <span class="gold-text">Afrique équipements et services</span>
+                </h1>
+                <p class="lead text-light opacity-90 my-4">
+                    Leader au Niger dans les services intégrés : infrastructure, logistique, location d'engins et solutions modernes.
+                </p>
+                <div class="d-flex justify-content-lg-start justify-content-center gap-3 flex-wrap">
+                    <a href="/services" class="btn btn-gold btn-lg rounded-pill px-4">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
+                    <button id="readingModeBtn" class="btn btn-outline-gold btn-lg rounded-pill px-4" onclick="toggleReadingMode()">
+                        <i class="fas fa-expand"></i> Lecture
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-3d-wrapper">
+                    <div id="niger3dContainer"></div>
+                    <div class="3d-badge">
+                        <i class="fas fa-map-marker-alt text-warning"></i>
+                        <span>Focus : <strong>Région d'Agadez</strong></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -93,7 +98,7 @@
                     <p class="card-text" th:text="${s.description}">Description</p>
                 </div>
             </div>
-            <div th:if="${services.isEmpty()}" class="col-12">
+            <div th:if="${services == null or services.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-3 service-card-wrapper">
                         <div class="service-card">
@@ -137,19 +142,19 @@
     <div class="container text-center">
         <div class="row g-4">
             <div class="col-md-3 col-6">
-                <h2 class="stat-number" data-count="10" data-suffix="+">10+</h2>
+                <h2 class="stat-number" data-count="10" data-suffix="+">0</h2>
                 <p class="stat-label">Années d'expérience</p>
             </div>
             <div class="col-md-3 col-6">
-                <h2 class="stat-number" data-count="50" data-suffix="+">50+</h2>
+                <h2 class="stat-number" data-count="50" data-suffix="+">0</h2>
                 <p class="stat-label">Projets réalisés</p>
             </div>
             <div class="col-md-3 col-6">
-                <h2 class="stat-number" data-count="20" data-suffix="+">20+</h2>
+                <h2 class="stat-number" data-count="20" data-suffix="+">0</h2>
                 <p class="stat-label">Engins en parc</p>
             </div>
             <div class="col-md-3 col-6">
-                <h2 class="stat-number" data-count="100" data-suffix="%">100%</h2>
+                <h2 class="stat-number" data-count="100" data-suffix="%">0</h2>
                 <p class="stat-label">Satisfaction client</p>
             </div>
         </div>
@@ -166,14 +171,14 @@
             <div class="col-md-4">
                 <div class="testimonial-card">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"Afrique équipements et services a réalisé la construction de notre nouveau siège avec un professionnalisme remarquable. Délais respectés, qualité irréprochable."</p>
+                    <p>"Afrique équipements et services a réalisé la construction de notre nouveau siège avec un professionnalisme remarquable."</p>
                     <p class="client-name">- M. Ibrahim, Directeur Général</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="testimonial-card">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>"La location d'engins lourds auprès d'Afrique équipements et services nous a permis de finaliser notre chantier dans les temps. Matériel fiable et équipe réactive."</p>
+                    <p>"La location d'engins lourds nous a permis de finaliser notre chantier dans les temps. Matériel fiable et équipe réactive."</p>
                     <p class="client-name">- Mme Aïcha, Responsable logistique</p>
                 </div>
             </div>
@@ -182,41 +187,6 @@
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p>"Un partenaire de confiance pour nos prestations de transport. Ponctualité, sécurité et tarifs compétitifs."</p>
                     <p class="client-name">- M. Oumar, Entrepreneur</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- AVIS CLIENTS -->
-<section class="py-5 section-animate">
-    <div class="container">
-        <div class="text-center">
-            <h2 class="section-title">Ce que nos clients disent de nous</h2>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Excellent travail ! L'équipe est professionnelle et réactive. Je recommande vivement."</p>
-                    <p class="reviewer-name">- Amadou Diallo</p>
-                    <p class="review-date">Client depuis 2024</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Les engins sont en parfait état et les tarifs sont compétitifs. Un partenaire de confiance."</p>
-                    <p class="reviewer-name">- Fatima Issa</p>
-                    <p class="review-date">Client depuis 2023</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Une équipe à l'écoute qui a su comprendre nos besoins et nous proposer les meilleures solutions."</p>
-                    <p class="reviewer-name">- Moussa Adamou</p>
-                    <p class="review-date">Client depuis 2024</p>
                 </div>
             </div>
         </div>
@@ -250,16 +220,6 @@
                     <div class="accordion-body">Nous intervenons sur tout le Niger, avec une expérience particulière dans la région d'Agadez et les zones rurales.</div>
                 </div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                        Comment puis-je obtenir un devis ?
-                    </button>
-                </h2>
-                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">Vous pouvez nous contacter via le formulaire de devis ou par téléphone. Nous vous répondrons dans les 24h.</div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -280,253 +240,5 @@
 
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
-
-<!-- ========================================== -->
-<!-- SCRIPT UNIQUE (particules sophistiquées + chatbot + mode lecture + loader + dark mode auto + compteur + accès admin) -->
-<!-- ========================================== -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-        // ========================================
-        // 1. PARTICULES SOPHISTIQUÉES (inchangé)
-        // ========================================
-        try {
-            const container = document.createElement('div');
-            container.id = 'particles-container';
-            container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;';
-            document.body.prepend(container);
-
-            const colors = [
-                '#ffd700', '#f1c40f', '#ffeaa7', '#fff9e6',
-                '#ffb300', '#ffcc02', '#ffffff', '#ffec8b',
-                '#ffdd59', '#f9ca24', '#f6b93b'
-            ];
-
-            const isMobile = window.innerWidth < 768;
-            const particleCount = isMobile ? 60 : 120;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                const size = Math.random() * 10 + 5;
-                const opacity = Math.random() * 0.6 + 0.4;
-                const duration = Math.random() * 25 + 18;
-                const delay = Math.random() * 30;
-                const xPos = Math.random() * 100;
-                const wobble = Math.random() * 30 - 15;
-
-                particle.style.cssText = `
-                    position:absolute;
-                    width:${size}px;
-                    height:${size}px;
-                    left:${xPos}%;
-                    background:${colors[Math.floor(Math.random() * colors.length)]};
-                    border-radius:50%;
-                    opacity:${opacity};
-                    box-shadow: 0 0 ${size * 2}px rgba(255,215,0,${opacity * 0.5});
-                    animation: particleFloat ${duration}s ease-in-out infinite;
-                    animation-delay:${delay}s;
-                    --wobble: ${wobble}px;
-                `;
-                container.appendChild(particle);
-            }
-
-            if (!document.getElementById('particle-style')) {
-                const style = document.createElement('style');
-                style.id = 'particle-style';
-                style.textContent = `
-                    @keyframes particleFloat {
-                        0% { transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.3); opacity: 0; }
-                        15% { opacity: 0.9; transform: translateY(75vh) translateX(var(--wobble)) rotate(90deg) scale(0.8); }
-                        50% { transform: translateY(40vh) translateX(calc(var(--wobble) * -1)) rotate(180deg) scale(1); opacity: 1; }
-                        85% { opacity: 0.9; transform: translateY(10vh) translateX(var(--wobble)) rotate(270deg) scale(0.8); }
-                        100% { transform: translateY(-100vh) translateX(0) rotate(360deg) scale(0.3); opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            console.log('✅ Particules sophistiquées créées.');
-        } catch (e) {
-            console.warn('⚠️ Erreur particules:', e);
-        }
-
-        // ========================================
-        // 2. CHATBOT (inchangé)
-        // ========================================
-        const toggle = document.getElementById('chatbotToggle');
-        const windowChat = document.getElementById('chatbotWindow');
-        const close = document.getElementById('closeChat');
-        const input = document.getElementById('chatInput');
-        const send = document.getElementById('chatSend');
-        const messages = document.getElementById('chatMessages');
-
-        if (toggle && windowChat) {
-            toggle.addEventListener('click', function() {
-                windowChat.classList.toggle('active');
-                if (windowChat.classList.contains('active')) {
-                    input?.focus();
-                }
-            });
-            if (close) {
-                close.addEventListener('click', function() {
-                    windowChat.classList.remove('active');
-                });
-            }
-
-            const responses = [
-                { keywords: ['bonjour', 'salut', 'hello', 'coucou'], response: 'Bonjour ! Comment puis-je vous aider aujourd\'hui ?' },
-                { keywords: ['nom', 'appelle', 'entreprise', 'société', 'vous êtes', 'c\'est quoi'], response: 'Nous sommes **Afrique équipements et services**, une entreprise leader au Niger dans les services intégrés.' },
-                { keywords: ['services', 'proposez', 'offrez', 'prestations'], response: 'Nous proposons : BTP, hydraulique, commerce général, location d\'engins lourds, transport et logistique.' },
-                { keywords: ['devis', 'tarif', 'prix', 'coût', 'estimation'], response: 'Vous pouvez demander un devis via notre formulaire en ligne ou nous contacter directement.' },
-                { keywords: ['contact', 'téléphone', 'email', 'adresse', 'joindre'], response: 'Contactez-nous au +227 96 96 74 74 / 90 96 74 74 ou par email à tidjani22686@gmail.com. Nous sommes à Agadez, quartier aéroport.' },
-                { keywords: ['agadez', 'localisation', 'où', 'adresse'], response: 'Nous sommes basés à Agadez, quartier aéroport, Niger. Nous intervenons dans tout le pays.' },
-                { keywords: ['merci', 'thanks', 'ok'], response: 'Avec plaisir ! N\'hésitez pas si vous avez d\'autres questions.' },
-                { keywords: ['au revoir', 'bye', 'à plus'], response: 'Au revoir ! Revenez quand vous voulez.' }
-            ];
-
-            function findResponse(text) {
-                const lowerText = text.toLowerCase();
-                for (const item of responses) {
-                    for (const keyword of item.keywords) {
-                        if (lowerText.includes(keyword)) {
-                            return item.response;
-                        }
-                    }
-                }
-                if (lowerText.includes('afrique') || lowerText.includes('équipement') || lowerText.includes('equipement')) {
-                    return 'Afrique équipements et services est une société nigérienne spécialisée dans le BTP, l\'hydraulique, la location d\'engins, le transport et la logistique.';
-                }
-                return null;
-            }
-
-            function sendMessage() {
-                const text = input?.value.trim();
-                if (!text) return;
-
-                const userMsg = document.createElement('div');
-                userMsg.className = 'chatbot-message user';
-                userMsg.textContent = text;
-                messages.appendChild(userMsg);
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
-
-                setTimeout(() => {
-                    const botMsg = document.createElement('div');
-                    botMsg.className = 'chatbot-message bot';
-                    const reply = findResponse(text);
-                    if (reply) {
-                        botMsg.innerHTML = reply;
-                    } else {
-                        botMsg.textContent = 'Je n\'ai pas bien compris. Voici quelques sujets : le nom de l\'entreprise, nos services, devis, contact, localisation.';
-                    }
-                    messages.appendChild(botMsg);
-                    messages.scrollTop = messages.scrollHeight;
-                }, 600);
-            }
-
-            if (send) send.addEventListener('click', sendMessage);
-            if (input) input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendMessage();
-            });
-
-            setTimeout(() => {
-                if (messages) {
-                    const welcome = document.createElement('div');
-                    welcome.className = 'chatbot-message bot';
-                    welcome.textContent = 'Bonjour ! Je suis l\'assistant d\'Afrique équipements et services. Posez-moi vos questions !';
-                    messages.appendChild(welcome);
-                }
-            }, 600);
-        } else {
-            console.warn('⚠️ Chatbot : éléments non trouvés.');
-        }
-
-        // ========================================
-        // 3. MODE LECTURE
-        // ========================================
-        window.toggleReadingMode = function() {
-            try {
-                const body = document.body;
-                const content = document.querySelector('.container');
-                body.classList.toggle('reading-mode');
-                if (content) {
-                    content.classList.toggle('reading-mode');
-                }
-                const btn = document.getElementById('readingModeBtn');
-                const isReading = body.classList.contains('reading-mode');
-                if (btn) {
-                    btn.innerHTML = isReading ? '<i class="fas fa-compress"></i> Normal' : '<i class="fas fa-expand"></i> Lecture';
-                }
-                alert(isReading ? 'Mode lecture activé' : 'Mode normal');
-            } catch (e) {
-                console.warn('Erreur mode lecture:', e);
-            }
-        };
-
-        // ========================================
-        // 4. LOADER (indicateur de chargement)
-        // ========================================
-        (function initLoader() {
-            const loader = document.createElement('div');
-            loader.id = 'loader';
-            loader.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(26,42,58,0.9);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(4px);';
-            loader.innerHTML = '<div class="loader-spinner" style="width:60px;height:60px;border:6px solid rgba(212,175,55,0.2);border-top:6px solid #d4af37;border-radius:50%;animation:spin 1s linear infinite;"></div>';
-            document.body.prepend(loader);
-
-            // Ajouter l'animation spin si elle n'existe pas
-            if (!document.getElementById('loader-style')) {
-                const style = document.createElement('style');
-                style.id = 'loader-style';
-                style.textContent = `
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
-            // Afficher le loader sur les clics internes
-            document.querySelectorAll('a[href^="/"]:not([href*="logout"]):not([href*="login"])').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (this.getAttribute('target') !== '_blank') {
-                        loader.style.display = 'flex';
-                    }
-                });
-            });
-
-            // Cacher au chargement complet
-            window.addEventListener('load', () => {
-                loader.style.display = 'none';
-            });
-
-            // Fallback : cacher après 5s
-            window.addEventListener('error', () => {
-                setTimeout(() => loader.style.display = 'none', 5000);
-            });
-        })();
-
-        // ========================================
-        // 5. COMPTEUR DE VISITEURS
-        // ========================================
-        (function visitorCounter() {
-            const counterElement = document.getElementById('visitorCount');
-            if (!counterElement) return;
-
-            let count = parseInt(localStorage.getItem('visitorCount')) || 0;
-            if (!sessionStorage.getItem('visited')) {
-                count += 1;
-                localStorage.setItem('visitorCount', count);
-                sessionStorage.setItem('visited', 'true');
-            }
-
-            const displayCount = count >= 1000 ? (count / 1000).toFixed(1) + 'k' : count;
-            counterElement.textContent = displayCount;
-        })();
-
-        console.log('✅ Tous les scripts sont prêts.');
-    });
-</script>
-
 </body>
 </html>
