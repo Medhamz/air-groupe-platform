@@ -1,13 +1,15 @@
 package com.airgroupe.platform.controller.admin;
 
-import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.model.ContactMessage;
+import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,14 +29,15 @@ public class AdminController {
         model.addAttribute("totalServices", serviceRepository.count());
         model.addAttribute("totalMessages", contactMessageRepository.count());
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
+        // Pour le badge dans la sidebar
+        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
         return "admin/dashboard";
     }
 
-    // Services
+    // ----- Services -----
     @GetMapping("/services")
     public String listServices(Model model) {
         model.addAttribute("services", serviceRepository.findAll());
-        // Pour le badge unread dans la sidebar
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
         return "admin/services";
     }
@@ -67,11 +70,13 @@ public class AdminController {
         return "redirect:/admin/services";
     }
 
-    // Messages
+    // ----- Messages -----
     @GetMapping("/messages")
     public String messages(Model model) {
-        model.addAttribute("messages", contactMessageRepository.findAllByOrderByCreatedAtDesc());
-        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        List<ContactMessage> messages = contactMessageRepository.findAllByOrderByCreatedAtDesc();
+        long unread = contactMessageRepository.countByIsReadFalse();
+        model.addAttribute("messages", messages);
+        model.addAttribute("unreadCount", unread);
         return "admin/messages";
     }
 

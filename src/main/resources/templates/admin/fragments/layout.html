@@ -4,93 +4,309 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration - Afrique équipements et services</title>
+    <!-- Bootstrap 5 & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body.admin-body {
-            padding-top: 56px;
-            background: #f4f6f9;
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f1c40f;
+            --dark: #1a2a3a;
+            --dark-light: #2c3e50;
+            --sidebar-width: 260px;
+            --header-height: 60px;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            overflow-x: hidden;
+        }
+        /* HEADER */
+        .admin-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .admin-header .brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        .admin-header .brand i {
+            color: var(--gold);
+            margin-right: 8px;
+        }
+        .admin-header .user-menu {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .admin-header .user-menu .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .btn-logout {
+            background: none;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        /* SIDEBAR */
         .admin-sidebar {
             position: fixed;
-            top: 56px;
-            bottom: 0;
+            top: var(--header-height);
             left: 0;
-            width: 250px;
-            background: #1a2a3a;
-            color: #fff;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: rgba(255,255,255,0.8);
             overflow-y: auto;
-            z-index: 1000;
-            padding-top: 20px;
+            z-index: 1020;
+            padding: 20px 0;
+            transition: transform 0.3s;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+        }
+        .admin-sidebar .sidebar-brand {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+        .admin-sidebar .sidebar-brand i {
+            margin-right: 10px;
         }
         .admin-sidebar .nav-link {
-            color: rgba(255,255,255,0.7);
-            padding: 10px 20px;
+            color: rgba(255,255,255,0.6);
+            padding: 12px 20px;
             border-radius: 0;
-            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .admin-sidebar .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+            font-size: 1.1rem;
         }
         .admin-sidebar .nav-link:hover,
         .admin-sidebar .nav-link.active {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: #fff;
-            border-left: 4px solid #d4af37;
+            border-left-color: var(--gold);
         }
-        .admin-sidebar .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
+        .admin-sidebar .nav-link .badge {
+            margin-left: auto;
+            background: #e74c3c;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
         }
+        .admin-sidebar hr {
+            border-color: rgba(255,255,255,0.05);
+            margin: 15px 20px;
+        }
+
+        /* CONTENT */
         .admin-content {
-            margin-left: 250px;
-            padding: 20px;
-            min-height: calc(100vh - 56px);
+            margin-left: var(--sidebar-width);
+            padding-top: calc(var(--header-height) + 20px);
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+            min-height: 100vh;
         }
-        .admin-header {
+
+        /* STAT CARDS */
+        .stat-card {
             background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-left: 4px solid var(--gold);
+            transition: transform 0.2s;
         }
-        .admin-header .user-info {
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+        .stat-card .stat-icon {
+            float: right;
+            font-size: 2.4rem;
+            opacity: 0.15;
+        }
+        .stat-card .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .stat-card .stat-label {
+            color: #6c757d;
             font-size: 0.9rem;
+            margin-top: 2px;
         }
+
+        /* TABLES */
+        .table-admin {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .table-admin thead {
+            background: #f8f9fa;
+        }
+        .table-admin th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        /* BOUTONS */
         .btn-gold {
-            background: linear-gradient(135deg, #d4af37, #f1c40f);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             border: none;
             color: #1a2a3a;
             font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 30px;
             transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(212,175,55,0.25);
         }
         .btn-gold:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+            box-shadow: 0 4px 16px rgba(212,175,55,0.35);
+            color: #1a2a3a;
         }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .admin-sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                top: 0;
+                transform: translateX(-100%);
+            }
+            .admin-sidebar.open {
+                transform: translateX(0);
             }
             .admin-content {
                 margin-left: 0;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .admin-header .brand {
+                font-size: 1.1rem;
+            }
+            .admin-header .user-menu .user-name {
+                display: none;
+            }
+        }
+        /* Bouton toggle pour mobile (ajouté dynamiquement) */
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-right: 12px;
+        }
+        @media (max-width: 768px) {
+            .sidebar-toggle {
+                display: block;
             }
         }
     </style>
 </head>
-<body class="admin-body">
-<header th:replace="~{admin/fragments/header :: header}"></header>
-<aside th:replace="~{admin/fragments/sidebar :: sidebar}"></aside>
+<body>
+<!-- HEADER -->
+<header th:fragment="header" class="admin-header">
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="brand">
+        <i class="fas fa-cog"></i> Administration
+    </div>
+    <div class="user-menu">
+        <span class="user-name"><i class="fas fa-user-circle"></i> Administrateur</span>
+        <a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside th:fragment="sidebar" class="admin-sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <i class="fas fa-mountain"></i> Afrique Équipements
+    </div>
+    <nav class="nav flex-column">
+        <a class="nav-link" href="/admin/dashboard" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/dashboard')} ? 'active' : ''">
+            <i class="fas fa-tachometer-alt"></i> Tableau de bord
+        </a>
+        <a class="nav-link" href="/admin/services" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/services')} ? 'active' : ''">
+            <i class="fas fa-concierge-bell"></i> Services
+        </a>
+        <a class="nav-link" href="/admin/messages" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/messages')} ? 'active' : ''">
+            <i class="fas fa-envelope"></i> Messages
+            <span class="badge" th:text="${unreadCount}">0</span>
+        </a>
+        <a class="nav-link" href="/admin/projects" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/projects')} ? 'active' : ''">
+            <i class="fas fa-project-diagram"></i> Projets
+        </a>
+        <a class="nav-link" href="/admin/users" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/users')} ? 'active' : ''">
+            <i class="fas fa-users"></i> Utilisateurs
+        </a>
+        <hr>
+        <a class="nav-link" href="/">
+            <i class="fas fa-arrow-left"></i> Retour au site
+        </a>
+    </nav>
+</aside>
+
+<!-- CONTENU PRINCIPAL -->
 <main class="admin-content">
-    <!-- Le contenu spécifique de la page sera inséré ici via le fragment pageContent -->
-    <th:block th:replace="~{::pageContent}"></th:block>
+    <div th:fragment="content">
+        <!-- Le contenu spécifique des pages enfants sera injecté ici -->
+    </div>
 </main>
-<footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+
+<!-- JavaScript pour toggle sidebar sur mobile -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        if (toggle && sidebar) {
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+            });
+        }
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

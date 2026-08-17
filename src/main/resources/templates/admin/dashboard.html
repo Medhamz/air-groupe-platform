@@ -2,67 +2,105 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<!-- Définition du fragment pageContent qui sera injecté dans le layout -->
-<th:block th:fragment="pageContent">
-    <h1 class="h2 mb-4">Tableau de bord</h1>
-    <div class="row g-4">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Services</h5>
-                    <p class="card-text display-6" th:text="${totalServices}">0</p>
+<div th:replace="~{admin/fragments/layout :: content}">
+    <div th:fragment="content">
+        <h1 class="h2 mb-4">Tableau de bord</h1>
+
+        <!-- Statistiques -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <span class="stat-icon"><i class="fas fa-concierge-bell"></i></span>
+                    <div class="stat-number" th:text="${totalServices != null ? totalServices : 0}">0</div>
+                    <div class="stat-label">Services</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="border-left-color: #28a745;">
+                    <span class="stat-icon"><i class="fas fa-envelope"></i></span>
+                    <div class="stat-number" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
+                    <div class="stat-label">Messages</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="border-left-color: #ffc107;">
+                    <span class="stat-icon"><i class="fas fa-envelope-open"></i></span>
+                    <div class="stat-number" th:text="${unreadMessages != null ? unreadMessages : 0}">0</div>
+                    <div class="stat-label">Non lus</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="border-left-color: #17a2b8;">
+                    <span class="stat-icon"><i class="fas fa-project-diagram"></i></span>
+                    <div class="stat-number" th:text="${totalProjets != null ? totalProjets : 0}">0</div>
+                    <div class="stat-label">Projets</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">Messages</h5>
-                    <p class="card-text display-6" th:text="${totalMessages}">0</p>
+
+        <!-- Graphique et derniers messages -->
+        <div class="row g-4">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-bold">
+                        <i class="fas fa-chart-line me-2 text-gold"></i> Activité des 7 derniers jours
+                    </div>
+                    <div class="card-body">
+                        <canvas id="activityChart" height="120"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-warning">
-                <div class="card-body">
-                    <h5 class="card-title">Non lus</h5>
-                    <p class="card-text display-6" th:text="${unreadMessages}">0</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">Projets</h5>
-                    <p class="card-text display-6">12</p>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-bold">
+                        <i class="fas fa-clock me-2 text-gold"></i> Derniers messages
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li th:each="msg : ${recentMessages}" class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong th:text="${msg.name}">Nom</strong>
+                                    <p class="small text-muted mb-0" th:text="${msg.message}">Message</p>
+                                </div>
+                                <small class="text-muted" th:text="${#temporals.format(msg.createdAt, 'dd/MM')}">Date</small>
+                            </li>
+                            <li th:if="${recentMessages == null or recentMessages.isEmpty()}" class="list-group-item text-center text-muted">
+                                Aucun message récent.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mt-4">
-        <h4>Derniers messages</h4>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Sujet</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="msg : ${recentMessages}">
-                    <td th:text="${msg.name}">Nom</td>
-                    <td th:text="${msg.subject}">Sujet</td>
-                    <td th:text="${#temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
-                </tr>
-                <tr th:if="${recentMessages == null or recentMessages.isEmpty()}">
-                    <td colspan="3" class="text-center text-muted">Aucun message récent.</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</th:block>
+</div>
+
+<!-- Script pour le graphique -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('activityChart')?.getContext('2d');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                    datasets: [{
+                        label: 'Visites',
+                        data: [12, 19, 3, 5, 2, 3, 7],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212,175,55,0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
