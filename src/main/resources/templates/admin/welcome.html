@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fallback de redirection à 10 secondes -->
+    <meta http-equiv="refresh" content="10;url=/admin/login">
     <title>Portail Admin - Afrique Équipements et Services</title>
 
     <!-- Bootstrap & FontAwesome -->
@@ -226,8 +228,8 @@
         <div class="pill-item"><i class="fas fa-user-shield"></i> Accès Restreint</div>
     </div>
 
-    <a th:href="@{/admin/login}" class="btn-enter">
-        <i class="fas fa-key me-2"></i> Accéder au système
+    <a id="login-btn" th:href="@{/admin/login}" class="btn-enter">
+        <i class="fas fa-key me-2"></i> Connexion (<span id="timer">10</span>s)
     </a>
 
     <div>
@@ -238,6 +240,22 @@
 </div>
 
 <script>
+    // Compte à rebours dynamique de 10 secondes
+    let seconds = 10;
+    const timerElement = document.getElementById("timer");
+    const loginUrl = "[[@{/admin/login}]]";
+
+    const countdown = setInterval(() => {
+        seconds--;
+        if (timerElement) {
+            timerElement.textContent = seconds;
+        }
+        if (seconds <= 0) {
+            clearInterval(countdown);
+            window.location.href = loginUrl;
+        }
+    }, 1000);
+
     // Particules
     tsParticles.load("tsparticles", {
         particles: {

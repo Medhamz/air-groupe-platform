@@ -24,10 +24,18 @@ public class AdminController {
         this.contactMessageRepository = contactMessageRepository;
     }
 
-    // ===================== WELCOME PAGE =====================
+    // ===================== AUTHENTICATION & WELCOME =====================
+
+    // 1. Page de bienvenue (Accès public via SecurityConfig)
     @GetMapping({"", "/"})
     public String welcome() {
         return "admin/welcome";
+    }
+
+    // 2. Page de formulaire de connexion
+    @GetMapping("/login")
+    public String login() {
+        return "admin/login";
     }
 
     // ===================== DASHBOARD =====================
