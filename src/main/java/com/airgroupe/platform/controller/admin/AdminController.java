@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;  // ← Import ajouté
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,10 +31,14 @@ public class AdminController {
         model.addAttribute("totalMessages", contactMessageRepository.count());
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
 
-        // Attributs supplémentaires pour le dashboard
-        model.addAttribute("totalProjets", 0L); // à remplacer par votre repository Projet
-        model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
+        // Pour le badge unread dans la sidebar
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+
+        // Pour la carte "Projets" (0 pour le moment)
+        model.addAttribute("totalProjets", 0L);
+
+        // Derniers messages (5 derniers)
+        model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
 
         return "admin/dashboard";
     }

@@ -5,8 +5,6 @@
 <div th:replace="~{admin/fragments/layout :: content}">
     <div th:fragment="content">
         <h1 class="h2 mb-4">Tableau de bord</h1>
-
-        <!-- Statistiques -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="stat-card">
@@ -38,7 +36,6 @@
             </div>
         </div>
 
-        <!-- Graphique et derniers messages -->
         <div class="row g-4">
             <div class="col-md-8">
                 <div class="card shadow-sm">
@@ -74,8 +71,6 @@
         </div>
     </div>
 </div>
-
-<!-- Script pour le graphique -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('activityChart')?.getContext('2d');
