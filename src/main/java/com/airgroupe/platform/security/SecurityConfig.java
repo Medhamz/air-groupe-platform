@@ -48,9 +48,10 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**", "/admin")
+                .securityMatcher("/admin", "/admin/**")
                 .authorizeHttpRequests(auth -> auth
-                        // Autorise l'accès public à la page d'accueil /admin et à la page de login
+                        // Indispensable pour la résolution des vues Thymeleaf internes sur Cloud
+                        .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
                         .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 )
