@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
@@ -34,30 +36,45 @@ public class AdminGalleryController {
     public String index(Model model) {
         model.addAttribute("items", mediaRepository.findAllByOrderByCreatedAtDesc());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
-        return "admin/galerie"; // Pointe vers src/main/resources/templates/admin/galerie.html
+        return "admin/galerie";
     }
 
     @PostMapping("/add")
     public String addMedia(@RequestParam("title") String title,
                            @RequestParam("description") String description,
                            @RequestParam("mediaType") MediaItem.MediaType mediaType,
-                           @RequestParam("file") MultipartFile file) throws IOException {
+                           @RequestParam("file") MultipartFile file) {
 
         if (!file.isEmpty()) {
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
+            try {
+                // 1. Définir le chemin absolu du dossier d'upload
+                Path uploadPath = Paths.get(uploadDir).toAbsolutePath();
 
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            String filePath = Paths.get(uploadDir, fileName).toString();
-            file.transferTo(new File(filePath));
+                // 2. Créer les répertoires s'ils n'existent pas
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
 
-            MediaItem item = new MediaItem();
-            item.setTitle(title);
-            item.setDescription(description);
-            item.setMediaType(mediaType);
-            item.setMediaUrl("/uploads/gallery/" + fileName);
+                // 3. Générer le nom unique et construire le fichier de destination
+                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                File destFile = uploadPath.resolve(fileName).toFile();
 
-            mediaRepository.save(item);
+                // 4. Transférer le fichier vers le chemin absolu
+                file.transferTo(destFile);
+
+                // 5. Enregistrer en base de données
+                MediaItem item = new MediaItem();
+                item.setTitle(title);
+                item.setDescription(description);
+                item.setMediaType(mediaType);
+                item.setMediaUrl("/uploads/gallery/" + fileName);
+
+                mediaRepository.save(item);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "redirect:/admin/galerie?error=upload";
+            }
         }
 
         return "redirect:/admin/galerie";
