@@ -2,19 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<div th:replace="~{admin/fragments/layout :: content}">
-    <div th:fragment="content">
-        <h1 class="h2 mb-3">Gestion des messages</h1>
+
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+
+<div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
+    <div id="page-content" class="cyber-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 text-gold m-0">
+                <i class="fas fa-envelope-open-text me-2"></i>Gestion des messages
+            </h1>
+        </div>
 
         <div class="table-responsive">
-            <table class="table table-admin table-hover">
+            <table class="table table-admin table-hover align-middle">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Nom</th>
                     <th>Email</th>
                     <th>Sujet</th>
-                    <th>Lu</th>
+                    <th>Statut</th>
                     <th>Date</th>
                     <th class="text-end">Actions</th>
                 </tr>
@@ -22,26 +30,39 @@
                 <tbody>
                 <tr th:each="msg : ${messages}">
                     <td th:text="${msg.id}">1</td>
-                    <td th:text="${msg.name}">Nom</td>
-                    <td th:text="${msg.email}">email</td>
+                    <td class="fw-bold" th:text="${msg.name}">Nom</td>
+                    <td th:text="${msg.email}">email@example.com</td>
                     <td th:text="${msg.subject}">Sujet</td>
                     <td>
-                                <span class="badge" th:class="${msg.isRead} ? 'bg-success' : 'bg-warning'"
-                                      th:text="${msg.isRead} ? 'Lu' : 'Non lu'">Non lu</span>
+                        <span class="badge"
+                              th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success' : 'bg-warning text-dark'"
+                              th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Non lu'">Non lu</span>
                     </td>
-                    <td th:text="${#temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
+                    <td th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
                     <td class="text-end">
-                        <a th:href="@{/admin/messages/read/{id}(id=${msg.id})}" class="btn btn-sm btn-outline-success" th:unless="${msg.isRead}"><i class="fas fa-check"></i></a>
-                        <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce message ?')"><i class="fas fa-trash"></i></a>
+                        <a th:href="@{/admin/messages/read/{id}(id=${msg.id})}"
+                           class="btn btn-sm btn-outline-success me-1"
+                           th:unless="${msg.isRead}"
+                           title="Marquer comme lu">
+                            <i class="fas fa-check"></i>
+                        </a>
+                        <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}"
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Supprimer ce message ?')"
+                           title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </a>
                     </td>
                 </tr>
-                <tr th:if="${messages.isEmpty()}">
-                    <td colspan="7" class="text-center text-muted">Aucun message.</td>
+                <tr th:if="${messages == null or messages.isEmpty()}">
+                    <td colspan="7" class="text-center text-muted py-4">Aucun message reçu pour le moment.</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
 </body>
 </html>
