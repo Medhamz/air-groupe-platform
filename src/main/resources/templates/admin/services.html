@@ -2,46 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<div th:replace="~{admin/fragments/layout :: content}">
-    <div th:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h2">Gestion des services</h1>
+
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+
+<div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
+    <div id="page-content" class="cyber-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 text-gold m-0"><i class="fas fa-concierge-bell me-2"></i>Gestion des services</h1>
             <a href="/admin/services/create" class="btn btn-gold">
-                <i class="fas fa-plus"></i> Nouveau service
+                <i class="fas fa-plus me-1"></i> Nouveau service
             </a>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-admin table-hover">
+            <table class="table table-admin table-hover align-middle">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Nom</th>
                     <th>Description</th>
                     <th>Icône</th>
-                    <th>Actif</th>
+                    <th>Statut</th>
                     <th class="text-end">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="s : ${services}">
                     <td th:text="${s.id}">1</td>
-                    <td th:text="${s.name}">Service</td>
+                    <td class="fw-bold" th:text="${s.name}">Service</td>
                     <td th:text="${s.description}">Description</td>
-                    <td><i class="fas" th:class="${s.iconClass}"></i></td>
-                    <td><span class="badge" th:class="${s.isActive} ? 'bg-success' : 'bg-secondary'" th:text="${s.isActive} ? 'Actif' : 'Inactif'"></span></td>
+                    <td><i class="fas text-gold fs-5" th:classappend="${s.iconClass}"></i></td>
+                    <td>
+                        <span class="badge" th:classappend="${s.isActive} ? 'bg-success' : 'bg-secondary'" th:text="${s.isActive} ? 'Actif' : 'Inactif'"></span>
+                    </td>
                     <td class="text-end">
-                        <a th:href="@{/admin/services/edit/{id}(id=${s.id})}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                        <a th:href="@{/admin/services/edit/{id}(id=${s.id})}" class="btn btn-sm btn-outline-warning me-1"><i class="fas fa-edit"></i></a>
                         <a th:href="@{/admin/services/delete/{id}(id=${s.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce service ?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
-                <tr th:if="${services.isEmpty()}">
-                    <td colspan="6" class="text-center text-muted">Aucun service enregistré.</td>
+                <tr th:if="${services == null or services.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted py-4">Aucun service enregistré.</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
 </body>
 </html>

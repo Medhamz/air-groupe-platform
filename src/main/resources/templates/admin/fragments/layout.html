@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Chart.js & VanillaTilt (Effet 3D) -->
+    <!-- Chart.js & VanillaTilt -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
-    <!-- tsParticles pour particules lumineuses -->
+    <!-- tsParticles -->
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
     <style>
@@ -184,72 +184,29 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .cyber-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: 0.5s;
-        }
-
-        .cyber-card:hover::before {
-            left: 100%;
-        }
-
-        /* STATS CARDS */
-        .stat-icon {
-            font-size: 2.2rem;
-            color: var(--cyber-gold);
-            filter: drop-shadow(0 0 8px var(--cyber-gold-glow));
-        }
-
-        .stat-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            margin: 10px 0 5px 0;
-        }
-
-        .stat-label {
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 700;
-        }
-
-        .glow-gold { border-top: 3px solid #d4af37; }
-        .glow-green { border-top: 3px solid #00ff88; }
-        .glow-yellow { border-top: 3px solid #ffb703; }
-        .glow-blue { border-top: 3px solid #00f0ff; }
-
-        /* LIST CUSTOM */
-        .cyber-list .list-group-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            padding: 15px;
-        }
-
-        .cyber-list .list-group-item:last-child {
-            border-bottom: none;
         }
 
         .text-gold { color: var(--cyber-gold) !important; }
-        .cyber-title {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1.5px;
+        .btn-gold {
+            background: var(--cyber-gold);
+            color: #000;
             font-weight: 700;
+            border: none;
+        }
+        .btn-gold:hover {
+            background: #e5be3b;
+            color: #000;
+        }
+        .table-admin {
+            color: var(--text-main);
+        }
+        .table-admin th {
+            border-bottom-color: var(--glass-border);
+            color: var(--cyber-gold);
+        }
+        .table-admin td {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -280,7 +237,7 @@
         <a class="nav-link" href="/admin/dashboard">
             <i class="fas fa-chart-pie"></i> Tableau de bord
         </a>
-        <a class="nav-link" href="/admin/services">
+        <a class="nav-link active" href="/admin/services">
             <i class="fas fa-concierge-bell"></i> Services
         </a>
         <a class="nav-link" href="/admin/messages">
@@ -294,38 +251,32 @@
     </nav>
 </aside>
 
-<!-- SCRIPTS INTELLIGENTS DE FOND ET 3D -->
+<!-- MAIN CONTENT WRAPPER -->
+<div th:fragment="main(viewContent)" class="admin-wrapper">
+    <main>
+        <th:block th:replace="${viewContent}" />
+    </main>
+</div>
+
+<!-- SCRIPTS INTELLIGENTS -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialisation Particules Lumineuses Cyberpunk
-        tsParticles.load("tsparticles", {
-            particles: {
-                number: { value: 40, density: { enable: true, value_area: 800 } },
-                color: { value: ["#d4af37", "#00f0ff", "#ffffff"] },
-                shape: { type: "circle" },
-                opacity: { value: 0.4, random: true },
-                size: { value: 3, random: true },
-                move: {
-                    enable: true,
-                    speed: 1,
-                    direction: "none",
-                    out_mode: "out"
+        if (typeof tsParticles !== 'undefined') {
+            tsParticles.load("tsparticles", {
+                particles: {
+                    number: { value: 40, density: { enable: true, value_area: 800 } },
+                    color: { value: ["#d4af37", "#00f0ff", "#ffffff"] },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.4, random: true },
+                    size: { value: 3, random: true },
+                    move: { enable: true, speed: 1, direction: "none", out_mode: "out" },
+                    line_linked: { enable: true, distance: 150, color: "#d4af37", opacity: 0.15, width: 1 }
                 },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#d4af37",
-                    opacity: 0.15,
-                    width: 1
-                }
-            },
-            interactivity: {
-                events: { onhover: { enable: true, mode: "grab" } }
-            }
-        });
+                interactivity: { events: { onhover: { enable: true, mode: "grab" } } }
+            });
+        }
 
-        // Sidebar Toggle
         document.getElementById('sidebarToggle')?.addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const wrapper = document.querySelector('.admin-wrapper');
@@ -338,13 +289,11 @@
             }
         });
 
-        // Activation de l'effet 3D Tilt sur les éléments .tilt-card
-        VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
-            max: 12,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.2
-        });
+        if (typeof VanillaTilt !== 'undefined') {
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+                max: 12, speed: 400, glare: true, "max-glare": 0.2
+            });
+        }
     </script>
 </div>
 </body>
