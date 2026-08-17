@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.List;  // ← Import ajouté
 
 @Controller
 @RequestMapping("/admin")
@@ -24,17 +24,22 @@ public class AdminController {
         this.contactMessageRepository = contactMessageRepository;
     }
 
+    // ===================== DASHBOARD =====================
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("totalServices", serviceRepository.count());
         model.addAttribute("totalMessages", contactMessageRepository.count());
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
-        // Pour le badge dans la sidebar
+
+        // Attributs supplémentaires pour le dashboard
+        model.addAttribute("totalProjets", 0L); // à remplacer par votre repository Projet
+        model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+
         return "admin/dashboard";
     }
 
-    // ----- Services -----
+    // ===================== SERVICES =====================
     @GetMapping("/services")
     public String listServices(Model model) {
         model.addAttribute("services", serviceRepository.findAll());
@@ -70,7 +75,7 @@ public class AdminController {
         return "redirect:/admin/services";
     }
 
-    // ----- Messages -----
+    // ===================== MESSAGES =====================
     @GetMapping("/messages")
     public String messages(Model model) {
         List<ContactMessage> messages = contactMessageRepository.findAllByOrderByCreatedAtDesc();
