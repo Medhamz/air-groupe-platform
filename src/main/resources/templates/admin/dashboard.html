@@ -2,70 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<!-- On remplace le fragment content du layout -->
-<div th:replace="~{admin/fragments/layout :: content}">
-    <div th:fragment="content">
-        <h1 class="h2 mb-4">Tableau de bord</h1>
-        <div class="row g-4">
-            <div class="col-md-3">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                        <h5 class="card-title">Services</h5>
-                        <p class="card-text display-6" th:text="${totalServices}">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-success">
-                    <div class="card-body">
-                        <h5 class="card-title">Messages</h5>
-                        <p class="card-text display-6" th:text="${totalMessages}">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-warning">
-                    <div class="card-body">
-                        <h5 class="card-title">Non lus</h5>
-                        <p class="card-text display-6" th:text="${unreadMessages}">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-info">
-                    <div class="card-body">
-                        <h5 class="card-title">Projets</h5>
-                        <p class="card-text display-6">12</p>
-                    </div>
+<!-- Définition du fragment pageContent qui sera injecté dans le layout -->
+<th:block th:fragment="pageContent">
+    <h1 class="h2 mb-4">Tableau de bord</h1>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Services</h5>
+                    <p class="card-text display-6" th:text="${totalServices}">0</p>
                 </div>
             </div>
         </div>
-        <!-- Section des derniers messages (exemple) -->
-        <div class="mt-4">
-            <h4>Derniers messages</h4>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Sujet</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="msg : ${recentMessages}">
-                        <td th:text="${msg.name}">Nom</td>
-                        <td th:text="${msg.subject}">Sujet</td>
-                        <td th:text="${#temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
-                    </tr>
-                    <tr th:if="${recentMessages == null or recentMessages.isEmpty()}">
-                        <td colspan="3" class="text-center text-muted">Aucun message récent.</td>
-                    </tr>
-                    </tbody>
-                </table>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Messages</h5>
+                    <p class="card-text display-6" th:text="${totalMessages}">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Non lus</h5>
+                    <p class="card-text display-6" th:text="${unreadMessages}">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Projets</h5>
+                    <p class="card-text display-6">12</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="mt-4">
+        <h4>Derniers messages</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Sujet</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="msg : ${recentMessages}">
+                    <td th:text="${msg.name}">Nom</td>
+                    <td th:text="${msg.subject}">Sujet</td>
+                    <td th:text="${#temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
+                </tr>
+                <tr th:if="${recentMessages == null or recentMessages.isEmpty()}">
+                    <td colspan="3" class="text-center text-muted">Aucun message récent.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
 </body>
 </html>
