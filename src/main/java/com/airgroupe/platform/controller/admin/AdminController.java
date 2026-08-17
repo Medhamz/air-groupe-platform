@@ -24,20 +24,26 @@ public class AdminController {
         this.contactMessageRepository = contactMessageRepository;
     }
 
+    // ===================== WELCOME PAGE =====================
+    @GetMapping({"", "/"})
+    public String welcome() {
+        return "admin/welcome";
+    }
+
+    // ===================== LOGIN PAGE =====================
+    @GetMapping("/login")
+    public String login() {
+        return "admin/login";
+    }
+
     // ===================== DASHBOARD =====================
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("totalServices", serviceRepository.count());
         model.addAttribute("totalMessages", contactMessageRepository.count());
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
-
-        // Pour le badge unread dans la sidebar
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
-
-        // Pour la carte "Projets" (0 pour le moment)
         model.addAttribute("totalProjets", 0L);
-
-        // Derniers messages (5 derniers)
         model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
 
         return "admin/dashboard";
@@ -54,7 +60,7 @@ public class AdminController {
     @GetMapping("/services/create")
     public String showCreateForm(Model model) {
         model.addAttribute("service", new ServiceEntity());
-        return "admin/services-form"; // Corrige le nom du fichier template
+        return "admin/services-form";
     }
 
     @GetMapping("/services/edit/{id}")
@@ -62,7 +68,7 @@ public class AdminController {
         ServiceEntity service = serviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Service invalide : " + id));
         model.addAttribute("service", service);
-        return "admin/services-form"; // Corrige le nom du fichier template
+        return "admin/services-form";
     }
 
     @PostMapping("/services/save")
@@ -104,11 +110,5 @@ public class AdminController {
         contactMessageRepository.deleteById(id);
         redirect.addFlashAttribute("success", "Message supprimé.");
         return "redirect:/admin/messages";
-    }
-
-    // ===================== WELCOME / GATEWAY =====================
-    @GetMapping("")
-    public String welcome() {
-        return "admin/welcome";
     }
 }

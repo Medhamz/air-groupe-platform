@@ -43,14 +43,15 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // ========== ADMIN BACK-OFFICE (protégé) ==========
+    // ========== ADMIN BACK-OFFICE ==========
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**")
+                .securityMatcher("/admin/**", "/admin")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin", "/admin/login").permitAll() // Autorise /admin (welcome) et /admin/login
+                        // Autorise l'accès public à la page de bienvenue (/admin) et de login (/admin/login)
+                        .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin(form -> form
@@ -72,14 +73,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ========== PUBLIC FRONT-OFFICE (totalement ouvert) ==========
+    // ========== PUBLIC FRONT-OFFICE ==========
     @Bean
     @Order(2)
     public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()   // TOUT le site public est accessible
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
