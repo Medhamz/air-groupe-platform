@@ -2,41 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<div th:replace="~{admin/fragments/layout :: header}"></div>
-<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
-<main class="admin-content">
-    <div class="container-fluid">
-        <div th:fragment="content">
-            <h1 class="h2 mb-3" th:text="${service.id} ? 'Modifier un service' : 'Nouveau service'">Nouveau service</h1>
-            <form th:action="@{/admin/services/save}" th:object="${service}" method="post">
-                <input type="hidden" th:field="*{id}">
-                <div class="mb-3">
-                    <label class="form-label">Nom</label>
-                    <input type="text" th:field="*{name}" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Icône (classe FontAwesome)</label>
-                    <input type="text" th:field="*{iconClass}" class="form-control" placeholder="ex: fa-hard-hat">
-                    <small class="text-muted">Voir <a href="https://fontawesome.com/icons" target="_blank">FontAwesome</a> pour les icônes.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Ordre d'affichage</label>
-                    <input type="number" th:field="*{displayOrder}" class="form-control" min="0">
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" th:field="*{isActive}" class="form-check-input" id="active">
-                    <label class="form-check-label" for="active">Actif</label>
-                </div>
-                <button type="submit" class="btn btn-gold">Enregistrer</button>
-                <a href="/admin/services" class="btn btn-secondary">Annuler</a>
-            </form>
-        </div>
+<div th:replace="~{admin/fragments/layout :: content}">
+    <div th:fragment="content">
+        <h1 class="h2 mb-3" th:text="${service.id} ? 'Modifier un service' : 'Nouveau service'">Nouveau service</h1>
+        <form th:action="@{/admin/services/save}" th:object="${service}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label class="form-label">Nom</label>
+                <input type="text" th:field="*{name}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Icône (classe FontAwesome)</label>
+                <input type="text" th:field="*{iconClass}" class="form-control" placeholder="ex: fa-hard-hat">
+                <small class="text-muted">Voir <a href="https://fontawesome.com/icons" target="_blank">FontAwesome</a> pour les icônes.</small>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ordre d'affichage</label>
+                <input type="number" th:field="*{displayOrder}" class="form-control" min="0">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" th:field="*{isActive}" class="form-check-input" id="active">
+                <label class="form-check-label" for="active">Actif</label>
+            </div>
+            <button type="submit" class="btn btn-gold">Enregistrer</button>
+            <a href="/admin/services" class="btn btn-secondary">Annuler</a>
+        </form>
     </div>
-</main>
-<footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+</div>
 </body>
 </html>

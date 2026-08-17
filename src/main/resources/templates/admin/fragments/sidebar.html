@@ -6,7 +6,7 @@
 <body>
 <aside th:fragment="sidebar" class="admin-sidebar">
     <nav class="nav flex-column">
-        <a class="nav-link" href="/admin/dashboard" th:classappend="${#strings.equals(#httpServletRequest.requestURI, '/admin/dashboard')} ? 'active' : ''">
+        <a class="nav-link" href="/admin/dashboard" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/dashboard')} ? 'active' : ''">
             <i class="fas fa-tachometer-alt"></i> Tableau de bord
         </a>
         <a class="nav-link" href="/admin/services" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/services')} ? 'active' : ''">

@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration - Afrique équipements et services</title>
-    <!-- Bootstrap 5 + FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Styles personnalisés -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <style>
-        /* Styles spécifiques à l'admin */
         body.admin-body {
             padding-top: 56px;
             background: #f4f6f9;
@@ -26,7 +23,6 @@
             overflow-y: auto;
             z-index: 1000;
             padding-top: 20px;
-            transition: all 0.3s;
         }
         .admin-sidebar .nav-link {
             color: rgba(255,255,255,0.7);
@@ -38,7 +34,7 @@
         .admin-sidebar .nav-link.active {
             background: rgba(255,255,255,0.1);
             color: #fff;
-            border-left: 4px solid var(--gold);
+            border-left: 4px solid #d4af37;
         }
         .admin-sidebar .nav-link i {
             margin-right: 10px;
@@ -62,6 +58,17 @@
         .admin-header .user-info {
             font-size: 0.9rem;
         }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37, #f1c40f);
+            border: none;
+            color: #1a2a3a;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+        }
         @media (max-width: 768px) {
             .admin-sidebar {
                 width: 100%;
@@ -72,32 +79,23 @@
             .admin-content {
                 margin-left: 0;
             }
-            .admin-sidebar .nav-link {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>
 <body class="admin-body">
 <!-- Header -->
 <header th:replace="~{admin/fragments/header :: header}"></header>
-
 <!-- Sidebar -->
 <aside th:replace="~{admin/fragments/sidebar :: sidebar}"></aside>
-
 <!-- Contenu principal -->
-<main class="admin-content" role="main">
-    <div class="container-fluid">
-        <!-- On inclut le contenu de la page enfant -->
-        <div th:replace="${content} :: content"></div>
+<main class="admin-content">
+    <div th:fragment="content">
+        <!-- Le contenu spécifique des pages enfants sera inséré ici -->
     </div>
 </main>
-
-<!-- Footer (optionnel) -->
+<!-- Footer -->
 <footer th:replace="~{admin/fragments/footer :: footer}"></footer>
 
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/script.js}"></script>
 </body>
