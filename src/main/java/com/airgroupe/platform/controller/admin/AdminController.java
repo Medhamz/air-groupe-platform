@@ -30,12 +30,6 @@ public class AdminController {
         return "admin/welcome";
     }
 
-    // ===================== LOGIN PAGE =====================
-    @GetMapping("/login")
-    public String login() {
-        return "admin/login";
-    }
-
     // ===================== DASHBOARD =====================
     @GetMapping("/dashboard")
     public String dashboard(Model model) {

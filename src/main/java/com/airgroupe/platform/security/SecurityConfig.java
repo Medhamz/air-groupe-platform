@@ -50,7 +50,7 @@ public class SecurityConfig {
         http
                 .securityMatcher("/admin/**", "/admin")
                 .authorizeHttpRequests(auth -> auth
-                        // Autorise l'accès public à la page de bienvenue (/admin) et de login (/admin/login)
+                        // Autorise l'accès public à la page d'accueil /admin et à la page de login
                         .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 )
