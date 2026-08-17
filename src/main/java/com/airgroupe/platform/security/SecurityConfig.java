@@ -50,9 +50,11 @@ public class SecurityConfig {
         http
                 .securityMatcher("/admin", "/admin/**")
                 .authorizeHttpRequests(auth -> auth
-                        // Indispensable pour la résolution des vues Thymeleaf internes sur Cloud
+                        // Dispatchers requis pour la résolution de vues internes
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
+                        // Autorise explicitement l'accès public à la page de bienvenue et de login
                         .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
+                        // Protège tout le reste de l'espace d'administration
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin(form -> form
