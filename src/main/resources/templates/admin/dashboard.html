@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head}"></head>
+<body>
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+<main class="admin-content">
+    <div class="container-fluid">
+        <!-- Contenu du dashboard -->
+        <div th:fragment="content">
+            <h1 class="h2 mb-4">Tableau de bord</h1>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">Services</h5>
+                            <p class="card-text display-6" th:text="${totalServices}">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <h5 class="card-title">Messages</h5>
+                            <p class="card-text display-6" th:text="${totalMessages}">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Non lus</h5>
+                            <p class="card-text display-6" th:text="${unreadMessages}">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body">
+                            <h5 class="card-title">Projets</h5>
+                            <p class="card-text display-6">12</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Ajouter d'autres graphiques ou tableaux si nécessaire -->
+        </div>
+    </div>
+</main>
+<footer th:replace="~{admin/fragments/footer :: footer}"></footer>
+</body>
+</html>

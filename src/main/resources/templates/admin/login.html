@@ -1,54 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administration - Aïr Groupe</title>
+    <title>Connexion admin - Afrique équipements et services</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #2c3e50; }
-        .login-card { max-width: 400px; margin: 100px auto; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-        .login-card .logo { text-align: center; margin-bottom: 25px; }
-        .login-card .logo i { font-size: 3rem; color: #0d6efd; }
+        body { background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .login-card { max-width: 400px; width: 100%; padding: 40px; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .login-card .logo { text-align: center; margin-bottom: 30px; }
+        .login-card .logo i { font-size: 3rem; color: #d4af37; }
+        .login-card .logo h4 { font-weight: 700; margin-top: 10px; color: #1a2a3a; }
+        .login-card .logo p { color: #6c757d; font-size: 0.9rem; }
+        .login-card .form-control { border-radius: 50px; padding: 12px 20px; }
+        .login-card .btn-gold { background: #d4af37; border: none; border-radius: 50px; padding: 12px; font-weight: 600; color: #1a2a3a; transition: all 0.3s; }
+        .login-card .btn-gold:hover { background: #f1c40f; transform: scale(1.02); }
+        .alert { border-radius: 50px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="login-card">
-        <div class="logo">
-            <i class="fas fa-user-shield"></i>
-            <h3 class="mt-2">Administration</h3>
-            <p class="text-muted">Accès réservé</p>
-        </div>
-
-        <!-- Affichage des erreurs -->
-        <div th:if="${param.error}" class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i> Identifiants incorrects.
-        </div>
-        <div th:if="${param.logout}" class="alert alert-success">
-            <i class="fas fa-check-circle"></i> Vous êtes déconnecté.
-        </div>
-        <div th:if="${param.accessDenied}" class="alert alert-warning">
-            <i class="fas fa-lock"></i> Accès refusé. Veuillez vous connecter avec un compte administrateur.
-        </div>
-
-        <form th:action="@{/admin/login}" method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">Nom d'utilisateur</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="admin" required autofocus>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-sign-in-alt"></i> Se connecter
-            </button>
-        </form>
+<div class="login-card">
+    <div class="logo">
+        <i class="fas fa-mountain"></i>
+        <h4>Afrique Équipements</h4>
+        <p>Espace administration</p>
     </div>
+    <div th:if="${param.error}" class="alert alert-danger text-center">
+        <i class="fas fa-exclamation-circle"></i> Identifiants incorrects.
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success text-center">
+        <i class="fas fa-check-circle"></i> Déconnecté avec succès.
+    </div>
+    <form th:action="@{/admin/login}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Nom d'utilisateur</label>
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-user"></i></span>
+                <input type="text" name="username" class="form-control border-start-0" placeholder="admin" required autofocus>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password" class="form-control border-start-0" placeholder="••••••••" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-gold w-100">Se connecter</button>
+    </form>
+    <p class="text-center text-muted mt-3 small"><a href="/" class="text-decoration-none">Retour au site</a></p>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
