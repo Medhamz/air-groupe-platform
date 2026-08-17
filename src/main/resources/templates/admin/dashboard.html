@@ -8,69 +8,90 @@
 <div th:replace="~{admin/fragments/layout :: header}"></div>
 <div th:replace="~{admin/fragments/layout :: sidebar}"></div>
 
-<main class="admin-content" style="margin-left: 250px; padding: 20px;">
-    <h1 class="h2 mb-4">Tableau de bord</h1>
-    <div class="row g-4 mb-4">
+<main class="admin-wrapper">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 cyber-title text-gold mb-1"><i class="fas fa-microchip me-2"></i>TABLEAU DE BORD</h1>
+            <p class="text-muted mb-0">Statistiques et activité du système en temps réel</p>
+        </div>
+    </div>
+
+    <!-- CARTE DE STATISTIQUES 3D -->
+    <div class="row g-4 mb-5">
         <div class="col-md-3">
-            <div class="stat-card p-3 border rounded bg-light">
-                <span class="stat-icon"><i class="fas fa-concierge-bell"></i></span>
-                <div class="stat-number h3 mb-0" th:text="${totalServices != null ? totalServices : 0}">0</div>
-                <div class="stat-label text-muted">Services</div>
+            <div class="cyber-card tilt-card glow-gold">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label">Services</span>
+                    <span class="stat-icon"><i class="fas fa-concierge-bell"></i></span>
+                </div>
+                <div class="stat-number" th:text="${totalServices != null ? totalServices : 0}">0</div>
+                <small class="text-success"><i class="fas fa-check-circle me-1"></i>Actifs</small>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #28a745 !important;">
-                <span class="stat-icon"><i class="fas fa-envelope"></i></span>
-                <div class="stat-number h3 mb-0" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
-                <div class="stat-label text-muted">Messages</div>
+            <div class="cyber-card tilt-card glow-green">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label">Total Messages</span>
+                    <span class="stat-icon" style="color: #00ff88;"><i class="fas fa-envelope"></i></span>
+                </div>
+                <div class="stat-number" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
+                <small class="text-muted">Reçus via formulaire</small>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #ffc107 !important;">
-                <span class="stat-icon"><i class="fas fa-envelope-open"></i></span>
-                <div class="stat-number h3 mb-0" th:text="${unreadMessages != null ? unreadMessages : 0}">0</div>
-                <div class="stat-label text-muted">Non lus</div>
+            <div class="cyber-card tilt-card glow-yellow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label">Non Lus</span>
+                    <span class="stat-icon" style="color: #ffb703;"><i class="fas fa-envelope-open"></i></span>
+                </div>
+                <div class="stat-number" style="color: #ffb703;" th:text="${unreadMessages != null ? unreadMessages : 0}">0</div>
+                <small class="text-warning"><i class="fas fa-clock me-1"></i>Action requise</small>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #17a2b8 !important;">
-                <span class="stat-icon"><i class="fas fa-project-diagram"></i></span>
-                <div class="stat-number h3 mb-0" th:text="${totalProjets != null ? totalProjets : 0}">0</div>
-                <div class="stat-label text-muted">Projets</div>
+            <div class="cyber-card tilt-card glow-blue">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label">Projets</span>
+                    <span class="stat-icon" style="color: #00f0ff;"><i class="fas fa-project-diagram"></i></span>
+                </div>
+                <div class="stat-number" th:text="${totalProjets != null ? totalProjets : 0}">0</div>
+                <small class="text-muted">Catalogue en ligne</small>
             </div>
         </div>
     </div>
 
+    <!-- SECTION GRAPHIQUE ET MESSAGES RÉCENTS -->
     <div class="row g-4">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-bold">
-                    <i class="fas fa-chart-line me-2 text-gold"></i> Activité des 7 derniers jours
+        <!-- GRAPHIQUE 3D LUMINEUX -->
+        <div class="col-lg-8">
+            <div class="cyber-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="cyber-title text-gold mb-0"><i class="fas fa-chart-line me-2"></i>Activité Récente</h5>
+                    <span class="badge bg-outline-gold border border-warning text-warning px-3 py-2">Flux 7J</span>
                 </div>
-                <div class="card-body">
-                    <canvas id="activityChart" height="120"></canvas>
+                <div style="position: relative; height: 280px;">
+                    <canvas id="activityChart"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-bold">
-                    <i class="fas fa-clock me-2 text-gold"></i> Derniers messages
-                </div>
-                <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        <li th:each="msg : ${recentMessages}" class="list-group-item d-flex justify-content-between align-items-start">
-                            <div>
-                                <strong th:text="${msg.name}">Nom</strong>
-                                <p class="small text-muted mb-0" th:text="${msg.message}">Message</p>
-                            </div>
-                            <small class="text-muted" th:text="${#temporals.format(msg.createdAt, 'dd/MM')}">Date</small>
-                        </li>
-                        <li th:if="${recentMessages == null or #lists.isEmpty(recentMessages)}" class="list-group-item text-center text-muted">
-                            Aucun message récent.
-                        </li>
-                    </ul>
-                </div>
+
+        <!-- DERNIERS MESSAGES -->
+        <div class="col-lg-4">
+            <div class="cyber-card h-100">
+                <h5 class="cyber-title text-gold mb-4"><i class="fas fa-history me-2"></i>Derniers Messages</h5>
+                <ul class="list-group list-group-flush cyber-list">
+                    <li th:each="msg : ${recentMessages}" class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="me-2">
+                            <strong class="text-white d-block" th:text="${msg.name}">Nom</strong>
+                            <p class="small text-muted mb-0 text-truncate" style="max-width: 180px;" th:text="${msg.message}">Message...</p>
+                        </div>
+                        <span class="badge bg-dark text-warning border border-secondary" th:text="${#temporals.format(msg.createdAt, 'dd/MM')}">Date</span>
+                    </li>
+                    <li th:if="${recentMessages == null or #lists.isEmpty(recentMessages)}" class="list-group-item text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>
+                        Aucun message récent.
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -82,23 +103,45 @@
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('activityChart')?.getContext('2d');
         if (ctx) {
+            // Création du dégradé lumineux pour le graphique
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(212, 175, 55, 0.4)');
+            gradient.addColorStop(1, 'rgba(212, 175, 55, 0.0)');
+
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
                     datasets: [{
                         label: 'Visites',
-                        data: [12, 19, 3, 5, 2, 3, 7],
+                        data: [14, 22, 12, 28, 19, 35, 42],
                         borderColor: '#d4af37',
-                        backgroundColor: 'rgba(212,175,55,0.1)',
-                        tension: 0.3,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#00f0ff',
+                        pointBorderColor: '#ffffff',
+                        pointHoverRadius: 7,
+                        backgroundColor: gradient,
+                        tension: 0.4,
                         fill: true
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#8a99ad' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#8a99ad' }
+                        }
+                    }
                 }
             });
         }
