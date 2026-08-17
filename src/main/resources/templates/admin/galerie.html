@@ -33,7 +33,7 @@
                     <span class="badge bg-secondary mb-3" th:text="${item.mediaType}">PHOTO</span>
 
                     <div class="d-flex justify-content-end">
-                        <a th:href="@{/admin/gallery/delete/{id}(id=${item.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce média ?')">
+                        <a th:href="@{/admin/galerie/delete/{id}(id=${item.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce média ?')">
                             <i class="fas fa-trash me-1"></i> Supprimer
                         </a>
                     </div>
@@ -56,7 +56,7 @@
                 <h5 class="modal-title text-gold"><i class="fas fa-file-upload me-2"></i>Ajouter une Photo / Vidéo</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form th:action="@{/admin/gallery/add}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/admin/galerie/add}" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label text-gold">Titre</label>

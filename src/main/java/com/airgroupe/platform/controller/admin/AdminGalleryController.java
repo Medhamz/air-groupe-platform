@@ -1,6 +1,7 @@
 package com.airgroupe.platform.controller.admin;
 
 import com.airgroupe.platform.model.MediaItem;
+import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,22 +15,26 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/admin/gallery")
+@RequestMapping("/admin/galerie")
 public class AdminGalleryController {
 
     private final MediaItemRepository mediaRepository;
+    private final ContactMessageRepository contactMessageRepository;
 
     @Value("${file.upload-dir:uploads/gallery}")
     private String uploadDir;
 
-    public AdminGalleryController(MediaItemRepository mediaRepository) {
+    public AdminGalleryController(MediaItemRepository mediaRepository,
+                                  ContactMessageRepository contactMessageRepository) {
         this.mediaRepository = mediaRepository;
+        this.contactMessageRepository = contactMessageRepository;
     }
 
     @GetMapping
     public String index(Model model) {
         model.addAttribute("items", mediaRepository.findAllByOrderByCreatedAtDesc());
-        return "admin/gallery";
+        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        return "admin/galerie"; // Pointe vers src/main/resources/templates/admin/galerie.html
     }
 
     @PostMapping("/add")
@@ -55,12 +60,12 @@ public class AdminGalleryController {
             mediaRepository.save(item);
         }
 
-        return "redirect:/admin/gallery";
+        return "redirect:/admin/galerie";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteMedia(@PathVariable Long id) {
         mediaRepository.deleteById(id);
-        return "redirect:/admin/gallery";
+        return "redirect:/admin/galerie";
     }
 }
