@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head}"></head>
+<body>
+
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+
+<div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
+    <div id="page-content" class="cyber-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 text-gold m-0">
+                <i class="fas fa-images me-2"></i>Gestion de la Galerie
+            </h1>
+            <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <i class="fas fa-upload me-1"></i> Ajouter un média
+            </button>
+        </div>
+
+        <!-- LISTE DES MÉDIAS -->
+        <div class="row g-4">
+            <div class="col-md-4" th:each="item : ${items}">
+                <div class="cyber-card p-3 position-relative">
+
+                    <div class="media-preview mb-3 text-center" style="height: 180px; overflow: hidden; border-radius: 8px; background: #000;">
+                        <img th:if="${item.mediaType.name() == 'PHOTO'}" th:src="${item.mediaUrl}" class="w-100 h-100" style="object-fit: cover;">
+                        <video th:if="${item.mediaType.name() == 'VIDEO'}" th:src="${item.mediaUrl}" controls class="w-100 h-100" style="object-fit: cover;"></video>
+                    </div>
+
+                    <h5 class="text-gold" th:text="${item.title}">Titre</h5>
+                    <p class="small text-muted mb-2" th:text="${item.description}">Description</p>
+                    <span class="badge bg-secondary mb-3" th:text="${item.mediaType}">PHOTO</span>
+
+                    <div class="d-flex justify-content-end">
+                        <a th:href="@{/admin/gallery/delete/{id}(id=${item.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce média ?')">
+                            <i class="fas fa-trash me-1"></i> Supprimer
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center text-muted py-4" th:if="${items == null or items.isEmpty()}">
+                Aucun média dans la galerie pour le moment.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL UPLOAD -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content style-cyber-modal" style="background: var(--cyber-bg); border: 1px solid var(--glass-border); color: #fff;">
+            <div class="modal-header" style="border-bottom-color: var(--glass-border);">
+                <h5 class="modal-title text-gold"><i class="fas fa-file-upload me-2"></i>Ajouter une Photo / Vidéo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/admin/gallery/add}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Titre</label>
+                        <input type="text" name="title" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Description</label>
+                        <textarea name="description" class="form-control bg-dark text-light border-secondary" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Type de média</label>
+                        <select name="mediaType" class="form-select bg-dark text-light border-secondary">
+                            <option value="PHOTO">Photo</option>
+                            <option value="VIDEO">Vidéo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Fichier (Image / Vidéo)</label>
+                        <input type="file" name="file" class="form-control bg-dark text-light border-secondary" accept="image/*,video/*" required>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--glass-border);">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-gold">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
+</body>
+</html>

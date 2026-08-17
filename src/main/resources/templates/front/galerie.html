@@ -7,56 +7,42 @@
 <section class="py-5 section-animate">
     <div class="container">
         <h1 class="text-center section-title">Galerie</h1>
-        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Photos de nos chantiers et réalisations à Agadez.</p>
+        <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Photos et vidéos de nos chantiers et réalisations à Agadez.</p>
 
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Construction du pont d'Agadez</h5>
-                        <p class="small mb-0">Mars 2025</p>
+            <!-- MENTIONS DYNAMIQUES DU BACK-OFFICE -->
+            <div class="col-md-4" th:each="item : ${items}">
+                <div class="project-card shadow-sm h-100 overflow-hidden" style="border-radius: 12px; background: #fff;">
+
+                    <!-- AFFICHAGE IMAGE OU VIDÉO -->
+                    <div class="media-container" style="height: 220px; overflow: hidden; position: relative;">
+                        <img th:if="${item.mediaType.name() == 'PHOTO'}"
+                             th:src="${item.mediaUrl}"
+                             class="w-100 h-100"
+                             style="object-fit: cover;"
+                             th:alt="${item.title}">
+
+                        <video th:if="${item.mediaType.name() == 'VIDEO'}"
+                               controls
+                               class="w-100 h-100"
+                               style="object-fit: cover;">
+                            <source th:src="${item.mediaUrl}">
+                            Votre navigateur ne prend pas en charge la lecture vidéo.
+                        </video>
+                    </div>
+
+                    <div class="project-body" style="padding: 20px; text-align: left;">
+                        <h5 class="fw-bold mb-2" th:text="${item.title}">Titre de la réalisation</h5>
+                        <p class="text-muted small mb-2" th:text="${item.description}">Description du projet...</p>
+                        <span class="badge bg-light text-dark border" th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy')}">Date</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Aménagement de pistes rurales</h5>
-                        <p class="small mb-0">Février 2025</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Parc d'engins lourds</h5>
-                        <p class="small mb-0">Janvier 2025</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Forage à Agadez</h5>
-                        <p class="small mb-0">Décembre 2024</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Réhabilitation de la route d'Agadez</h5>
-                        <p class="small mb-0">Novembre 2024</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="project-card">
-                    <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                        <h5>Construction d'un centre de santé</h5>
-                        <p class="small mb-0">Octobre 2024</p>
-                    </div>
-                </div>
+
+            <!-- MESSAGE SI GALERIE VIDE -->
+            <div class="col-12 text-center text-muted py-5" th:if="${items == null or items.isEmpty()}">
+                <i class="fas fa-images fa-3x mb-3 text-secondary"></i>
+                <p>Aucune réalisation disponible dans la galerie pour le moment.</p>
             </div>
         </div>
     </div>
