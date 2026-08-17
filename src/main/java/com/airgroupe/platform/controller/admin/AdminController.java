@@ -105,4 +105,10 @@ public class AdminController {
         redirect.addFlashAttribute("success", "Message supprimé.");
         return "redirect:/admin/messages";
     }
+
+    // ===================== WELCOME / GATEWAY =====================
+    @GetMapping("")
+    public String welcome() {
+        return "admin/welcome";
+    }
 }
