@@ -36,10 +36,25 @@ body {
     padding-top: 76px;
     line-height: 1.8;
     transition: background 0.4s ease, color 0.4s ease;
+    position: relative;
+    overflow-x: hidden;
 }
 
 /* ============================================
-   HERO & MAP 3D
+   CANVAS PARTICULES LUMINEUSES
+============================================ */
+#particlesCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ============================================
+   HERO & JEUX DE LUMIÈRE
 ============================================ */
 .hero {
     background: var(--gradient-main);
@@ -57,12 +72,34 @@ body {
     color: transparent;
 }
 
+/* Rays / Jeux de lumière */
+.light-ray {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, rgba(0,0,0,0) 60%);
+    animation: rotateRay 20s linear infinite;
+    pointer-events: none;
+}
+.light-ray-2 {
+    animation-duration: 35s;
+    animation-direction: reverse;
+    background: radial-gradient(circle, rgba(241,196,15,0.1) 0%, rgba(0,0,0,0) 50%);
+}
+
+@keyframes rotateRay {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .hero-3d-wrapper {
     position: relative;
     width: 100%;
-    height: 380px;
+    height: 400px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.25);
     border-radius: 24px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     overflow: hidden;
@@ -76,7 +113,7 @@ body {
 }
 #niger3dContainer:active { cursor: grabbing; }
 
-.3d-badge {
+.map-3d-badge {
     position: absolute;
     bottom: 15px;
     left: 15px;
@@ -98,6 +135,7 @@ body {
     background: rgba(26, 42, 58, 0.9) !important;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     padding: 12px 0;
+    z-index: 1050;
 }
 .navbar-brand { font-weight: 800; color: var(--gold) !important; }
 
@@ -122,45 +160,76 @@ body {
 .theme-toggle:hover { background: var(--gold); color: #1a2a3a; }
 
 /* ============================================
-   BOUTONS & CARTES
+   CHATBOT RETAIL
 ============================================ */
-.btn-gold {
-    background: var(--gradient-gold);
-    border: none;
+.chatbot-toggle {
+    position: fixed; bottom: 90px; right: 25px;
+    width: 60px; height: 60px;
+    background: var(--gradient-gold); border: none; border-radius: 50%;
+    color: #1a2a3a; font-size: 26px; z-index: 1000;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.chatbot-window {
+    position: fixed; bottom: 165px; right: 25px;
+    width: 360px; height: 480px;
+    background: var(--bg-card); border-radius: var(--radius);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3); z-index: 1000;
+    display: none; flex-direction: column; overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.chatbot-window.active { display: flex; }
+
+.chatbot-header {
+    background: var(--primary);
+    color: #fff; padding: 15px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.bot-avatar {
+    width: 35px; height: 35px; background: var(--gold);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
     color: #1a2a3a;
-    font-weight: 700;
-    transition: all var(--transition);
 }
-.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5); }
+.close-chat { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
 
-.btn-outline-gold {
-    border: 2px solid var(--gold);
-    color: var(--gold);
-    font-weight: 700;
+.chatbot-messages {
+    flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
 }
-.btn-outline-gold:hover { background: var(--gold); color: #1a2a3a; }
+.message {
+    max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem;
+}
+.bot-message { background: #e9ecef; color: #1a2a3a; align-self: flex-start; }
+body.dark-mode .bot-message { background: #2c3e50; color: #fff; }
+.user-message { background: var(--gold); color: #1a2a3a; align-self: flex-end; font-weight: 600; }
 
+.chatbot-input {
+    display: flex; border-top: 1px solid rgba(0,0,0,0.1); padding: 10px; background: var(--bg-card);
+}
+.chatbot-input input {
+    flex: 1; border: none; outline: none; background: transparent; color: var(--text-color); padding: 5px 10px;
+}
+.chatbot-input button {
+    background: var(--gold); border: none; color: #1a2a3a; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+}
+
+/* ============================================
+   CARTES & SECTIONS
+============================================ */
 .service-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 30px 20px;
-    box-shadow: var(--shadow);
-    transition: all var(--transition);
-    text-align: center;
+    background: var(--bg-card); border-radius: var(--radius);
+    padding: 30px 20px; box-shadow: var(--shadow);
+    transition: all var(--transition); text-align: center;
 }
 .service-card:hover { transform: translateY(-8px); }
 .service-card .icon-wrapper {
-    width: 70px; height: 70px;
-    background: var(--gradient-gold);
-    color: #1a2a3a;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    width: 70px; height: 70px; background: var(--gradient-gold);
+    color: #1a2a3a; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     font-size: 28px; margin: 0 auto 20px;
 }
 
 .section-title {
-    font-size: 2.5rem; font-weight: 800;
-    position: relative; margin-bottom: 40px;
+    font-size: 2.5rem; font-weight: 800; position: relative; margin-bottom: 40px;
 }
 .section-title::after {
     content: ''; display: block; width: 60px; height: 4px;
@@ -169,49 +238,14 @@ body {
 
 .stat-number {
     font-size: 3.5rem; font-weight: 800;
-    background: var(--gradient-gold);
-    -webkit-background-clip: text; background-clip: text;
+    background: var(--gradient-gold); -webkit-background-clip: text; background-clip: text;
     color: transparent;
 }
 
-/* ============================================
-   CHATBOT & FOOTER
-============================================ */
-.chatbot-toggle {
-    position: fixed; bottom: 90px; right: 25px;
-    width: 55px; height: 55px;
-    background: var(--gradient-gold); border: none; border-radius: 50%;
-    color: #1a2a3a; font-size: 24px; z-index: 1000;
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-}
-.chatbot-window {
-    position: fixed; bottom: 160px; right: 25px;
-    width: 350px; height: 450px;
-    background: var(--bg-card); border-radius: var(--radius);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3); z-index: 999;
-    display: none; flex-direction: column; overflow: hidden;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-}
-.chatbot-window.active { display: flex; }
-
-.footer {
-    background: #1a2a3a; color: #b0bec5;
-    padding: 50px 0 30px; margin-top: 60px;
-}
-.visitor-counter {
-    background: var(--gradient-main); color: #fff;
-    padding: 4px 16px; border-radius: 50px; font-size: 0.85rem;
-}
-.admin-access-link {
-    font-size: 0.75rem; color: #6c757d; text-decoration: none; opacity: 0.6;
-}
-.admin-access-link:hover { opacity: 1; }
-
+.footer { background: #1a2a3a; color: #b0bec5; padding: 50px 0 30px; margin-top: 60px; }
 .back-to-top {
     position: fixed; bottom: 25px; right: 25px;
-    width: 45px; height: 45px;
-    background: var(--gradient-gold); border: none; border-radius: 50%;
-    color: #1a2a3a; font-size: 18px; opacity: 0; visibility: hidden;
-    transition: all 0.3s ease; z-index: 999;
+    width: 45px; height: 45px; background: var(--gradient-gold); border: none; border-radius: 50%;
+    color: #1a2a3a; font-size: 18px; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999;
 }
 .back-to-top.visible { opacity: 1; visibility: visible; }

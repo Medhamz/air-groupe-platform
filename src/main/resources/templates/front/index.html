@@ -4,26 +4,45 @@
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
 
-<!-- ====== CHATBOT ====== -->
+<!-- ====== CHATBOT COMPLET ====== -->
 <button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
     <i class="fas fa-comment-dots"></i>
     <span class="notification-dot"></span>
 </button>
 <div id="chatbotWindow" class="chatbot-window">
     <div class="chatbot-header">
-        <h6><i class="fas fa-robot me-2"></i>Assistant Afrique Équipements</h6>
+        <div class="d-flex align-items-center gap-2">
+            <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+            <div>
+                <h6 class="mb-0 text-white">Assistant Virtuel</h6>
+                <small class="text-success" style="font-size: 0.75rem;"><i class="fas fa-circle me-1"></i>En ligne</small>
+            </div>
+        </div>
         <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
     </div>
-    <div id="chatMessages" class="chatbot-messages"></div>
+    <div id="chatMessages" class="chatbot-messages">
+        <div class="message bot-message">
+            Bonjour ! Je suis l'assistant virtuel d'Afrique équipements et services. Comment puis-je vous aider aujourd'hui ?
+        </div>
+    </div>
+    <div class="chatbot-suggestions p-2 border-top">
+        <button class="btn btn-xs btn-outline-warning text-dark me-1 mb-1 suggestion-btn" onclick="sendQuickMessage('Vos services ?')">Vos services ?</button>
+        <button class="btn btn-xs btn-outline-warning text-dark me-1 mb-1 suggestion-btn" onclick="sendQuickMessage('Demander un devis')">Demander un devis</button>
+        <button class="btn btn-xs btn-outline-warning text-dark me-1 mb-1 suggestion-btn" onclick="sendQuickMessage('Où êtes-vous basés ?')">Où êtes-vous ?</button>
+    </div>
     <div class="chatbot-input">
         <input type="text" id="chatInput" placeholder="Posez votre question...">
         <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
-<!-- Hero Section avec Carte 3D -->
+<!-- Hero Section avec Jeux de Lumières & Carte 3D du Niger -->
 <section class="hero">
-    <div class="container">
+    <!-- Jeux de Lumière / Rays -->
+    <div class="light-ray light-ray-1"></div>
+    <div class="light-ray light-ray-2"></div>
+
+    <div class="container position-relative z-index-2">
         <div class="row align-items-center">
             <div class="col-lg-6 text-lg-start text-center mb-4 mb-lg-0">
                 <h1 class="display-4 fw-bold">
@@ -35,16 +54,16 @@
                 <div class="d-flex justify-content-lg-start justify-content-center gap-3 flex-wrap">
                     <a href="/services" class="btn btn-gold btn-lg rounded-pill px-4">Découvrir nos services <i class="fas fa-arrow-right ms-2"></i></a>
                     <button id="readingModeBtn" class="btn btn-outline-gold btn-lg rounded-pill px-4" onclick="toggleReadingMode()">
-                        <i class="fas fa-expand"></i> Lecture
+                        <i class="fas fa-expand"></i> Mode Lecture
                     </button>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="hero-3d-wrapper">
                     <div id="niger3dContainer"></div>
-                    <div class="3d-badge">
+                    <div class="map-3d-badge">
                         <i class="fas fa-map-marker-alt text-warning"></i>
-                        <span>Focus : <strong>Région d'Agadez</strong></span>
+                        <span>République du Niger — <strong>Focus Région d'Agadez</strong></span>
                     </div>
                 </div>
             </div>
@@ -84,7 +103,7 @@
     </div>
 </section>
 
-<!-- Services en avant -->
+<!-- Services -->
 <section class="py-5 bg-white section-animate">
     <div class="container">
         <div class="text-center">
@@ -130,9 +149,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="noResult" class="text-center mt-4" style="display: none;">
-            <p class="text-secondary"><i class="fas fa-search-minus me-2"></i>Aucun service ne correspond à votre recherche.</p>
         </div>
     </div>
 </section>
@@ -189,51 +205,6 @@
                     <p class="client-name">- M. Oumar, Entrepreneur</p>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ -->
-<section class="py-5 bg-white section-animate">
-    <div class="container">
-        <div class="text-center">
-            <h2 class="section-title">Questions fréquentes</h2>
-        </div>
-        <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                        Quels types de services proposez-vous ?
-                    </button>
-                </h2>
-                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">Nous couvrons le BTP, l'hydraulique, le commerce général, la location et vente d'engins lourds, ainsi que le transport et la logistique.</div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                        Travaillez-vous uniquement à Agadez ?
-                    </button>
-                </h2>
-                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">Nous intervenons sur tout le Niger, avec une expérience particulière dans la région d'Agadez et les zones rurales.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Newsletter -->
-<section class="py-5 bg-white section-animate">
-    <div class="container">
-        <div class="newsletter">
-            <h3>Restez informé</h3>
-            <p>Recevez nos actualités et nos offres spéciales.</p>
-            <form id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3">
-                <input type="email" placeholder="Votre email" required>
-                <button type="submit" class="btn">S'abonner</button>
-            </form>
         </div>
     </div>
 </section>
