@@ -4,6 +4,7 @@ import com.airgroupe.platform.dto.ProjectDto;
 import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
+import com.airgroupe.platform.repository.MediaItemRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +21,14 @@ public class HomeController {
 
     private final ServiceRepository serviceRepository;
     private final ContactMessageRepository contactMessageRepository;
+    private final MediaItemRepository mediaRepository;
 
     public HomeController(ServiceRepository serviceRepository,
-                          ContactMessageRepository contactMessageRepository) {
+                          ContactMessageRepository contactMessageRepository,
+                          MediaItemRepository mediaRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
+        this.mediaRepository = mediaRepository;
     }
 
     @GetMapping("/")
@@ -74,7 +78,8 @@ public class HomeController {
     }
 
     @GetMapping("/galerie")
-    public String galerie() {
+    public String galerie(Model model) {
+        model.addAttribute("items", mediaRepository.findAllByOrderByCreatedAtDesc());
         return "front/galerie";
     }
 
