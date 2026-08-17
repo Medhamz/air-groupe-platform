@@ -7,13 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* ... vos styles existants ... */
-    </style>
 </head>
 <body>
+
 <!-- HEADER -->
-<header class="admin-header">
+<header class="admin-header" th:fragment="header">
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
     </button>
@@ -22,31 +20,25 @@
     </div>
     <div class="user-menu">
         <span class="user-name"><i class="fas fa-user-circle"></i> Administrateur</span>
-        <a href="/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        <a href="/admin/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
 </header>
 
 <!-- SIDEBAR -->
-<aside class="admin-sidebar" id="sidebar">
+<aside class="admin-sidebar" id="sidebar" th:fragment="sidebar">
     <div class="sidebar-brand">
         <i class="fas fa-mountain"></i> Afrique Équipements
     </div>
     <nav class="nav flex-column">
-        <a class="nav-link" href="/admin/dashboard" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/dashboard')} ? 'active' : ''">
+        <a class="nav-link" href="/admin/dashboard">
             <i class="fas fa-tachometer-alt"></i> Tableau de bord
         </a>
-        <a class="nav-link" href="/admin/services" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/services')} ? 'active' : ''">
+        <a class="nav-link" href="/admin/services">
             <i class="fas fa-concierge-bell"></i> Services
         </a>
-        <a class="nav-link" href="/admin/messages" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/messages')} ? 'active' : ''">
+        <a class="nav-link" href="/admin/messages">
             <i class="fas fa-envelope"></i> Messages
             <span class="badge" th:text="${unreadCount != null ? unreadCount : 0}">0</span>
-        </a>
-        <a class="nav-link" href="/admin/projects" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/projects')} ? 'active' : ''">
-            <i class="fas fa-project-diagram"></i> Projets
-        </a>
-        <a class="nav-link" href="/admin/users" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/users')} ? 'active' : ''">
-            <i class="fas fa-users"></i> Utilisateurs
         </a>
         <hr>
         <a class="nav-link" href="/">
@@ -55,14 +47,7 @@
     </nav>
 </aside>
 
-<!-- CONTENU PRINCIPAL -->
-<main class="admin-content">
-    <div th:fragment="content">
-        <!-- Le contenu spécifique sera injecté ici -->
-    </div>
-</main>
-
-<script>
+<script th:fragment="scripts">
     document.addEventListener('DOMContentLoaded', function() {
         const toggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
@@ -73,6 +58,5 @@
         }
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

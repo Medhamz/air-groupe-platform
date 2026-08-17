@@ -54,7 +54,7 @@ public class AdminController {
     @GetMapping("/services/create")
     public String showCreateForm(Model model) {
         model.addAttribute("service", new ServiceEntity());
-        return "admin/service-form";
+        return "admin/services-form"; // Corrige le nom du fichier template
     }
 
     @GetMapping("/services/edit/{id}")
@@ -62,7 +62,7 @@ public class AdminController {
         ServiceEntity service = serviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Service invalide : " + id));
         model.addAttribute("service", service);
-        return "admin/service-form";
+        return "admin/services-form"; // Corrige le nom du fichier template
     }
 
     @PostMapping("/services/save")

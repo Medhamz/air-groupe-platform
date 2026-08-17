@@ -1,59 +1,108 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments/layout :: head}"></head>
+<head>
+    <th:block th:replace="~{admin/fragments/layout :: head}"></th:block>
+</head>
 <body>
-<div th:replace="~{admin/fragments/layout :: content}">
-    <div th:fragment="content">
-        <h1 class="h2 mb-4">Tableau de bord</h1>
 
-        <!-- Statistiques -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <span class="stat-icon"><i class="fas fa-concierge-bell"></i></span>
-                    <div class="stat-number" th:text="${totalServices != null ? totalServices : 0}">0</div>
-                    <div class="stat-label">Services</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card" style="border-left-color: #28a745;">
-                    <span class="stat-icon"><i class="fas fa-envelope"></i></span>
-                    <div class="stat-number" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
-                    <div class="stat-label">Messages</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card" style="border-left-color: #ffc107;">
-                    <span class="stat-icon"><i class="fas fa-envelope-open"></i></span>
-                    <div class="stat-number" th:text="${unreadMessages != null ? unreadMessages : 0}">0</div>
-                    <div class="stat-label">Non lus</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card" style="border-left-color: #17a2b8;">
-                    <span class="stat-icon"><i class="fas fa-project-diagram"></i></span>
-                    <div class="stat-number" th:text="${totalProjets != null ? totalProjets : 0}">0</div>
-                    <div class="stat-label">Projets</div>
-                </div>
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+
+<main class="admin-content" style="margin-left: 250px; padding: 20px;">
+    <h1 class="h2 mb-4">Tableau de bord</h1>
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card p-3 border rounded bg-light">
+                <span class="stat-icon"><i class="fas fa-concierge-bell"></i></span>
+                <div class="stat-number h3 mb-0" th:text="${totalServices != null ? totalServices : 0}">0</div>
+                <div class="stat-label text-muted">Services</div>
             </div>
         </div>
-
-        <!-- Message de diagnostic -->
-        <div class="alert alert-success">
-            ✅ Le tableau de bord s'affiche correctement. Les statistiques sont chargées.
-        </div>
-
-        <!-- Section simplifiée sans graphique ni #temporals -->
-        <div class="card">
-            <div class="card-header bg-white fw-bold">
-                <i class="fas fa-info-circle me-2 text-gold"></i> Informations
+        <div class="col-md-3">
+            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #28a745 !important;">
+                <span class="stat-icon"><i class="fas fa-envelope"></i></span>
+                <div class="stat-number h3 mb-0" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
+                <div class="stat-label text-muted">Messages</div>
             </div>
-            <div class="card-body">
-                <p class="mb-0">Bienvenue dans l'interface d'administration.</p>
-                <p class="mb-0">Vous pouvez gérer les services et les messages via le menu de gauche.</p>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #ffc107 !important;">
+                <span class="stat-icon"><i class="fas fa-envelope-open"></i></span>
+                <div class="stat-number h3 mb-0" th:text="${unreadMessages != null ? unreadMessages : 0}">0</div>
+                <div class="stat-label text-muted">Non lus</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card p-3 border rounded bg-light" style="border-left: 4px solid #17a2b8 !important;">
+                <span class="stat-icon"><i class="fas fa-project-diagram"></i></span>
+                <div class="stat-number h3 mb-0" th:text="${totalProjets != null ? totalProjets : 0}">0</div>
+                <div class="stat-label text-muted">Projets</div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-chart-line me-2 text-gold"></i> Activité des 7 derniers jours
+                </div>
+                <div class="card-body">
+                    <canvas id="activityChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">
+                    <i class="fas fa-clock me-2 text-gold"></i> Derniers messages
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li th:each="msg : ${recentMessages}" class="list-group-item d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong th:text="${msg.name}">Nom</strong>
+                                <p class="small text-muted mb-0" th:text="${msg.message}">Message</p>
+                            </div>
+                            <small class="text-muted" th:text="${#temporals.format(msg.createdAt, 'dd/MM')}">Date</small>
+                        </li>
+                        <li th:if="${recentMessages == null or #lists.isEmpty(recentMessages)}" class="list-group-item text-center text-muted">
+                            Aucun message récent.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('activityChart')?.getContext('2d');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                    datasets: [{
+                        label: 'Visites',
+                        data: [12, 19, 3, 5, 2, 3, 7],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212,175,55,0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
