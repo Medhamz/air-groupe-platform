@@ -18,7 +18,8 @@
                         </div>
                         <p class="date">
                             <i class="far fa-calendar-alt me-2"></i>
-                            <span th:text="${#temporals.format(article.createdAt, 'dd MMMM yyyy', #locales.create('fr'))}">15 mars 2025</span>
+                            <span th:if="${article.createdAt != null}"
+                                  th:text="${#temporals.format(article.createdAt, 'dd MMMM yyyy')}">15 mars 2025</span>
                         </p>
                         <h5 th:text="${article.title}">Titre de l'article</h5>
                         <p th:text="${article.summary}">Résumé de l'actualité...</p>
