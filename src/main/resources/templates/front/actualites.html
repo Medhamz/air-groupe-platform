@@ -10,35 +10,26 @@
         <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Suivez l'actualité d'Afrique équipements et services à Agadez.</p>
 
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="article-card">
+            <div class="col-md-4" th:each="article : ${articles}">
+                <div class="article-card h-100 d-flex flex-column justify-content-between">
                     <div class="article-body">
-                        <p class="date"><i class="far fa-calendar-alt me-2"></i>15 mars 2025</p>
-                        <h5>Nouveau chantier à Agadez</h5>
-                        <p>Afrique équipements et services débute la construction d'un complexe administratif à Agadez.</p>
-                        <a href="#" class="text-gold fw-bold">Lire la suite <i class="fas fa-arrow-right ms-1"></i></a>
+                        <div th:if="${article.imageUrl != null}" class="mb-3 text-center" style="height: 180px; overflow: hidden; border-radius: 8px;">
+                            <img th:src="${article.imageUrl}" class="w-100 h-100" style="object-fit: cover;" th:alt="${article.title}">
+                        </div>
+                        <p class="date">
+                            <i class="far fa-calendar-alt me-2"></i>
+                            <span th:text="${#temporals.format(article.createdAt, 'dd MMMM yyyy', #locales.create('fr'))}">15 mars 2025</span>
+                        </p>
+                        <h5 th:text="${article.title}">Titre de l'article</h5>
+                        <p th:text="${article.summary}">Résumé de l'actualité...</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="article-card">
-                    <div class="article-body">
-                        <p class="date"><i class="far fa-calendar-alt me-2"></i>2 mars 2025</p>
-                        <h5>Location d'engins pour la nouvelle route</h5>
-                        <p>Nos engins lourds sont mobilisés pour le nouvel axe routier reliant Agadez à la région.</p>
-                        <a href="#" class="text-gold fw-bold">Lire la suite <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="article-card">
-                    <div class="article-body">
-                        <p class="date"><i class="far fa-calendar-alt me-2"></i>18 février 2025</p>
-                        <h5>Partenariat pour le développement d'Agadez</h5>
-                        <p>Afrique équipements et services signe un accord de collaboration pour des projets d'envergure à Agadez.</p>
-                        <a href="#" class="text-gold fw-bold">Lire la suite <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
-                </div>
+
+            <!-- Message si aucune actualité -->
+            <div class="col-12 text-center text-muted py-5" th:if="${articles == null or articles.isEmpty()}">
+                <i class="far fa-newspaper fa-3x mb-3 text-secondary"></i>
+                <p class="fs-5">Aucune actualité publiée pour le moment.</p>
             </div>
         </div>
     </div>

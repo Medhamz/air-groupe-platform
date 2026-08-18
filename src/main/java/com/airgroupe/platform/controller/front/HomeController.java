@@ -5,6 +5,7 @@ import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
+import com.airgroupe.platform.repository.NewsArticleRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +23,16 @@ public class HomeController {
     private final ServiceRepository serviceRepository;
     private final ContactMessageRepository contactMessageRepository;
     private final MediaItemRepository mediaRepository;
+    private final NewsArticleRepository newsRepository;
 
     public HomeController(ServiceRepository serviceRepository,
                           ContactMessageRepository contactMessageRepository,
-                          MediaItemRepository mediaRepository) {
+                          MediaItemRepository mediaRepository,
+                          NewsArticleRepository newsRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
         this.mediaRepository = mediaRepository;
+        this.newsRepository = newsRepository;
     }
 
     @GetMapping("/")
@@ -68,7 +72,8 @@ public class HomeController {
     }
 
     @GetMapping("/actualites")
-    public String actualites() {
+    public String actualites(Model model) {
+        model.addAttribute("articles", newsRepository.findAllByOrderByCreatedAtDesc());
         return "front/actualites";
     }
 
