@@ -4,19 +4,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Obtenir le chemin absolu vers le dossier racine 'uploads'
-        Path uploadDir = Paths.get("uploads").toAbsolutePath();
-        String uploadPath = uploadDir.toUri().toString();
-
+        // Mappe /uploads/** vers le dossier physique local uploads/
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(uploadPath);
+                .addResourceLocations("file:uploads/", "file:uploads/gallery/");
     }
 }
