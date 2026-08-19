@@ -1,12 +1,12 @@
 package com.airgroupe.platform.controller.front;
 
-import com.airgroupe.platform.dto.ProjectDto;
 import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.Review;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
 import com.airgroupe.platform.repository.NewsArticleRepository;
+import com.airgroupe.platform.repository.ReviewRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import com.airgroupe.platform.repository.TeamRepository;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,23 +27,27 @@ public class HomeController {
     private final MediaItemRepository mediaRepository;
     private final NewsArticleRepository newsRepository;
     private final TeamRepository teamRepository;
+    private final ReviewRepository reviewRepository;
 
     public HomeController(ServiceRepository serviceRepository,
                           ContactMessageRepository contactMessageRepository,
                           MediaItemRepository mediaRepository,
                           NewsArticleRepository newsRepository,
-                          TeamRepository teamRepository) {
+                          TeamRepository teamRepository,
+                          ReviewRepository reviewRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
         this.mediaRepository = mediaRepository;
         this.newsRepository = newsRepository;
         this.teamRepository = teamRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("/")
     public String index(Model model) {
         List<ServiceEntity> services = serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
         model.addAttribute("services", services);
+        model.addAttribute("reviews", reviewRepository.findByApprovedTrueOrderByCreatedAtDesc());
         return "front/index";
     }
 
@@ -127,13 +130,6 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("services", serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc());
-        model.addAttribute("reviews", reviewRepository.findByApprovedTrueOrderByCreatedAtDesc());
-        return "front/index";
-    }
-
     @GetMapping("/avis")
     public String avis(Model model) {
         model.addAttribute("newReview", new Review());
@@ -142,7 +138,7 @@ public class HomeController {
 
     @PostMapping("/submit-avis")
     public String submitAvis(@ModelAttribute Review review, RedirectAttributes redirectAttributes) {
-        review.setApproved(false); // Nécessite validation admin
+        review.setApproved(false);
         reviewRepository.save(review);
         redirectAttributes.addFlashAttribute("success", "Merci ! Votre avis a été soumis et sera publié après validation.");
         return "redirect:/avis";
