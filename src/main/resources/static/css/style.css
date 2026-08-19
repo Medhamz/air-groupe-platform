@@ -1,210 +1,335 @@
 /* ============================================
-   VARIABLES & RESET AVANCÉ
+   DESIGN SYSTEM CYBER BRIGHT (HAUT CONTRASTE)
 ============================================ */
 :root {
-    --primary: #0a1118;
-    --primary-light: #162432;
-    --gold: #d4af37;
-    --gold-light: #ffd700;
-    --gold-glow: rgba(212, 175, 55, 0.4);
-    --cyan-glow: rgba(0, 240, 255, 0.4);
-    --white: #f8f9fa;
-    --gray: #8a99ad;
-    --bg-body: #080c10;
-    --bg-card: rgba(16, 24, 34, 0.75);
-    --text-color: #e2e8f0;
-    --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    --gradient-main: linear-gradient(135deg, #0a1118 0%, #162432 100%);
-    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-    --radius: 16px;
-    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --cyber-bg: #f0f4f8;
+    --cyber-card-bg: #ffffff;
+    --cyber-text: #0f172a;
+    --cyber-text-muted: #475569;
+
+    --cyber-cyan: #0077ff;
+    --cyber-cyan-glow: rgba(0, 119, 255, 0.3);
+    --cyber-gold: #d97706;
+    --cyber-gold-glow: rgba(217, 119, 6, 0.25);
+    --cyber-neon: #7c3aed;
+
+    --cyber-border: rgba(0, 119, 255, 0.25);
+    --cyber-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --cyber-radius: 12px;
 }
 
-body.dark-mode {
-    --bg-body: #030507;
-    --bg-card: rgba(10, 15, 22, 0.85);
-    --text-color: #f1f5f9;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    background: var(--bg-body);
-    color: var(--text-color);
-    padding-top: 76px;
-    line-height: 1.8;
+body.cyber-theme {
+    background-color: var(--cyber-bg);
+    color: var(--cyber-text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.6;
     overflow-x: hidden;
 }
 
-/* ============================================
-   EFFETS LUMIÈRES & EFFETS DE FLUX
-============================================ */
-.hero {
-    background: radial-gradient(circle at 50% 30%, #1c2d42 0%, #080c10 80%);
-    color: #fff;
-    padding: 140px 0 100px;
-    border-radius: 0 0 60px 60px;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-}
-.hero::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, var(--gold-glow) 0%, transparent 60%);
-    animation: pulseLight 8s ease-in-out infinite alternate;
-    pointer-events: none;
-}
-@keyframes pulseLight {
-    0% { transform: scale(0.8) translate(-10%, -10%); opacity: 0.3; }
-    100% { transform: scale(1.2) translate(10%, 10%); opacity: 0.7; }
+.cyber-font {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.5px;
 }
 
-/* ============================================
-   CHATBOT VIRTUEUL (STYLISÉ 3D / GLOW)
-============================================ */
-.chatbot-toggle {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 65px;
-    height: 65px;
-    background: var(--gradient-gold);
-    border: none;
-    border-radius: 50%;
-    color: #0a1118;
-    font-size: 26px;
-    box-shadow: 0 0 25px var(--gold-glow);
-    cursor: pointer;
-    z-index: 1000;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.chatbot-toggle:hover {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 0 35px var(--gold-light);
-}
-.chatbot-window {
-    position: fixed;
-    bottom: 110px;
-    right: 30px;
-    width: 380px;
-    height: 500px;
-    background: rgba(10, 17, 24, 0.95);
-    backdrop-filter: blur(15px);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow), 0 0 20px var(--gold-glow);
-    z-index: 1000;
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-}
-.chatbot-window.active {
-    display: flex;
-    animation: chatOpen 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-@keyframes chatOpen {
-    from { opacity: 0; transform: translateY(30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-.chatbot-header {
-    background: rgba(22, 36, 50, 0.9);
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-}
-.chatbot-messages {
-    flex: 1;
-    padding: 16px;
-    overflow-y: auto;
-    gap: 12px;
-}
-.chatbot-message {
-    padding: 10px 16px;
-    border-radius: 14px;
-    max-width: 85%;
-    font-size: 0.9rem;
-}
-.chatbot-message.bot {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    align-self: flex-start;
-}
-.chatbot-message.user {
-    background: var(--gradient-gold);
-    color: #0a1118;
-    font-weight: 600;
-    align-self: flex-end;
-}
-.chatbot-input {
-    padding: 12px;
-    background: rgba(16, 24, 34, 0.9);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    gap: 8px;
-}
-.chatbot-input input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 50px;
-    padding: 8px 16px;
-    color: #fff;
-    outline: none;
-}
-.chatbot-input button {
-    background: var(--gradient-gold);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    color: #0a1118;
-    cursor: pointer;
+/* Visibilité accrue des textes */
+p, span, li, a, label, input {
+    color: var(--cyber-text);
 }
 
-/* ============================================
-   PARTICULES LUMINEUSES EN CANVAS
-============================================ */
-#bg-particles-canvas {
+.text-cyan { color: var(--cyber-cyan) !important; }
+.text-gold { color: var(--cyber-gold) !important; }
+
+/* Canvas Cyber en fond */
+#cyberCanvas {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     pointer-events: none;
     z-index: -1;
 }
 
 /* ============================================
-   NAVBAR & ACCENTS
+   NAVBAR CYBER HAUT CONTRASTE
 ============================================ */
-.navbar {
-    background: rgba(8, 12, 16, 0.85) !important;
+.cyber-nav {
+    background: rgba(255, 255, 255, 0.92) !important;
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    border-bottom: 2px solid var(--cyber-cyan);
+    box-shadow: 0 4px 20px rgba(0, 119, 255, 0.15);
 }
-.navbar-brand { color: var(--gold) !important; font-weight: 800; }
-.text-gold { color: var(--gold) !important; }
-.visitor-counter {
-    background: rgba(212, 175, 55, 0.1);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 4px 16px;
-    border-radius: 50px;
-    font-size: 0.85rem;
+
+.cyber-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: #0f172a !important;
 }
-.admin-link {
-    font-size: 0.75rem;
-    color: var(--gray);
+
+.cyber-nav .nav-link {
+    color: #1e293b !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    padding: 8px 14px !important;
+    transition: all 0.2s ease;
+}
+
+.cyber-nav .nav-link:hover {
+    color: var(--cyber-cyan) !important;
+    background: rgba(0, 119, 255, 0.08);
+    border-radius: 6px;
+}
+
+.cyber-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cyber-search input {
+    background: #f1f5f9;
+    border: 1px solid var(--cyber-cyan);
+    border-radius: 20px;
+    padding: 6px 16px 6px 36px;
+    color: #0f172a;
+    font-weight: 600;
+    outline: none;
+}
+
+.cyber-search .search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--cyber-cyan);
+}
+
+/* ============================================
+   CHATBOT VIRTUEL CYBER
+============================================ */
+.cyber-chat-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-neon));
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--cyber-cyan-glow);
+    z-index: 9999;
+    transition: transform 0.3s ease;
+}
+
+.cyber-chat-btn:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.cyber-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    border: 2px solid var(--cyber-cyan);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-chat-window {
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    width: 360px;
+    height: 480px;
+    background: #ffffff;
+    border: 2px solid var(--cyber-cyan);
+    border-radius: var(--cyber-radius);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 0 20px var(--cyber-cyan-glow);
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.cyber-chat-window.active {
+    display: flex;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.cyber-chat-header {
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--cyber-cyan);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.close-cyber-chat {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.cyber-chat-body {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-msg {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.chat-msg.bot {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    align-self: flex-start;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.chat-msg.user {
+    background: var(--cyber-cyan);
+    color: #ffffff;
+    align-self: flex-end;
+}
+
+.cyber-chat-footer {
+    padding: 10px;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 8px;
+}
+
+.cyber-chat-footer input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 8px 14px;
+    outline: none;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.cyber-chat-footer button {
+    background: var(--cyber-cyan);
+    border: none;
+    color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* ============================================
+   GLOBE 3D & FOOTER CYBER
+============================================ */
+.cyber-footer {
+    background: #ffffff;
+    border-top: 3px solid var(--cyber-cyan);
+    padding: 40px 0 20px;
+    box-shadow: 0 -10px 30px rgba(0, 119, 255, 0.05);
+}
+
+.globe-container {
+    width: 100%;
+    height: 180px;
+    position: relative;
+}
+
+.cyber-title {
+    font-family: 'Orbitron', sans-serif;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.cyber-text {
+    color: var(--cyber-text-muted);
+    font-weight: 600;
+}
+
+.cyber-share-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--cyber-cyan);
+    background: #ffffff;
+    color: var(--cyber-cyan);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cyber-share-btn:hover {
+    background: var(--cyber-cyan);
+    color: #ffffff;
+}
+
+.cyber-badge {
+    background: rgba(0, 119, 255, 0.1);
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.cyber-admin-btn {
+    color: #64748b;
     text-decoration: none;
-    transition: color 0.3s;
+    font-weight: 700;
 }
-.admin-link:hover { color: var(--gold); }
+
+.cyber-admin-btn:hover {
+    color: var(--cyber-cyan);
+}
+
+.back-to-top-cyber {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    width: 45px;
+    height: 45px;
+    background: #ffffff;
+    border: 2px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 99;
+}

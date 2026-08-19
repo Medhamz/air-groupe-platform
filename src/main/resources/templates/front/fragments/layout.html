@@ -3,22 +3,31 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Afrique équipements et services - Leader au Niger dans les services intégrés : BTP, hydraulique, commerce, location d'engins, transport et logistique.">
-    <title>Afrique équipements et services - Excellence & Innovation</title>
+    <meta name="description" content="Afrique équipements et services - Leader au Niger dans les services intégrés.">
+    <title>Afrique Équipements & Services - Cyber Edition</title>
+
+    <!-- Google Fonts pour la lisibilité -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="cyber-theme">
 
-<!-- Navbar -->
-<nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top">
+<!-- Canvas de particules & Grille Cyber en fond -->
+<canvas id="cyberCanvas"></canvas>
+
+<!-- Navbar Cyber -->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top cyber-nav">
     <div class="container-fluid px-4">
-        <a class="navbar-brand" href="/">
-            <i class="fas fa-mountain"></i> Afrique équipements et services
+        <a class="navbar-brand cyber-logo" href="/">
+            <i class="fas fa-microchip text-cyan"></i> AFRIQUE <span class="text-gold">EQUIPEMENTS</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler cyber-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fas fa-bars text-cyan"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
@@ -33,87 +42,80 @@
                 <li class="nav-item"><a class="nav-link" href="/devis">Devis</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
             </ul>
-            <div class="d-flex align-items-center gap-2">
-                <div class="search-bar search-bar-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="cyber-search">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Rechercher un service...">
+                    <input type="text" id="searchInput" placeholder="Rechercher...">
                 </div>
-                <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème">
-                    <i class="fas fa-moon"></i>
-                </button>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- BACK TO TOP -->
-<button id="backToTop" class="back-to-top"><i class="fas fa-chevron-up"></i></button>
+<!-- Bouton Retour en haut -->
+<button id="backToTop" class="back-to-top-cyber"><i class="fas fa-arrow-up"></i></button>
 
-<!-- CHATBOT INTEGRATION -->
+<!-- ASSISTANT VIRTUEUL CYBER CHAT -->
 <div th:fragment="chat">
-    <button id="chatbotToggle" class="chatbot-toggle" aria-label="Ouvrir l'assistant virtuel">
-        <i class="fas fa-comments"></i>
-        <span class="notification-dot"></span>
+    <button id="chatbotToggle" class="cyber-chat-btn" aria-label="Ouvrir le Chatbot">
+        <i class="fas fa-brain"></i>
+        <span class="cyber-pulse"></span>
     </button>
 
-    <div id="chatbotWindow" class="chatbot-window">
-        <div class="chatbot-header">
+    <div id="chatbotWindow" class="cyber-chat-window">
+        <div class="cyber-chat-header">
             <div class="d-flex align-items-center gap-2">
-                <i class="fas fa-robot text-gold"></i>
-                <h6 class="mb-0 text-white">Assistant IA</h6>
+                <span class="status-dot"></span>
+                <i class="fas fa-robot text-cyan"></i>
+                <h6 class="mb-0 cyber-font text-dark">CYBER-AI ASSISTANT</h6>
             </div>
-            <button id="closeChat" class="close-chat">&times;</button>
+            <button id="closeChat" class="close-cyber-chat">&times;</button>
         </div>
-        <div id="chatMessages" class="chatbot-messages d-flex flex-column"></div>
-        <div class="chatbot-input">
-            <input type="text" id="chatInput" placeholder="Posez une question...">
+        <div id="chatMessages" class="cyber-chat-body"></div>
+        <div class="cyber-chat-footer">
+            <input type="text" id="chatInput" placeholder="Saisissez votre commande/question...">
             <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
 <!-- Footer -->
-<footer th:fragment="footer" class="footer">
+<footer th:fragment="footer" class="cyber-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-lg-4">
-                <h5 class="text-white">Afrique équipements et services</h5>
-                <p>Leader au Niger dans les services intégrés : BTP, hydraulique, commerce, location d'engins, transport et logistique.</p>
+                <h5 class="cyber-title">Afrique Équipements & Services</h5>
+                <p class="cyber-text">Leader au Niger dans les services intégrés : BTP, hydraulique, commerce, location d'engins, transport et logistique.</p>
                 <div class="share-buttons mt-3">
-                    <button class="share-btn facebook" data-platform="facebook"><i class="fab fa-facebook-f"></i></button>
-                    <button class="share-btn twitter" data-platform="twitter"><i class="fab fa-twitter"></i></button>
-                    <button class="share-btn linkedin" data-platform="linkedin"><i class="fab fa-linkedin-in"></i></button>
-                    <button class="share-btn whatsapp" data-platform="whatsapp"><i class="fab fa-whatsapp"></i></button>
+                    <button class="cyber-share-btn" data-platform="facebook"><i class="fab fa-facebook-f"></i></button>
+                    <button class="cyber-share-btn" data-platform="twitter"><i class="fab fa-twitter"></i></button>
+                    <button class="cyber-share-btn" data-platform="linkedin"><i class="fab fa-linkedin-in"></i></button>
+                    <button class="cyber-share-btn" data-platform="whatsapp"><i class="fab fa-whatsapp"></i></button>
                 </div>
             </div>
             <div class="col-lg-4 text-center">
-                <h5 class="text-white mb-2">Couverture Internationale</h5>
-                <!-- CONTENEUR DU GLOBE 3D THREE.JS -->
-                <div id="globeContainer" style="width: 100%; height: 180px; position: relative;"></div>
+                <h5 class="cyber-title mb-2">Réseau & Couverture 3D</h5>
+                <div id="globeContainer" class="globe-container"></div>
             </div>
             <div class="col-lg-4">
-                <h5 class="text-white">Contact</h5>
-                <p><i class="fas fa-map-marker-alt me-2 text-gold"></i>Agadez, quartier aéroport, Niger</p>
-                <p><i class="fas fa-phone me-2 text-gold"></i>+227 96 96 74 74 / 90 96 74 74</p>
-                <p><i class="fas fa-envelope me-2 text-gold"></i>tidjani22686@gmail.com</p>
+                <h5 class="cyber-title">Contact Direct</h5>
+                <p class="cyber-text"><i class="fas fa-map-marker-alt me-2 text-cyan"></i>Agadez, quartier aéroport, Niger</p>
+                <p class="cyber-text"><i class="fas fa-phone me-2 text-cyan"></i>+227 96 96 74 74 / 90 96 74 74</p>
+                <p class="cyber-text"><i class="fas fa-envelope me-2 text-cyan"></i>tidjani22686@gmail.com</p>
             </div>
         </div>
-        <hr class="border-secondary my-4">
-        <p class="text-center mb-0 small">&copy; 2026 Afrique équipements et services - Tous droits réservés.</p>
-        <div class="text-center mt-3">
-            <span class="visitor-counter">
-                <i class="fas fa-eye me-1"></i> <span id="visitorCount">0</span> visiteurs
+        <hr class="cyber-hr my-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <p class="mb-0 cyber-text small">&copy; 2026 Afrique équipements et services - Cyber System v2.5</p>
+            <span class="cyber-badge">
+                <i class="fas fa-user-check me-1"></i> <span id="visitorCount">0</span> Visiteurs connectés
             </span>
-        </div>
-        <div class="text-center mt-2">
-            <a href="/admin/dashboard" class="admin-link">
-                <i class="fas fa-user-shield"></i> Admin
-            </a>
+            <a href="/admin/dashboard" class="cyber-admin-btn"><i class="fas fa-shield-alt"></i> Espace Admin</a>
         </div>
     </div>
 </footer>
 
-<!-- Scripts & Librairies 3D -->
+<!-- Scripts -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
