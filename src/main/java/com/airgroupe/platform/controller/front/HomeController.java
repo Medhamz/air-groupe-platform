@@ -49,28 +49,6 @@ public class HomeController {
         return "front/services";
     }
 
-    @GetMapping("/projets")
-    public String projets(Model model) {
-        List<ProjectDto> projects = new ArrayList<>();
-        projects.add(new ProjectDto(
-                "Aménagement de pistes rurales",
-                "Réhabilitation de 15 km de pistes dans la région d'Agadez.",
-                ""
-        ));
-        projects.add(new ProjectDto(
-                "Location d'engins lourds",
-                "Fourniture de pelles et bulldozers pour les chantiers locaux.",
-                ""
-        ));
-        projects.add(new ProjectDto(
-                "Projets hydrauliques",
-                "Forage et adduction d'eau potable dans les villages d'Agadez.",
-                ""
-        ));
-        model.addAttribute("projects", projects);
-        return "front/projets";
-    }
-
     @GetMapping("/actualites")
     public String actualites(Model model) {
         model.addAttribute("articles", newsRepository.findAllByOrderByCreatedAtDesc());
