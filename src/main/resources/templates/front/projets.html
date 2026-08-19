@@ -10,6 +10,7 @@
         <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Découvrez nos réalisations à Agadez et dans tout le Niger.</p>
 
         <div class="row g-4">
+            <!-- Boucle dynamique sur les projets du back-office -->
             <div class="col-md-4" th:each="proj : ${projects}">
                 <div class="project-card">
                     <div class="project-body" style="padding: 30px 20px; text-align: center;">
@@ -18,34 +19,10 @@
                     </div>
                 </div>
             </div>
-            <!-- Fallback -->
-            <div th:if="${projects.isEmpty()}" class="col-12">
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="project-card">
-                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                                <h5>Pont d'Agadez</h5>
-                                <p class="small mb-0">Construction d'un pont moderne sur le fleuve à Agadez.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="project-card">
-                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                                <h5>Piste agricole d'Agadez</h5>
-                                <p class="small mb-0">Aménagement de 15 km de piste dans la région d'Agadez.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="project-card">
-                            <div class="project-body" style="padding: 30px 20px; text-align: center;">
-                                <h5>Location d'engins à Agadez</h5>
-                                <p class="small mb-0">Location de pelles et bulldozers pour les chantiers à Agadez.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <!-- Affichage propre si la liste est vide -->
+            <div th:if="${#lists.isEmpty(projects)}" class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Aucun projet à afficher pour le moment.</p>
             </div>
         </div>
     </div>
