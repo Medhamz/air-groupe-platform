@@ -2,74 +2,84 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/layout :: head}"></head>
 <body>
-<div th:replace="~{admin/fragments/layout :: navbar}"></div>
 
-<section class="py-5 section-animate">
-    <div class="container">
+<!-- Inclusion du Header et de la Sidebar -->
+<header th:replace="~{admin/fragments/layout :: header}"></header>
+<aside th:replace="~{admin/fragments/layout :: sidebar}"></aside>
+
+<!-- Contenu principal du Back-Office -->
+<div class="admin-wrapper">
+    <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="section-title mb-0">Gestion des Projets</h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">+ Ajouter un Projet</button>
+            <h1 class="h3 mb-0 text-gold fw-bold">Gestion des Projets</h1>
+            <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                <i class="fas fa-plus me-1"></i> Ajouter un Projet
+            </button>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-                <thead class="table-dark">
-                <tr>
-                    <th style="width: 80px;">ID</th>
-                    <th>Titre</th>
-                    <th>Description</th>
-                    <th style="width: 160px;" class="text-center">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="proj : ${projects}">
-                    <td th:text="${proj.id}">1</td>
-                    <td th:text="${proj.title}" class="fw-bold">Titre</td>
-                    <td th:text="${proj.description}">Description</td>
-                    <td class="text-center">
-                        <a th:href="@{/admin/projects/edit/{id}(id=${proj.id})}" class="btn btn-sm btn-warning">Éditer</a>
-                        <a th:href="@{/admin/projects/delete/{id}(id=${proj.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous supprimer ce projet ?')">Supprimer</a>
-                    </td>
-                </tr>
-                <!-- Fallback si aucun projet en base -->
-                <tr th:if="${#lists.isEmpty(projects)}">
-                    <td colspan="4" class="text-center text-muted">Aucun projet enregistré pour le moment. Cliquez sur "+ Ajouter un Projet".</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="cyber-card">
+            <div class="table-responsive">
+                <table class="table table-admin align-middle">
+                    <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th style="width: 160px;" class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="proj : ${projects}">
+                        <td th:text="${proj.id}">1</td>
+                        <td th:text="${proj.title}" class="fw-bold">Titre</td>
+                        <td th:text="${proj.description}">Description</td>
+                        <td class="text-center">
+                            <a th:href="@{/admin/projects/edit/{id}(id=${proj.id})}" class="btn btn-sm btn-outline-warning me-1">Éditer</a>
+                            <a th:href="@{/admin/projects/delete/{id}(id=${proj.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Voulez-vous supprimer ce projet ?')">Supprimer</a>
+                        </td>
+                    </tr>
+                    <!-- Fallback si aucun projet en base -->
+                    <tr th:if="${#lists.isEmpty(projects)}">
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Aucun projet enregistré pour le moment. Cliquez sur "+ Ajouter un Projet".
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</section>
+</div>
 
 <!-- Modal d'ajout de projet -->
 <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProjectModalLabel">Nouveau Projet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-gold" id="addProjectModalLabel">Nouveau Projet</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form th:action="@{/admin/projects/save}" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label font-weight-bold">Titre du Projet</label>
-                        <input type="text" name="title" class="form-control" required placeholder="Ex: Pont d'Agadez">
+                        <label class="form-label fw-bold">Titre du Projet</label>
+                        <input type="text" name="title" class="form-control bg-dark text-light border-secondary" required placeholder="Ex: Pont d'Agadez">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label font-weight-bold">Description</label>
-                        <textarea name="description" class="form-control" rows="4" required placeholder="Description détaillée du projet..."></textarea>
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea name="description" class="form-control bg-dark text-light border-secondary" rows="4" required placeholder="Description détaillée du projet..."></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-gold">Enregistrer</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div th:replace="~{admin/fragments/layout :: footer}"></div>
+<!-- Inclusion des scripts JavaScript -->
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
 </body>
 </html>
