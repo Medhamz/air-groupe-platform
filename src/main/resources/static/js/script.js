@@ -2,10 +2,10 @@
     'use strict';
 
     // ========================================
-    // 1. ARRIÈRE-PLAN CYBER DYNAMIQUE & LUMINEUX
+    // 1. FOND DE GRILLE PRO SUBTIL
     // ========================================
-    function initCyberBackground() {
-        const canvas = document.getElementById('cyberCanvas');
+    function initAdminBackground() {
+        const canvas = document.getElementById('adminCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
@@ -17,98 +17,60 @@
             height = canvas.height = window.innerHeight;
         });
 
-        // Particules réseau
-        const nodes = Array.from({ length: 45 }, () => ({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.6,
-            vy: (Math.random() - 0.5) * 0.6,
-            radius: Math.random() * 2 + 1
-        }));
-
         function render() {
             ctx.clearRect(0, 0, width, height);
 
-            // Connexions réseau
-            for (let i = 0; i < nodes.length; i++) {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const dx = nodes[i].x - nodes[j].x;
-                    const dy = nodes[i].y - nodes[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+            // Lignes de grille très claires style dashboard
+            ctx.strokeStyle = 'rgba(226, 232, 240, 0.6)';
+            ctx.lineWidth = 1;
 
-                    if (dist < 130) {
-                        ctx.beginPath();
-                        ctx.moveTo(nodes[i].x, nodes[i].y);
-                        ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(0, 119, 255, ${0.15 - dist / 1300})`;
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            // Dessin des nœuds
-            nodes.forEach(node => {
-                node.x += node.vx;
-                node.y += node.vy;
-
-                if (node.x < 0 || node.x > width) node.vx *= -1;
-                if (node.y < 0 || node.y > height) node.vy *= -1;
-
+            const gridSize = 40;
+            for (let x = 0; x < width; x += gridSize) {
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#0077ff';
-                ctx.fill();
-            });
-
-            requestAnimationFrame(render);
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
         }
         render();
     }
 
     // ========================================
-    // 2. GLOBE 3D HOLOGRAPHIQUE (THREE.JS)
+    // 2. GLOBE TERRESTRE PRO (THREE.JS)
     // ========================================
-    function initCyberGlobe() {
+    function initAdminGlobe() {
         const container = document.getElementById('globeContainer');
         if (!container || typeof THREE === 'undefined') return;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.z = 200;
+        camera.position.z = 190;
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // Sphère principale en réseau
-        const geometry = new THREE.SphereGeometry(55, 24, 24);
+        // Globe bleu corporate
+        const geometry = new THREE.SphereGeometry(55, 28, 28);
         const material = new THREE.MeshBasicMaterial({
-            color: 0x0077ff,
+            color: 0x2563eb,
             wireframe: true,
             transparent: true,
-            opacity: 0.4
+            opacity: 0.35
         });
         const globe = new THREE.Mesh(geometry, material);
         scene.add(globe);
 
-        // Anneau hélio-cyber
-        const ringGeo = new THREE.RingGeometry(65, 68, 32);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: 0xd97706,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.5
-        });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = Math.PI / 2;
-        scene.add(ring);
-
         function animate() {
             requestAnimationFrame(animate);
-            globe.rotation.y += 0.004;
-            ring.rotation.z += 0.002;
+            globe.rotation.y += 0.003;
             renderer.render(scene, camera);
         }
         animate();
@@ -121,9 +83,9 @@
     }
 
     // ========================================
-    // 3. LOGIQUE DU CHATBOT CYBER
+    // 3. CHATBOT ASSISTANT SUPPORT
     // ========================================
-    function initCyberChat() {
+    function initAdminChat() {
         const toggle = document.getElementById('chatbotToggle');
         const win = document.getElementById('chatbotWindow');
         const close = document.getElementById('closeChat');
@@ -151,16 +113,16 @@
             input.value = '';
 
             setTimeout(() => {
-                let response = "Cyber-System : Requête reçue. Un agent Afrique Équipements vous répondra rapidement.";
+                let response = "Merci pour votre message. Notre équipe administrative traitera votre demande sous peu.";
                 const query = val.toLowerCase();
 
                 if (query.includes('service') || query.includes('btp')) {
-                    response = "Nos expertises Cyber-BTP : Construction, Hydraulique, Logistique et Location d'engins lourds.";
+                    response = "Nos services comprennent : BTP, Hydraulique, Location d'engins, Transport et Logistique.";
                 } else if (query.includes('contact') || query.includes('adresse')) {
                     response = "Siège social : Agadez, quartier aéroport, Niger. Tél : +227 96 96 74 74.";
                 }
                 addMessage(response, 'bot');
-            }, 500);
+            }, 400);
         }
 
         if (send) send.addEventListener('click', handleSend);
@@ -170,16 +132,15 @@
             });
         }
 
-        addMessage("Bonjour ! Système Cyber-AI prêt. Comment puis-je vous guider ?", "bot");
+        addMessage("Bonjour ! Comment pouvons-nous vous aider aujourd'hui ?", "bot");
     }
 
-    // Initialisation globale
+    // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
-        initCyberBackground();
-        initCyberGlobe();
-        initCyberChat();
+        initAdminBackground();
+        initAdminGlobe();
+        initAdminChat();
 
-        // Retour en haut
         const btt = document.getElementById('backToTop');
         if (btt) {
             btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
