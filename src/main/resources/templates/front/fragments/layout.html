@@ -3,10 +3,10 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Afrique Équipements & Services - Corporate Cyber Grid">
-    <title>Afrique Équipements & Services - Cyber Admin System</title>
+    <meta name="description" content="Afrique Équipements & Services - Corporate Cyber System">
+    <title>Afrique Équipements & Services - System Core</title>
 
-    <!-- Typographie Cyber / Tech Pro -->
+    <!-- Fonts Hi-Tech / Cyber -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 </head>
 <body class="cyber-theme">
 
-<!-- Arrière-plan Canvas Matrix Grid -->
+<!-- Canvas Grille Matrix Futuriste -->
 <canvas id="cyberCanvas"></canvas>
 
 <!-- Top Navbar Cyber Pro -->
@@ -25,9 +25,9 @@
     <div class="container-fluid px-4">
         <a class="navbar-brand cyber-brand" href="/">
             <div class="brand-glitch-icon"><i class="fas fa-terminal"></i></div>
-            <span>AES<span class="cyber-highlight">//</span>ADMIN</span>
+            <span>AES<span class="text-cyber">//</span>SYSTEM</span>
         </a>
-        <button class="navbar-toggler cyber-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#cyberNav">
+        <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#cyberNav">
             <i class="fas fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="cyberNav">
@@ -97,28 +97,28 @@
                 </div>
             </div>
             <div class="col-lg-4 text-center">
-                <h5 class="cyber-title mb-2"><i class="fas fa-globe me-2"></i>RESEAU GLOBAL</h5>
+                <h5 class="cyber-title mb-2 justify-content-center"><i class="fas fa-globe me-2 text-cyber"></i>RESEAU GLOBAL</h5>
                 <div id="globeContainer" class="cyber-globe-container"></div>
             </div>
             <div class="col-lg-4">
                 <h5 class="cyber-title"><span class="cyber-dot"></span> COORDONNÉES SYS</h5>
-                <p class="cyber-text"><i class="fas fa-location-dot me-2 text-cyber"></i>Agadez, quartier aéroport, Niger</p>
-                <p class="cyber-text"><i class="fas fa-phone-volume me-2 text-cyber"></i>+227 96 96 74 74 / 90 96 74 74</p>
-                <p class="cyber-text"><i class="fas fa-envelope-open-text me-2 text-cyber"></i>tidjani22686@gmail.com</p>
+                <p class="cyber-text mb-1"><i class="fas fa-location-dot me-2 text-cyber"></i>Agadez, quartier aéroport, Niger</p>
+                <p class="cyber-text mb-1"><i class="fas fa-phone-volume me-2 text-cyber"></i>+227 96 96 74 74 / 90 96 74 74</p>
+                <p class="cyber-text mb-0"><i class="fas fa-envelope-open-text me-2 text-cyber"></i>tidjani22686@gmail.com</p>
             </div>
         </div>
         <hr class="cyber-hr my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <p class="mb-0 cyber-text small">&copy; 2026 AFRIQUE ÉQUIPEMENTS ET SERVICES | CYBER CORE SYSTEM</p>
             <span class="cyber-badge">
-                <i class="fas fa-eye me-1"></i> VISITEURS: <span id="visitorCount">0</span>
+                <i class="fas fa-eye me-1"></i> VISITEURS: <span id="visitorCount">1024</span>
             </span>
             <a href="/admin/dashboard" class="cyber-admin-link"><i class="fas fa-terminal me-1"></i> [TERMINAL_ADMIN]</a>
         </div>
     </div>
 </footer>
 
-<!-- Scripts -->
+<!-- Fragment Scripts -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
