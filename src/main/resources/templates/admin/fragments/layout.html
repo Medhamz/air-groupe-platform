@@ -234,29 +234,29 @@
 <aside class="admin-sidebar" id="sidebar" th:fragment="sidebar">
     <div class="sidebar-brand">SYSTEM CONTROL</div>
     <nav class="nav flex-column">
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/dashboard')} ? 'active'" href="/admin/dashboard">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/dashboard')} ? 'active'" href="/admin/dashboard">
             <i class="fas fa-chart-pie"></i> Tableau de bord
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/services')} ? 'active'" href="/admin/services">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/services')} ? 'active'" href="/admin/services">
             <i class="fas fa-concierge-bell"></i> Services
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/projects')} ? 'active'" href="/admin/projects">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/projects')} ? 'active'" href="/admin/projects">
             <i class="fas fa-project-diagram"></i> Projets
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/equipe')} ? 'active'" href="/admin/equipe">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/equipe')} ? 'active'" href="/admin/equipe">
             <i class="fas fa-users"></i> Équipe
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/actualites')} ? 'active'" href="/admin/actualites">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/actualites')} ? 'active'" href="/admin/actualites">
             <i class="fas fa-newspaper"></i> Actualités
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/galerie')} ? 'active'" href="/admin/galerie">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/galerie')} ? 'active'" href="/admin/galerie">
             <i class="fas fa-images"></i> Galerie
         </a>
         <!-- Onglet Modération des Avis Ajouté -->
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/avis')} ? 'active'" href="/admin/avis">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/avis')} ? 'active'" href="/admin/avis">
             <i class="fas fa-star"></i> Avis Clients
         </a>
-        <a class="nav-link" th:classappend="${#ctx.springRequestContext != null and #ctx.springRequestContext.requestUri.startsWith('/admin/messages')} ? 'active'" href="/admin/messages">
+        <a class="nav-link" th:classappend="${#request != null and #request.requestURI != null and #request.requestURI.startsWith('/admin/messages')} ? 'active'" href="/admin/messages">
             <i class="fas fa-envelope-open-text"></i> Messages
             <span class="badge bg-warning text-dark ms-auto" th:text="${unreadCount != null ? unreadCount : 0}">0</span>
         </a>
