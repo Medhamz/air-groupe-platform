@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{front/layout :: head}"></head>
+<body>
+<div th:replace="~{front/layout :: navbar}"></div>
+
+<!-- Header Page -->
+<section class="py-5 text-center text-white" style="background: linear-gradient(135deg, #1a2a3a 0%, #0d151d 100%);">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-gold">Avis & Témoignages</h1>
+        <p class="lead text-light mb-0">Découvrez les retours de nos clients et partagez votre propre expérience.</p>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <!-- Message de confirmation après envoi -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i><span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="row g-5">
+            <!-- Formulaire de dépôt d'avis -->
+            <div class="col-lg-5">
+                <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm border-0">
+                    <h3 class="fw-bold mb-3"><i class="fas fa-pen-alt text-gold me-2"></i>Laisser un avis</h3>
+                    <p class="text-muted small mb-4">Votre avis sera soumis à une équipe de modération avant sa publication.</p>
+
+                    <form th:action="@{/submit-avis}" method="post" th:object="${reviewForm}">
+                        <div class="mb-3">
+                            <label for="clientName" class="form-label fw-semibold">Nom complet ou Entreprise *</label>
+                            <input type="text" id="clientName" name="clientName" class="form-control form-control-lg rounded-3" placeholder="Ex: Amadou Diallo" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold">Adresse Email *</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-lg rounded-3" placeholder="exemple@domaine.com" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Votre Note *</label>
+                            <div class="rating-select d-flex gap-2 text-warning fs-3 mb-2" style="cursor: pointer;">
+                                <i class="far fa-star star-btn" data-value="1"></i>
+                                <i class="far fa-star star-btn" data-value="2"></i>
+                                <i class="far fa-star star-btn" data-value="3"></i>
+                                <i class="far fa-star star-btn" data-value="4"></i>
+                                <i class="far fa-star star-btn" data-value="5"></i>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" value="5" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="comment" class="form-label fw-semibold">Votre commentaire *</label>
+                            <textarea id="comment" name="comment" rows="4" class="form-control rounded-3" placeholder="Racontez-nous votre expérience avec nos services..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill shadow-sm">
+                            <i class="fas fa-paper-plane me-2"></i>Publier mon avis
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des avis clients approuvés -->
+            <div class="col-lg-7">
+                <h3 class="fw-bold mb-4"><i class="fas fa-comments text-gold me-2"></i>Avis récents</h3>
+
+                <div class="row g-3">
+                    <div th:each="review : ${reviews}" class="col-12">
+                        <div class="bg-white p-4 rounded-4 shadow-sm border-0">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="fw-bold mb-0" th:text="${review.clientName}">Nom Client</h5>
+                                <div class="text-gold">
+                                    <i th:if="${review.rating > 0}" th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-secondary fst-italic mb-2" th:text="'&quot;' + ${review.comment} + '&quot;'"></p>
+                            <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd MMMM yyyy')}">01 Janvier 2026</small>
+                        </div>
+                    </div>
+
+                    <div th:if="${reviews == null or reviews.isEmpty()}" class="col-12 text-center py-5 bg-white rounded-4 shadow-sm">
+                        <i class="fas fa-comment-slash fs-1 text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Aucun avis publié pour le moment. Soyez le premier !</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{front/layout :: footer}"></div>
+<div th:replace="~{front/layout :: scripts}"></div>
+
+<!-- Script de sélection interactif des étoiles -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-btn');
+        const ratingInput = document.getElementById('rating');
+        let currentRating = 5;
+
+        function renderStars(val) {
+            stars.forEach((star, idx) => {
+                if (idx < val) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                } else {
+                    star.classList.remove('fas');
+                    star.classList.add('far');
+                }
+            });
+        }
+
+        renderStars(currentRating);
+
+        stars.forEach(star => {
+            // Effet au survol
+            star.addEventListener('mouseover', function() {
+                const hoverVal = parseInt(this.getAttribute('data-value'));
+                renderStars(hoverVal);
+            });
+
+            // Restauration quand la souris quitte la zone
+            star.parentElement.addEventListener('mouseleave', function() {
+                renderStars(currentRating);
+            });
+
+            // Validation au clic
+            star.addEventListener('click', function() {
+                currentRating = parseInt(this.getAttribute('data-value'));
+                ratingInput.value = currentRating;
+                renderStars(currentRating);
+            });
+        });
+    });
+</script>
+</body>
+</html>

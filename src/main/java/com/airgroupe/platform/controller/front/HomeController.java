@@ -2,6 +2,7 @@ package com.airgroupe.platform.controller.front;
 
 import com.airgroupe.platform.dto.ProjectDto;
 import com.airgroupe.platform.model.ContactMessage;
+import com.airgroupe.platform.model.Review;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
@@ -11,6 +12,7 @@ import com.airgroupe.platform.repository.TeamRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -123,5 +125,26 @@ public class HomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("services", serviceRepository.findByIsActiveTrueOrderByDisplayOrderAsc());
+        model.addAttribute("reviews", reviewRepository.findByApprovedTrueOrderByCreatedAtDesc());
+        return "front/index";
+    }
+
+    @GetMapping("/avis")
+    public String avis(Model model) {
+        model.addAttribute("newReview", new Review());
+        return "front/avis";
+    }
+
+    @PostMapping("/submit-avis")
+    public String submitAvis(@ModelAttribute Review review, RedirectAttributes redirectAttributes) {
+        review.setApproved(false); // Nécessite validation admin
+        reviewRepository.save(review);
+        redirectAttributes.addFlashAttribute("success", "Merci ! Votre avis a été soumis et sera publié après validation.");
+        return "redirect:/avis";
     }
 }
