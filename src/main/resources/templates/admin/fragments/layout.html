@@ -243,6 +243,10 @@
         <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/projects')} ? 'active'" href="/admin/projects">
             <i class="fas fa-project-diagram"></i> Projets
         </a>
+        <!-- Onglet Équipe Ajouté -->
+        <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/equipe')} ? 'active'" href="/admin/equipe">
+            <i class="fas fa-users"></i> Équipe
+        </a>
         <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/actualites')} ? 'active'" href="/admin/actualites">
             <i class="fas fa-newspaper"></i> Actualités
         </a>

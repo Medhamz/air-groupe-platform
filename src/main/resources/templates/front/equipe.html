@@ -10,33 +10,18 @@
         <p class="text-center text-secondary mb-5" style="font-size:1.2rem;">Des professionnels dévoués à votre service.</p>
 
         <div class="row g-4">
-            <div class="col-md-3 col-sm-6">
+            <!-- Boucle dynamique sur la liste des membres -->
+            <div class="col-md-3 col-sm-6" th:each="member : ${members}">
                 <div class="team-card">
-                    <div class="avatar">AT</div>
-                    <h5>Amadou Tidjani Hamza</h5>
-                    <p class="role">Directeur Général</p>
+                    <div class="avatar" th:text="${member.initials}">AT</div>
+                    <h5 th:text="${member.name}">Nom Membre</h5>
+                    <p class="role" th:text="${member.role}">Poste</p>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="team-card">
-                    <div class="avatar">IA</div>
-                    <h5>Issa Abdou Issa</h5>
-                    <p class="role">Comptable</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="team-card">
-                    <div class="avatar">SA</div>
-                    <h5>Sidi Ali Harouna</h5>
-                    <p class="role">Conducteur engin</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="team-card">
-                    <div class="avatar">NM</div>
-                    <h5>Noura Michel</h5>
-                    <p class="role">Aide conducteur</p>
-                </div>
+
+            <!-- Message d'absence de membre -->
+            <div th:if="${#lists.isEmpty(members)}" class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Aucun membre d'équipe enregistré pour le moment.</p>
             </div>
         </div>
     </div>

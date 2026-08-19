@@ -7,6 +7,7 @@ import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
 import com.airgroupe.platform.repository.NewsArticleRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
+import com.airgroupe.platform.repository.TeamRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +25,18 @@ public class HomeController {
     private final ContactMessageRepository contactMessageRepository;
     private final MediaItemRepository mediaRepository;
     private final NewsArticleRepository newsRepository;
+    private final TeamRepository teamRepository;
 
     public HomeController(ServiceRepository serviceRepository,
                           ContactMessageRepository contactMessageRepository,
                           MediaItemRepository mediaRepository,
-                          NewsArticleRepository newsRepository) {
+                          NewsArticleRepository newsRepository,
+                          TeamRepository teamRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
         this.mediaRepository = mediaRepository;
         this.newsRepository = newsRepository;
+        this.teamRepository = teamRepository;
     }
 
     @GetMapping("/")
@@ -56,7 +60,8 @@ public class HomeController {
     }
 
     @GetMapping("/equipe")
-    public String equipe() {
+    public String equipe(Model model) {
+        model.addAttribute("members", teamRepository.findAll());
         return "front/equipe";
     }
 

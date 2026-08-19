@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head}"></head>
+<body>
+
+<header th:replace="~{admin/fragments/layout :: header}"></header>
+<aside th:replace="~{admin/fragments/layout :: sidebar}"></aside>
+
+<div class="admin-wrapper">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0 text-gold fw-bold">Gestion de l'Équipe</h1>
+            <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                <i class="fas fa-user-plus me-1"></i> Ajouter un Membre
+            </button>
+        </div>
+
+        <div class="cyber-card">
+            <div class="table-responsive">
+                <table class="table table-admin align-middle">
+                    <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th style="width: 80px;">Initiales</th>
+                        <th>Nom & Prénom</th>
+                        <th>Rôle / Poste</th>
+                        <th style="width: 160px;" class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.id}">1</td>
+                        <td>
+                            <span class="badge bg-warning text-dark fw-bold" th:text="${member.initials}">AT</span>
+                        </td>
+                        <td th:text="${member.name}" class="fw-bold">Nom</td>
+                        <td th:text="${member.role}">Directeur</td>
+                        <td class="text-center">
+                            <a th:href="@{/admin/equipe/delete/{id}(id=${member.id})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('Voulez-vous retirer ce membre ?')">Supprimer</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(members)}">
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Aucun membre enregistré. Cliquez sur "+ Ajouter un Membre".
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'ajout -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-gold">Nouveau Membre</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/admin/equipe/save}" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nom Complet</label>
+                        <input type="text" name="name" class="form-control bg-dark text-light border-secondary" required placeholder="Ex: Amadou Tidjani Hamza">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Poste / Rôle</label>
+                        <input type="text" name="role" class="form-control bg-dark text-light border-secondary" required placeholder="Ex: Directeur Général">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Initiales (optionnel)</label>
+                        <input type="text" name="initials" maxlength="3" class="form-control bg-dark text-light border-secondary" placeholder="Ex: AT">
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-gold">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
+</body>
+</html>
