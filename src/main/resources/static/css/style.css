@@ -1,47 +1,45 @@
 /* ============================================
-   STYLE DASHBOARD ADMIN CORPORATE
+   THEME CYBER DARK SOPHISTIQUÉ
 ============================================ */
 :root {
-    --bg-main: #f4f6f9;
-    --bg-card: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    --bg-dark: #080c14;
+    --bg-card-cyber: #0f172a;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
 
-    --admin-primary: #2563eb;
-    --admin-primary-hover: #1d4ed8;
-    --admin-accent: #4f46e5;
+    --cyber-cyan: #00f3ff;
+    --cyber-purple: #9d4edd;
+    --cyber-neon-green: #00ff66;
+    --cyber-border: rgba(0, 243, 255, 0.25);
 
-    --border-color: #e2e8f0;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+    --glow-cyan: 0 0 15px rgba(0, 243, 255, 0.4);
+    --glow-purple: 0 0 15px rgba(157, 78, 221, 0.4);
 
-    --radius-sm: 8px;
-    --radius-md: 12px;
+    --font-heading: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
 }
 
-body.admin-theme {
-    background-color: var(--bg-main);
-    color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1rem;
+body.cyber-theme {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
     font-weight: 500;
     line-height: 1.6;
     overflow-x: hidden;
 }
 
-/* Lisibilité maximale des éléments de texte */
 h1, h2, h3, h4, h5, h6 {
-    color: #0f172a !important;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    color: #ffffff !important;
+    letter-spacing: 1px;
 }
 
-p, span, li, label {
-    color: var(--text-primary);
-}
+.text-cyber { color: var(--cyber-cyan) !important; }
+.text-cyber-neon { color: var(--cyber-cyan) !important; font-family: var(--font-heading); }
 
-/* Background Canvas */
-#adminCanvas {
+/* Canvas Matrix Grid Background */
+#cyberCanvas {
     position: fixed;
     top: 0;
     left: 0;
@@ -52,311 +50,353 @@ p, span, li, label {
 }
 
 /* ============================================
-   NAVBAR STYLE ADMIN
+   NAVBAR CYBER
 ============================================ */
-.admin-navbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
+.cyber-navbar {
+    background: rgba(8, 12, 20, 0.88) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cyber-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8);
     padding: 12px 0;
 }
 
-.admin-brand {
+.cyber-brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.15rem;
-    color: #0f172a !important;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: #ffffff !important;
     text-decoration: none;
 }
 
-.brand-icon {
+.brand-glitch-icon {
     width: 38px;
     height: 38px;
-    background: var(--admin-primary);
-    color: #ffffff;
-    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-purple));
+    color: #000;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.1rem;
+    box-shadow: var(--glow-cyan);
 }
 
-.admin-navbar .nav-link {
-    color: #334155 !important;
+.cyber-highlight { color: var(--cyber-cyan); }
+
+.cyber-navbar .nav-link {
+    color: var(--text-main) !important;
+    font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.92rem;
+    font-size: 1rem;
     padding: 8px 12px !important;
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
     transition: all 0.2s ease;
+    text-transform: uppercase;
 }
 
-.admin-navbar .nav-link:hover {
-    color: var(--admin-primary) !important;
-    background: #eff6ff;
+.cyber-navbar .nav-link:hover {
+    color: var(--cyber-cyan) !important;
+    background: rgba(0, 243, 255, 0.08);
+    text-shadow: 0 0 8px var(--cyber-cyan);
 }
 
-.admin-search-box {
+.cyber-search-box {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.admin-search-box input {
-    background: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+.cyber-search-box input {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--cyber-border);
+    border-radius: 4px;
     padding: 6px 12px 6px 34px;
-    font-size: 0.9rem;
-    color: #0f172a;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    color: var(--cyber-cyan);
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.3s ease;
 }
 
-.admin-search-box input:focus {
-    border-color: var(--admin-primary);
-    background: #ffffff;
+.cyber-search-box input:focus {
+    border-color: var(--cyber-cyan);
+    box-shadow: var(--glow-cyan);
 }
 
-.admin-search-box .search-icon {
+.cyber-search-box .search-icon {
     position: absolute;
     left: 10px;
-    color: var(--text-secondary);
+    color: var(--cyber-cyan);
+}
+
+.cyber-toggler {
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
+    padding: 4px 8px;
 }
 
 /* ============================================
-   CHATBOT & WIDGET WIDGET TYPE ADMIN
+   CHATBOT & WIDGET CYBER
 ============================================ */
-.admin-chat-btn {
+.cyber-chat-btn {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: var(--admin-primary);
-    border: none;
-    color: #ffffff;
+    background: var(--bg-dark);
+    border: 2px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
     font-size: 22px;
     cursor: pointer;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--glow-cyan);
     z-index: 9999;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.admin-chat-btn:hover {
-    background: var(--admin-primary-hover);
-    transform: scale(1.05);
+.cyber-chat-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    background: var(--cyber-cyan);
+    color: #000;
 }
 
-.online-indicator {
+.cyber-pulse {
     position: absolute;
     top: 2px;
     right: 2px;
     width: 14px;
     height: 14px;
-    background: #22c55e;
-    border: 2px solid #ffffff;
+    background: var(--cyber-neon-green);
     border-radius: 50%;
+    box-shadow: 0 0 8px var(--cyber-neon-green);
 }
 
-.admin-chat-window {
+.cyber-chat-window {
     position: fixed;
-    bottom: 90px;
+    bottom: 95px;
     right: 25px;
-    width: 360px;
-    height: 480px;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    width: 370px;
+    height: 500px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--cyber-cyan);
+    border-radius: 8px;
+    box-shadow: var(--glow-cyan);
     display: none;
     flex-direction: column;
     z-index: 9999;
     overflow: hidden;
 }
 
-.admin-chat-window.active {
+.cyber-chat-window.active {
     display: flex;
-    animation: fadeIn 0.2s ease-in-out;
+    animation: cyberSlideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes cyberSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.admin-chat-header {
-    background: #ffffff;
+.cyber-chat-header {
+    background: rgba(8, 12, 20, 0.9);
     padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--cyber-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.avatar-bot {
+.cyber-avatar {
     width: 36px;
     height: 36px;
-    background: #eff6ff;
-    color: var(--admin-primary);
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.close-admin-chat {
+.status-online {
+    color: var(--cyber-neon-green);
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+}
+
+.close-cyber-chat {
     background: none;
     border: none;
-    font-size: 22px;
-    color: #94a3b8;
+    font-size: 24px;
+    color: var(--text-muted);
     cursor: pointer;
 }
 
-.admin-chat-body {
+.close-cyber-chat:hover { color: var(--cyber-cyan); }
+
+.cyber-chat-body {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
-    background: #f8fafc;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.admin-chat-body .chat-msg {
-    max-width: 82%;
+.cyber-chat-body .chat-msg {
+    max-width: 85%;
     padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
-.admin-chat-body .chat-msg.bot {
-    background: #ffffff;
-    color: #1e293b;
-    border: 1px solid var(--border-color);
+.cyber-chat-body .chat-msg.bot {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--cyber-cyan);
+    color: var(--text-main);
     align-self: flex-start;
-    box-shadow: var(--shadow-sm);
 }
 
-.admin-chat-body .chat-msg.user {
-    background: var(--admin-primary);
-    color: #ffffff;
+.cyber-chat-body .chat-msg.user {
+    background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-purple));
+    color: #000;
+    font-weight: 700;
     align-self: flex-end;
 }
 
-.admin-chat-footer {
+.cyber-chat-footer {
     padding: 12px;
-    background: #ffffff;
-    border-top: 1px solid var(--border-color);
+    background: rgba(8, 12, 20, 0.9);
+    border-top: 1px solid var(--cyber-border);
     display: flex;
     gap: 8px;
 }
 
-.admin-chat-footer input {
+.cyber-chat-footer input {
     flex: 1;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--cyber-border);
+    border-radius: 4px;
     padding: 8px 12px;
+    color: var(--cyber-cyan);
     outline: none;
-    font-size: 0.9rem;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
 }
 
-.admin-chat-footer button {
-    background: var(--admin-primary);
+.cyber-chat-footer button {
+    background: var(--cyber-cyan);
     border: none;
-    color: #ffffff;
+    color: #000;
     padding: 0 16px;
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 /* ============================================
-   GLOBE 3D & FOOTER CORPORATE
+   GLOBE 3D & FOOTER CYBER
 ============================================ */
-.admin-footer {
-    background: #ffffff;
-    border-top: 1px solid var(--border-color);
+.cyber-footer {
+    background: rgba(8, 12, 20, 0.95);
+    border-top: 1px solid var(--cyber-border);
     padding: 40px 0 20px;
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
-.admin-globe-container {
+.cyber-globe-container {
     width: 100%;
-    height: 180px;
+    height: 190px;
     position: relative;
 }
 
-.footer-title {
-    font-size: 1.05rem;
+.cyber-title {
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 12px;
-}
-
-.footer-text {
-    color: var(--text-secondary);
-    font-size: 0.92rem;
-}
-
-.admin-share-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-color);
-    background: #ffffff;
-    color: #475569;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.admin-share-btn:hover {
-    background: var(--admin-primary);
     color: #ffffff;
-    border-color: var(--admin-primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.admin-hr {
-    border-color: var(--border-color);
-    opacity: 0.7;
+.cyber-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--cyber-cyan);
+    box-shadow: var(--glow-cyan);
+    border-radius: 50%;
 }
 
-.admin-badge {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: var(--admin-primary);
+.cyber-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.cyber-share-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid var(--cyber-border);
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--cyber-cyan);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cyber-share-btn:hover {
+    background: var(--cyber-cyan);
+    color: #000;
+    box-shadow: var(--glow-cyan);
+}
+
+.cyber-hr {
+    border-color: var(--cyber-border);
+    opacity: 0.5;
+}
+
+.cyber-badge {
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
 }
 
-.admin-dashboard-link {
-    color: var(--text-secondary);
+.cyber-admin-link {
+    color: var(--cyber-purple);
+    font-family: var(--font-heading);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
+    transition: color 0.2s;
 }
 
-.admin-dashboard-link:hover {
-    color: var(--admin-primary);
+.cyber-admin-link:hover {
+    color: var(--cyber-cyan);
+    text-shadow: var(--glow-cyan);
 }
 
-.back-to-top-admin {
+.back-to-top-cyber {
     position: fixed;
     bottom: 25px;
     left: 25px;
-    width: 40px;
-    height: 40px;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    color: #475569;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-md);
+    width: 42px;
+    height: 42px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
+    border-radius: 4px;
+    box-shadow: var(--glow-cyan);
     cursor: pointer;
     z-index: 99;
 }

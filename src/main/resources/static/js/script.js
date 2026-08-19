@@ -2,10 +2,10 @@
     'use strict';
 
     // ========================================
-    // 1. FOND DE GRILLE PRO SUBTIL
+    // 1. CANVAS GRID & MATRIX PARTICLES
     // ========================================
-    function initAdminBackground() {
-        const canvas = document.getElementById('adminCanvas');
+    function initCyberCanvas() {
+        const canvas = document.getElementById('cyberCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
@@ -17,60 +17,96 @@
             height = canvas.height = window.innerHeight;
         });
 
-        function render() {
+        // Particules Lumineuses
+        const particles = Array.from({ length: 45 }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.8 + 0.5,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4
+        }));
+
+        function draw() {
             ctx.clearRect(0, 0, width, height);
 
-            // Lignes de grille très claires style dashboard
-            ctx.strokeStyle = 'rgba(226, 232, 240, 0.6)';
+            // Dessin de la grille Cyber
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.04)';
             ctx.lineWidth = 1;
-
-            const gridSize = 40;
-            for (let x = 0; x < width; x += gridSize) {
+            const size = 50;
+            for (let x = 0; x < width; x += size) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
                 ctx.lineTo(x, height);
                 ctx.stroke();
             }
-            for (let y = 0; y < height; y += gridSize) {
+            for (let y = 0; y < height; y += size) {
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(width, y);
                 ctx.stroke();
             }
+
+            // Animation des particules
+            ctx.fillStyle = '#00f3ff';
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            requestAnimationFrame(draw);
         }
-        render();
+        draw();
     }
 
     // ========================================
-    // 2. GLOBE TERRESTRE PRO (THREE.JS)
+    // 2. GLOBE CYBER 3D (THREE.JS)
     // ========================================
-    function initAdminGlobe() {
+    function initCyberGlobe() {
         const container = document.getElementById('globeContainer');
         if (!container || typeof THREE === 'undefined') return;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.z = 190;
+        camera.position.z = 185;
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // Globe bleu corporate
-        const geometry = new THREE.SphereGeometry(55, 28, 28);
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x2563eb,
+        // Sphère externe (Lignes Cybers)
+        const geo = new THREE.SphereGeometry(52, 24, 24);
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0x00f3ff,
             wireframe: true,
             transparent: true,
-            opacity: 0.35
+            opacity: 0.45
         });
-        const globe = new THREE.Mesh(geometry, material);
+        const globe = new THREE.Mesh(geo, mat);
         scene.add(globe);
+
+        // Noyau Violet Interne
+        const coreGeo = new THREE.SphereGeometry(30, 16, 16);
+        const coreMat = new THREE.MeshBasicMaterial({
+            color: 0x9d4edd,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.25
+        });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        scene.add(core);
 
         function animate() {
             requestAnimationFrame(animate);
-            globe.rotation.y += 0.003;
+            globe.rotation.y += 0.004;
+            core.rotation.y -= 0.006;
             renderer.render(scene, camera);
         }
         animate();
@@ -83,9 +119,9 @@
     }
 
     // ========================================
-    // 3. CHATBOT ASSISTANT SUPPORT
+    // 3. CHATBOT CYBER ENGINE
     // ========================================
-    function initAdminChat() {
+    function initCyberChat() {
         const toggle = document.getElementById('chatbotToggle');
         const win = document.getElementById('chatbotWindow');
         const close = document.getElementById('closeChat');
@@ -113,16 +149,16 @@
             input.value = '';
 
             setTimeout(() => {
-                let response = "Merci pour votre message. Notre équipe administrative traitera votre demande sous peu.";
+                let response = "[SYS_RESP]: Reçu. Traitement de la requête par le noyau AES...";
                 const query = val.toLowerCase();
 
                 if (query.includes('service') || query.includes('btp')) {
-                    response = "Nos services comprennent : BTP, Hydraulique, Location d'engins, Transport et Logistique.";
+                    response = "[SERVICES]: Module BTP, Hydraulique, Location d'engins, Transport & Logistique actifs.";
                 } else if (query.includes('contact') || query.includes('adresse')) {
-                    response = "Siège social : Agadez, quartier aéroport, Niger. Tél : +227 96 96 74 74.";
+                    response = "[COORDONNÉES]: Siège à Agadez, quartier aéroport, Niger. Ligne directe: +227 96 96 74 74.";
                 }
                 addMessage(response, 'bot');
-            }, 400);
+            }, 300);
         }
 
         if (send) send.addEventListener('click', handleSend);
@@ -132,14 +168,14 @@
             });
         }
 
-        addMessage("Bonjour ! Comment pouvons-nous vous aider aujourd'hui ?", "bot");
+        addMessage("SYSTEM_READY // Posez votre question au support AES.", "bot");
     }
 
-    // Initialisation
+    // Initialisation Globale
     document.addEventListener('DOMContentLoaded', () => {
-        initAdminBackground();
-        initAdminGlobe();
-        initAdminChat();
+        initCyberCanvas();
+        initCyberGlobe();
+        initCyberChat();
 
         const btt = document.getElementById('backToTop');
         if (btt) {
