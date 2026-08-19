@@ -240,6 +240,9 @@
         <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/services')} ? 'active'" href="/admin/services">
             <i class="fas fa-concierge-bell"></i> Services
         </a>
+        <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/projects')} ? 'active'" href="/admin/projects">
+            <i class="fas fa-project-diagram"></i> Projets
+        </a>
         <a class="nav-link" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI.startsWith('/admin/actualites')} ? 'active'" href="/admin/actualites">
             <i class="fas fa-newspaper"></i> Actualités
         </a>
