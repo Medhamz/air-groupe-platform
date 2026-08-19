@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{front/layout :: head}"></head>
+<head th:replace="~{front/fragments/layout :: head}"></head>
 <body>
-<div th:replace="~{front/layout :: navbar}"></div>
+<div th:replace="~{front/fragments/layout :: navbar}"></div>
 
 <!-- Header Page -->
 <section class="py-5 text-center text-white" style="background: linear-gradient(135deg, #1a2a3a 0%, #0d151d 100%);">
@@ -90,8 +90,8 @@
     </div>
 </section>
 
-<div th:replace="~{front/layout :: footer}"></div>
-<div th:replace="~{front/layout :: scripts}"></div>
+<div th:replace="~{front/fragments/layout :: footer}"></div>
+<div th:replace="~{front/fragments/layout :: scripts}"></div>
 
 <!-- Script de sélection interactif des étoiles -->
 <script>
