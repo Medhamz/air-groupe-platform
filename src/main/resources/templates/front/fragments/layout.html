@@ -3,372 +3,379 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Afrique Équipements & Services">
     <title>Afrique Équipements & Services</title>
 
-    <!-- Polices & Icônes -->
+    <!-- Typography & Graphics -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap & FontAwesome -->
+    <!-- Frameworks & Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- tsParticles & VanillaTilt pour les effets 3D -->
+    <!-- Moteur 3D Particles -->
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
-    <style>
+    <style type="text/css">
         :root {
-            --cyber-gold: #ffd700;
-            --cyber-gold-glow: rgba(255, 215, 0, 0.4);
-            --cyber-bg: #0a0e17;
-            --glass-bg: rgba(16, 24, 39, 0.85);
-            --glass-border: rgba(255, 215, 0, 0.3);
-            --text-main: #e2e8f0;
+            /* Palette Executive Gold & Navy */
+            --theme-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0b132b 100%);
+            --theme-card-bg: rgba(30, 41, 59, 0.75);
+            --theme-card-border: rgba(212, 175, 55, 0.25);
+
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
         }
 
         body {
-            background-color: var(--cyber-bg) !important;
-            color: var(--text-main) !important;
-            font-family: 'Rajdhani', sans-serif !important;
+            background: var(--theme-bg-gradient) !important;
+            background-attachment: fixed !important;
+            color: var(--text-primary) !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
             min-height: 100vh;
-            overflow-x: hidden;
             margin: 0;
-            padding-top: 75px;
+            padding-top: 80px;
         }
 
-        /* Globe 3D et Particules couvrant tout l'écran (Haut et Bas) */
+        /* 3D Canvas / Background */
         #tsparticles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 0 !important;
+            pointer-events: none !important;
         }
 
-        main, section, header, footer, div, .container, .row, .col {
+        main, section, header, footer, div, .container {
             position: relative;
             z-index: 1;
-            background-color: transparent;
-        }
-
-        .card, .bg-white, .bg-light, .list-group-item, .modal-content, .dropdown-menu {
-            background: var(--glass-bg) !important;
-            border: 1px solid var(--glass-border) !important;
-            color: var(--text-main) !important;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Orbitron', sans-serif !important;
+            font-family: 'Cinzel', serif !important;
             color: #ffffff !important;
+            letter-spacing: 0.5px;
         }
 
         .text-gold {
-            color: var(--cyber-gold) !important;
-            text-shadow: 0 0 8px var(--cyber-gold-glow);
+            color: var(--gold-primary) !important;
+            text-shadow: 0 2px 10px var(--gold-glow);
         }
 
-        /* HEADER SANS LA BARRE DE RECHERCHE */
-        .front-header {
+        .card, .bg-white, .bg-light, .list-group-item, .modal-content, .dropdown-menu {
+            background: var(--theme-card-bg) !important;
+            border: 1px solid var(--theme-card-border) !important;
+            color: var(--text-primary) !important;
+            backdrop-filter: blur(16px);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+        }
+
+        /* Header Épuré (Sans barre de recherche haut) */
+        .exec-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 75px;
-            background: rgba(10, 14, 23, 0.92);
+            height: 80px;
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--theme-card-border);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            padding: 0 40px;
         }
 
-        .front-header .brand {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+        .exec-header .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--cyber-gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 12px var(--cyber-gold-glow);
+            color: var(--gold-primary);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .front-nav .nav-link {
-            color: #cbd5e1 !important;
-            font-weight: 600;
-            font-size: 0.95rem;
-            padding: 8px 12px !important;
-            transition: all 0.3s;
+        .exec-nav .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            font-size: 0.92rem;
+            padding: 8px 14px !important;
+            transition: all 0.3s ease;
         }
 
-        .front-nav .nav-link:hover, .front-nav .nav-link.active {
-            color: var(--cyber-gold) !important;
-            text-shadow: 0 0 10px var(--cyber-gold-glow);
+        .exec-nav .nav-link:hover, .exec-nav .nav-link.active {
+            color: var(--gold-primary) !important;
         }
 
-        /* CHATBOT FLOTTANT EN BAS À DROITE */
-        .cyber-chat-btn {
+        /* Chatbot Flottant (Effet Verre & Bouton Doré) */
+        .exec-chat-btn {
             position: fixed !important;
-            bottom: 25px !important;
-            right: 25px !important;
-            width: 60px !important;
-            height: 60px !important;
+            bottom: 30px !important;
+            right: 30px !important;
+            width: 58px !important;
+            height: 58px !important;
             border-radius: 50% !important;
-            background: rgba(10, 14, 23, 0.9) !important;
-            border: 2px solid var(--cyber-gold) !important;
-            color: var(--cyber-gold) !important;
-            font-size: 24px !important;
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
+            border: none !important;
+            color: #0b132b !important;
+            font-size: 22px !important;
             cursor: pointer !important;
-            box-shadow: 0 0 20px var(--cyber-gold-glow) !important;
+            box-shadow: 0 8px 25px var(--gold-glow) !important;
             z-index: 99999 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .cyber-chat-btn:hover {
-            transform: scale(1.1);
-            background: var(--cyber-gold) !important;
-            color: #000 !important;
+        .exec-chat-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5) !important;
         }
 
-        .cyber-chat-window {
+        .exec-chat-window {
             position: fixed !important;
-            bottom: 95px !important;
-            right: 25px !important;
-            width: 350px !important;
-            height: 460px !important;
-            background: rgba(10, 14, 23, 0.95) !important;
-            border: 1px solid var(--cyber-gold) !important;
-            border-radius: 14px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px var(--cyber-gold-glow) !important;
+            bottom: 100px !important;
+            right: 30px !important;
+            width: 360px !important;
+            height: 480px !important;
+            background: rgba(15, 23, 42, 0.95) !important;
+            border: 1px solid var(--theme-card-border) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
             display: none;
             flex-direction: column;
             z-index: 99999 !important;
             overflow: hidden;
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
         }
 
-        .cyber-chat-window.active {
+        .exec-chat-window.active {
             display: flex !important;
         }
 
-        .cyber-chat-header {
-            padding: 12px 15px;
-            background: rgba(16, 24, 39, 0.9);
-            border-bottom: 1px solid var(--glass-border);
+        .exec-chat-header {
+            padding: 16px 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid var(--theme-card-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .cyber-chat-body {
+        .exec-chat-body {
             flex: 1;
-            padding: 15px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .cyber-chat-body .chat-msg {
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+        .exec-chat-body .chat-msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            line-height: 1.4;
             max-width: 85%;
         }
 
-        .cyber-chat-body .chat-msg.bot {
-            background: rgba(255, 215, 0, 0.1);
-            border-left: 3px solid var(--cyber-gold);
-            color: #fff;
+        .exec-chat-body .chat-msg.bot {
+            background: rgba(30, 41, 59, 0.9);
+            border-left: 3px solid var(--gold-primary);
+            color: var(--text-primary);
             align-self: flex-start;
         }
 
-        .cyber-chat-body .chat-msg.user {
-            background: var(--cyber-gold);
-            color: #000;
+        .exec-chat-body .chat-msg.user {
+            background: var(--gold-primary);
+            color: #0b132b;
             font-weight: 600;
             align-self: flex-end;
         }
 
-        .cyber-chat-footer {
-            padding: 10px;
-            border-top: 1px solid var(--glass-border);
+        .exec-chat-footer {
+            padding: 12px;
+            border-top: 1px solid var(--theme-card-border);
             display: flex;
             gap: 8px;
-            background: rgba(16, 24, 39, 0.9);
+            background: rgba(30, 41, 59, 0.8);
         }
 
-        /* SECTION RECHERCHE EN BAS DE PAGE */
-        .bottom-search-bar {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 6px 20px;
+        /* Barre de Recherche Positionnée en Bas */
+        .bottom-search-wrapper {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 50px;
+            padding: 8px 24px;
             display: flex;
             align-items: center;
-            max-width: 500px;
-            margin: 40px auto 20px auto;
-            box-shadow: 0 0 15px var(--cyber-gold-glow);
+            max-width: 580px;
+            margin: 50px auto 30px auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .bottom-search-bar input {
+        .bottom-search-wrapper input {
             background: transparent !important;
             border: none !important;
             color: #ffffff !important;
             box-shadow: none !important;
+            font-size: 0.95rem;
         }
 
-        /* FOOTER ET RETOUR HAUT */
-        .front-footer {
-            background: rgba(10, 14, 23, 0.95) !important;
-            border-top: 1px solid var(--glass-border);
+        .bottom-search-wrapper input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .exec-footer {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-top: 1px solid var(--theme-card-border);
             padding: 40px 0 20px;
         }
 
-        .back-to-top-cyber {
+        /* Bouton Retour Haut */
+        .back-to-top {
             position: fixed;
-            bottom: 25px;
-            left: 25px;
-            width: 45px;
-            height: 45px;
-            background: var(--glass-bg);
-            border: 1px solid var(--cyber-gold);
-            color: var(--cyber-gold);
+            bottom: 30px;
+            left: 30px;
+            width: 44px;
+            height: 44px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--theme-card-border);
+            color: var(--gold-primary);
             border-radius: 50%;
             cursor: pointer;
             z-index: 999;
             display: none;
-            box-shadow: 0 0 10px var(--cyber-gold-glow);
+            transition: all 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: var(--gold-primary);
+            color: #0b132b;
         }
     </style>
 </head>
 <body>
 
-<!-- Globe 3D & Effets de fond -->
+<!-- Fond Moteur 3D étendu sur toute la hauteur -->
 <div id="tsparticles"></div>
 
-<!-- HEADER SANS RECHERCHE -->
-<header class="front-header" th:fragment="navbar">
+<!-- HEADER (Barre de recherche retirée) -->
+<header class="exec-header" th:fragment="navbar">
     <a class="brand" href="/">
-        <i class="fas fa-cube text-gold"></i> AES SYSTEM
+        <i class="fas fa-shield-halved text-gold"></i> AES GROUP
     </a>
 
     <nav class="navbar navbar-expand-lg p-0">
-        <button class="navbar-toggler text-gold border-0" type="button" data-bs-toggle="collapse" data-bs-target="#frontNav">
+        <button class="navbar-toggler text-gold border-0" type="button" data-bs-toggle="collapse" data-bs-target="#execNav">
             <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="frontNav">
-            <ul class="navbar-nav front-nav mx-auto">
-                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-microchip me-1 text-gold"></i> Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-layer-group me-1 text-gold"></i> Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-project-diagram me-1 text-gold"></i> Projets</a></li>
-                <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-rss me-1 text-gold"></i> News</a></li>
-                <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-user-shield me-1 text-gold"></i> Équipe</a></li>
-                <li class="nav-item"><a class="nav-link" href="/galerie"><i class="fas fa-photo-film me-1 text-gold"></i> Galerie</a></li>
-                <li class="nav-item"><a class="nav-link" href="/avis"><i class="fas fa-star me-1 text-gold"></i> Avis</a></li>
-                <li class="nav-item"><a class="nav-link" href="/devis-calculator"><i class="fas fa-calculator me-1 text-gold"></i> Estimation</a></li>
-                <li class="nav-item"><a class="nav-link" href="/devis"><i class="fas fa-file-contract me-1 text-gold"></i> Devis</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-headset me-1 text-gold"></i> Contact</a></li>
+        <div class="collapse navbar-collapse" id="execNav">
+            <ul class="navbar-nav exec-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-house me-1 text-gold"></i> Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-cubes me-1 text-gold"></i> Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-diagram-project me-1 text-gold"></i> Projets</a></li>
+                <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-newspaper me-1 text-gold"></i> Actualités</a></li>
+                <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-users me-1 text-gold"></i> Équipe</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
         </div>
     </nav>
 </header>
 
-<!-- RETOUR EN HAUT -->
-<button id="backToTop" class="back-to-top-cyber" title="Retour au sommet"><i class="fas fa-chevron-up"></i></button>
-
 <!-- CHATBOT FLOTTANT -->
 <div th:fragment="chat">
-    <button id="chatbotToggle" class="cyber-chat-btn" aria-label="Ouvrir l'Assistant">
-        <i class="fas fa-robot"></i>
+    <button id="chatbotToggle" class="exec-chat-btn" aria-label="Assistant">
+        <i class="fas fa-comments"></i>
     </button>
 
-    <div id="chatbotWindow" class="cyber-chat-window">
-        <div class="cyber-chat-header">
+    <div id="chatbotWindow" class="exec-chat-window">
+        <div class="exec-chat-header">
             <div class="d-flex align-items-center gap-2">
                 <i class="fas fa-robot text-gold"></i>
                 <div>
-                    <h6 class="mb-0 text-gold font-monospace" style="font-size: 0.85rem;">ASSISTANT AES</h6>
-                    <small class="text-success" style="font-size: 0.7rem;"><i class="fas fa-circle me-1"></i> EN LIGNE</small>
+                    <h6 class="mb-0 text-white fw-bold" style="font-size: 0.88rem;">Assistant Virtuel AES</h6>
+                    <small class="text-success" style="font-size: 0.72rem;"><i class="fas fa-circle me-1"></i>En ligne</small>
                 </div>
             </div>
-            <button id="closeChat" class="btn-close btn-close-white" style="font-size: 0.75rem;"></button>
+            <button id="closeChat" class="btn-close btn-close-white small"></button>
         </div>
-        <div id="chatMessages" class="cyber-chat-body"></div>
-        <div class="cyber-chat-footer">
+        <div id="chatMessages" class="exec-chat-body"></div>
+        <div class="exec-chat-footer">
             <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez une question...">
-            <button id="chatSend" class="btn btn-sm btn-gold" style="background: var(--cyber-gold); color: #000;"><i class="fas fa-paper-plane"></i></button>
+            <button id="chatSend" class="btn btn-sm" style="background: var(--gold-primary); color: #0b132b;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
-<!-- BARRE DE RECHERCHE DÉPLACÉE EN BAS DE PAGE -->
+<!-- BARRE DE RECHERCHE EN BAS DE PAGE -->
 <div class="container">
-    <div class="bottom-search-bar">
-        <i class="fas fa-search text-gold me-2"></i>
-        <input type="text" id="bottomSearchInput" class="form-control" placeholder="Posez une question ou recherchez...">
+    <div class="bottom-search-wrapper">
+        <i class="fas fa-magnifying-glass text-gold me-3"></i>
+        <input type="text" id="bottomSearchInput" class="form-control" placeholder="Rechercher un service, un projet ou poser une question...">
     </div>
 </div>
+
+<!-- RETOUR EN HAUT -->
+<button id="backToTop" class="back-to-top" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
 <!-- FOOTER -->
-<footer th:fragment="footer" class="front-footer">
+<footer th:fragment="footer" class="exec-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-lg-6">
-                <h5 class="text-gold"><i class="fas fa-cube me-2"></i> AFRIQUE ÉQUIPEMENTS & SERVICES</h5>
-                <p class="text-muted mb-0">Partenaire stratégique au Niger : BTP, Hydraulique, Location d'engins, Transport & Logistique.</p>
+                <h5 class="text-gold mb-2"><i class="fas fa-shield-halved me-2"></i> AFRIQUE ÉQUIPEMENTS & SERVICES</h5>
+                <p class="text-muted small mb-0">Excellence en BTP, Ingénierie Hydraulique & Solutions Logistiques au Niger.</p>
             </div>
             <div class="col-lg-6 text-lg-end">
-                <p class="text-muted mb-1"><i class="fas fa-location-dot text-gold me-2"></i>Agadez, quartier aéroport, Niger</p>
-                <p class="text-muted mb-0"><i class="fas fa-phone text-gold me-2"></i>+227 96 96 74 74 / 90 96 74 74</p>
+                <p class="text-muted small mb-1"><i class="fas fa-location-dot text-gold me-2"></i>Agadez, Niger</p>
+                <p class="text-muted small mb-0"><i class="fas fa-phone text-gold me-2"></i>+227 96 96 74 74 / 90 96 74 74</p>
             </div>
         </div>
-        <hr style="border-color: rgba(255,215,0,0.2);" class="my-4">
+        <hr style="border-color: rgba(212,175,55,0.15);" class="my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <p class="mb-0 text-muted small">&copy; 2026 AFRIQUE ÉQUIPEMENTS ET SERVICES</p>
-            <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Administration</a>
+            <p class="mb-0 text-muted small">&copy; 2026 Afrique Équipements et Services</p>
+            <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Sécurisé</a>
         </div>
     </div>
 </footer>
 
-<!-- SCRIPTS -->
+<!-- SCRIPT EMBARQUÉ SANS FICHIER EXTERNE -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Globe 3D / Particules Dorées
+            // Configuration Particules 3D
             if (typeof tsParticles !== 'undefined') {
                 tsParticles.load("tsparticles", {
                     particles: {
-                        number: { value: 50, density: { enable: true, value_area: 800 } },
-                        color: { value: ["#ffd700", "#00f0ff", "#ffffff"] },
+                        number: { value: 55, density: { enable: true, value_area: 900 } },
+                        color: { value: ["#d4af37", "#94a3b8"] },
                         shape: { type: "circle" },
-                        opacity: { value: 0.4, random: true },
-                        size: { value: 3.5, random: true },
-                        move: { enable: true, speed: 1.2, direction: "none", out_mode: "out" },
-                        line_linked: { enable: true, distance: 150, color: "#ffd700", opacity: 0.2, width: 1 }
+                        opacity: { value: 0.35 },
+                        size: { value: 2.8 },
+                        move: { enable: true, speed: 0.8 },
+                        line_linked: { enable: true, distance: 130, color: "#d4af37", opacity: 0.18, width: 1 }
                     },
                     interactivity: { events: { onhover: { enable: true, mode: "grab" } } }
                 });
             }
 
-            // Gestion du Chatbot Flottant
+            // Gestionnaire Chatbot
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
@@ -388,23 +395,21 @@
                     messages.scrollTop = messages.scrollHeight;
                 }
 
-                function sendHandler() {
-                    const val = input.value.trim();
-                    if (!val) return;
-                    addMsg(val, 'user');
+                function handleSend() {
+                    const txt = input.value.trim();
+                    if (!txt) return;
+                    addMsg(txt, 'user');
                     input.value = '';
-                    setTimeout(() => {
-                        addMsg("Bonjour ! Un conseiller Afrique Équipements analysera votre demande sous peu.", "bot");
-                    }, 350);
+                    setTimeout(() => addMsg("Bonjour ! Un conseiller étudie votre message et reviendra vers vous.", "bot"), 400);
                 }
 
-                if (send) send.addEventListener('click', sendHandler);
-                if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendHandler(); });
+                if (send) send.addEventListener('click', handleSend);
+                if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 
-                addMsg("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous aider ?", "bot");
+                addMsg("Bienvenue ! Comment pouvons-nous vous assister aujourd'hui ?", "bot");
             }
 
-            // Bouton Retour en haut
+            // Retour Haut
             const btt = document.getElementById('backToTop');
             if (btt) {
                 window.addEventListener('scroll', () => {
