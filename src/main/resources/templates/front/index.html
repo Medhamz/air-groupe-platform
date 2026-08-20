@@ -4,122 +4,112 @@
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
 
-<!-- Fragment Chatbot global (Bulle bas-gauche uniquement) -->
 <div th:replace="~{front/fragments/layout :: chat}"></div>
 
-<!-- Hero -->
-<section class="hero text-center position-relative overflow-hidden">
+<section class="hero text-center position-relative overflow-hidden py-5">
     <div class="container position-relative" style="z-index: 2;">
-        <h1 class="display-3 fw-bold mb-3">
-            Bienvenue chez <span class="gold-text">Afrique Équipements et Services</span>
+        <h1 class="display-3 fw-bold mb-3 text-white">
+            Bienvenue chez <span class="text-gold">Afrique Équipements et Services</span>
         </h1>
-        <p class="lead max-w-700 mx-auto mb-4">
+        <p class="lead max-w-700 mx-auto mb-4 text-light">
             Leader au Niger dans les services intégrés : infrastructures, logistique, location d'engins et solutions d'ingénierie moderne.
         </p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="/services" class="btn btn-gold btn-lg rounded-pill px-5 shadow-sm">
+            <a href="/services" class="btn btn-lg rounded-pill px-5 shadow-sm" style="background: var(--gold-primary); color: #0b132b; font-weight: 700;">
                 Découvrir nos services <i class="fas fa-arrow-right ms-2"></i>
             </a>
-            <a href="/avis" class="btn btn-outline-gold btn-lg rounded-pill px-4 shadow-sm">
+            <a href="/avis" class="btn btn-outline-warning btn-lg rounded-pill px-4 shadow-sm text-gold border-gold" style="border-color: var(--gold-primary);">
                 <i class="fas fa-pen me-2"></i> Donner votre avis
             </a>
-            <button id="readingModeBtn" class="btn btn-outline-light btn-lg rounded-pill px-4 shadow-sm" onclick="toggleReadingMode()">
-                <i class="fas fa-expand me-1"></i> Lecture
-            </button>
         </div>
     </div>
 </section>
 
-<!-- Pourquoi nous choisir -->
 <section class="py-5 section-animate">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="section-title position-relative d-inline-block">Pourquoi nous choisir</h2>
+            <h2 class="section-title position-relative d-inline-block text-white">Pourquoi nous choisir</h2>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="service-card text-center p-4 h-100 shadow-sm rounded-4 border-0 transition-all">
+                <div class="card text-center p-4 h-100 shadow-sm border-0 transition-all">
                     <div class="icon-wrapper mb-3 text-gold fs-1"><i class="fas fa-medal"></i></div>
-                    <h5 class="card-title fw-bold">Excellence & Expertise</h5>
-                    <p class="card-text text-muted">Des années d'expérience technique et des réalisations majeures à travers tout le Niger.</p>
+                    <h5 class="card-title fw-bold text-white">Excellence & Expertise</h5>
+                    <p class="card-text text-secondary">Des années d'expérience technique et des réalisations majeures à travers tout le Niger.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="service-card text-center p-4 h-100 shadow-sm rounded-4 border-0 transition-all">
+                <div class="card text-center p-4 h-100 shadow-sm border-0 transition-all">
                     <div class="icon-wrapper mb-3 text-gold fs-1"><i class="fas fa-handshake"></i></div>
-                    <h5 class="card-title fw-bold">Engagement & Confiance</h5>
-                    <p class="card-text text-muted">Un suivi rigoureux, le respect des délais et des partenariats durables basés sur la transparence.</p>
+                    <h5 class="card-title fw-bold text-white">Engagement & Confiance</h5>
+                    <p class="card-text text-secondary">Un suivi rigoureux, le respect des délais et des partenariats durables basés sur la transparence.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="service-card text-center p-4 h-100 shadow-sm rounded-4 border-0 transition-all">
+                <div class="card text-center p-4 h-100 shadow-sm border-0 transition-all">
                     <div class="icon-wrapper mb-3 text-gold fs-1"><i class="fas fa-leaf"></i></div>
-                    <h5 class="card-title fw-bold">Innovation & Matériel</h5>
-                    <p class="card-text text-muted">Un parc d'équipements récents et des approches modernes pour tous vos projets d'ingénierie.</p>
+                    <h5 class="card-title fw-bold text-white">Innovation & Matériel</h5>
+                    <p class="card-text text-secondary">Un parc d'équipements récents et des approches modernes pour tous vos projets d'ingénierie.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Services en avant -->
-<section class="py-5 bg-light section-animate">
+<section class="py-5 section-animate">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="section-title position-relative d-inline-block">Nos Domaines d'Excellence</h2>
+            <h2 class="section-title position-relative d-inline-block text-white">Nos Domaines d'Excellence</h2>
         </div>
         <div class="row g-4" id="servicesContainer">
-            <!-- Services dynamiques Thymeleaf -->
             <div th:each="s : ${services}" class="col-md-3 service-card-wrapper">
-                <div class="service-card text-center p-4 h-100 shadow-sm bg-white rounded-4 border-0">
+                <div class="card text-center p-4 h-100 shadow-sm border-0">
                     <div class="icon-wrapper mb-3 text-gold fs-2"><i class="fas" th:classappend="${s.iconClass}"></i></div>
-                    <h5 class="card-title fw-bold" th:text="${s.name}">Service</h5>
-                    <p class="card-text text-muted small" th:text="${s.description}">Description</p>
+                    <h5 class="card-title fw-bold text-white" th:text="${s.name}">Service</h5>
+                    <p class="card-text text-secondary small" th:text="${s.description}">Description</p>
                 </div>
             </div>
 
-            <!-- Fallback si aucun service en base -->
             <div th:if="${services == null or services.isEmpty()}" class="col-12">
                 <div class="row g-4">
                     <div class="col-md-3 service-card-wrapper">
-                        <div class="service-card text-center p-4 bg-white rounded-4 shadow-sm">
+                        <div class="card text-center p-4 rounded-4 shadow-sm">
                             <div class="icon-wrapper mb-3 text-gold fs-2"><i class="fas fa-hard-hat"></i></div>
-                            <h5 class="card-title fw-bold">BTP & Construction</h5>
-                            <p class="card-text text-muted small">Bâtiments, routes, ponts et infrastructures publiques.</p>
+                            <h5 class="card-title fw-bold text-white">BTP & Construction</h5>
+                            <p class="card-text text-secondary small">Bâtiments, routes, ponts et infrastructures publiques.</p>
                         </div>
                     </div>
                     <div class="col-md-3 service-card-wrapper">
-                        <div class="service-card text-center p-4 bg-white rounded-4 shadow-sm">
+                        <div class="card text-center p-4 rounded-4 shadow-sm">
                             <div class="icon-wrapper mb-3 text-gold fs-2"><i class="fas fa-tint"></i></div>
-                            <h5 class="card-title fw-bold">Hydraulique</h5>
-                            <p class="card-text text-muted small">Forages, adduction d'eau potable et réseaux d'irrigation.</p>
+                            <h5 class="card-title fw-bold text-white">Hydraulique</h5>
+                            <p class="card-text text-secondary small">Forages, adduction d'eau potable et réseaux d'irrigation.</p>
                         </div>
                     </div>
                     <div class="col-md-3 service-card-wrapper">
-                        <div class="service-card text-center p-4 bg-white rounded-4 shadow-sm">
+                        <div class="card text-center p-4 rounded-4 shadow-sm">
                             <div class="icon-wrapper mb-3 text-gold fs-2"><i class="fas fa-truck"></i></div>
-                            <h5 class="card-title fw-bold">Transport & Logistique</h5>
-                            <p class="card-text text-muted small">Acheminement sécurisé et gestion globale de fret.</p>
+                            <h5 class="card-title fw-bold text-white">Transport & Logistique</h5>
+                            <p class="card-text text-secondary small">Acheminement sécurisé et gestion globale de fret.</p>
                         </div>
                     </div>
                     <div class="col-md-3 service-card-wrapper">
-                        <div class="service-card text-center p-4 bg-white rounded-4 shadow-sm">
+                        <div class="card text-center p-4 rounded-4 shadow-sm">
                             <div class="icon-wrapper mb-3 text-gold fs-2"><i class="fas fa-cogs"></i></div>
-                            <h5 class="card-title fw-bold">Location d'engins</h5>
-                            <p class="card-text text-muted small">Pelles, bulldozers, grues et compacteurs récents.</p>
+                            <h5 class="card-title fw-bold text-white">Location d'engins</h5>
+                            <p class="card-text text-secondary small">Pelles, bulldozers, grues et compacteurs récents.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="noResult" class="text-center mt-4" style="display: none;">
-            <p class="text-secondary fs-5"><i class="fas fa-search-minus me-2"></i>Aucun service ne correspond à votre recherche.</p>
+            <p class="text-light fs-5"><i class="fas fa-search-minus me-2"></i>Aucun service ne correspond à votre recherche.</p>
         </div>
     </div>
 </section>
 
-<!-- Statistiques -->
-<section class="py-5 stats-section text-white section-animate" style="background: linear-gradient(135deg, #1a2a3a 0%, #0d151d 100%);">
+<section class="py-5 stats-section text-white section-animate">
     <div class="container text-center">
         <div class="row g-4">
             <div class="col-md-3 col-6">
@@ -142,57 +132,54 @@
     </div>
 </section>
 
-<!-- AVIS CLIENTS APPROUVÉS (DYNAMIQUE) -->
-<section class="py-5 bg-white section-animate">
+<section class="py-5 section-animate">
     <div class="container">
         <div class="text-center mb-4">
-            <h2 class="section-title position-relative d-inline-block">Ce que nos clients disent de nous</h2>
-            <p class="text-muted">Retrouvez les retours d'expérience vérifiés de nos partenaires et clients.</p>
+            <h2 class="section-title position-relative d-inline-block text-white">Ce que nos clients disent de nous</h2>
+            <p class="text-secondary">Retrouvez les retours d'expérience vérifiés de nos partenaires et clients.</p>
         </div>
 
         <div class="row g-4">
-            <!-- Liste des avis validés depuis la BD -->
             <div th:each="review : ${reviews}" class="col-md-4">
-                <div class="review-card p-4 rounded-4 shadow-sm border h-100 d-flex flex-column justify-content-between">
+                <div class="card p-4 rounded-4 shadow-sm border h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div class="stars mb-3 text-gold">
                             <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star"></i>
                         </div>
-                        <p class="review-text fst-italic text-secondary" th:text="'&quot;' + ${review.comment} + '&quot;'">"Excellent service !"</p>
+                        <p class="review-text fst-italic text-light" th:text="'&quot;' + ${review.comment} + '&quot;'">"Excellent service !"</p>
                     </div>
-                    <div class="mt-3 pt-3 border-top">
-                        <h6 class="reviewer-name fw-bold mb-0" th:text="${review.clientName}">Nom Client</h6>
+                    <div class="mt-3 pt-3 border-top border-secondary">
+                        <h6 class="reviewer-name fw-bold mb-0 text-white" th:text="${review.clientName}">Nom Client</h6>
                         <small class="review-date text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">01/01/2026</small>
                     </div>
                 </div>
             </div>
 
-            <!-- Message si aucun avis validé pour l'instant -->
             <div th:if="${reviews == null or reviews.isEmpty()}" class="col-12 text-center py-4">
-                <p class="text-muted fs-6 mb-3">Soyez le premier à donner votre avis sur nos prestations !</p>
-                <a href="/avis" class="btn btn-gold rounded-pill px-4"><i class="fas fa-star me-2"></i>Publier un avis</a>
+                <p class="text-light fs-6 mb-3">Soyez le premier à donner votre avis sur nos prestations !</p>
+                <a href="/avis" class="btn btn-lg rounded-pill px-4" style="background: var(--gold-primary); color: #0b132b; font-weight: 700;">
+                    <i class="fas fa-star me-2"></i>Publier un avis
+                </a>
             </div>
         </div>
 
-        <!-- Bouton vers le formulaire complet d'avis -->
         <div class="text-center mt-5" th:if="${reviews != null and !reviews.isEmpty()}">
-            <a href="/avis" class="btn btn-outline-gold rounded-pill px-5 shadow-sm">
+            <a href="/avis" class="btn btn-outline-warning rounded-pill px-5 shadow-sm text-gold border-gold" style="border-color: var(--gold-primary);">
                 <i class="fas fa-comment-medical me-2"></i>Donner votre avis
             </a>
         </div>
     </div>
 </section>
 
-<!-- FAQ -->
-<section class="py-5 bg-light section-animate">
+<section class="py-5 section-animate">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="section-title position-relative d-inline-block">Questions fréquentes</h2>
+            <h2 class="section-title position-relative d-inline-block text-white">Questions fréquentes</h2>
         </div>
         <div class="accordion max-w-800 mx-auto" id="faqAccordion">
             <div class="accordion-item border-0 shadow-sm mb-3 rounded-3 overflow-hidden">
                 <h2 class="accordion-header">
-                    <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    <button class="accordion-button fw-bold text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
                         Quels types de services proposez-vous ?
                     </button>
                 </h2>
@@ -204,7 +191,7 @@
             </div>
             <div class="accordion-item border-0 shadow-sm mb-3 rounded-3 overflow-hidden">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    <button class="accordion-button collapsed fw-bold text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
                         Intervenez-vous uniquement à Agadez ?
                     </button>
                 </h2>
@@ -216,7 +203,7 @@
             </div>
             <div class="accordion-item border-0 shadow-sm mb-3 rounded-3 overflow-hidden">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                    <button class="accordion-button collapsed fw-bold text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
                         Comment obtenir une cotation ou un devis personnalisé ?
                     </button>
                 </h2>
@@ -230,15 +217,14 @@
     </div>
 </section>
 
-<!-- Newsletter -->
-<section class="py-5 bg-white section-animate">
+<section class="py-5 section-animate">
     <div class="container">
-        <div class="newsletter text-center p-5 rounded-4 shadow-sm bg-gold-light position-relative overflow-hidden">
-            <h3 class="fw-bold mb-2">Restez informé</h3>
-            <p class="text-muted mb-4">Abonnez-vous pour recevoir nos actualités et nos disponibilités d'équipements.</p>
+        <div class="card text-center p-5 rounded-4 shadow-sm position-relative overflow-hidden">
+            <h3 class="fw-bold mb-2 text-white">Restez informé</h3>
+            <p class="text-secondary mb-4">Abonnez-vous pour recevoir nos actualités et nos disponibilités d'équipements.</p>
             <form id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3 max-w-500 mx-auto">
-                <input type="email" class="form-control form-control-lg rounded-pill border-0 shadow-sm px-4" placeholder="Votre adresse email" required>
-                <button type="submit" class="btn btn-gold btn-lg rounded-pill px-4 shadow-sm">S'abonner</button>
+                <input type="email" class="form-control form-control-lg rounded-pill border-0 shadow-sm px-4 bg-dark text-white" placeholder="Votre adresse email" style="max-width: 320px;" required>
+                <button type="submit" class="btn btn-lg rounded-pill px-4 shadow-sm" style="background: var(--gold-primary); color: #0b132b; font-weight: 700;">S'abonner</button>
             </form>
         </div>
     </div>
@@ -247,7 +233,6 @@
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 
-<!-- Script relié à la barre de recherche du Header -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('navSearchInput');

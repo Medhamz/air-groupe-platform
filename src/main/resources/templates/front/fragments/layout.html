@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afrique Équipements & Services</title>
 
-    <!-- Typography & Graphics -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
-    <!-- Frameworks & Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Moteur 3D Particles -->
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 
     <style type="text/css">
@@ -119,7 +116,7 @@
             color: var(--gold-primary) !important;
         }
 
-        /* Seule et unique barre de recherche (dans le Header) */
+        /* Barre de recherche dans le Header */
         .nav-search-form {
             position: relative;
             max-width: 200px;
@@ -288,10 +285,8 @@
 </head>
 <body>
 
-<!-- Moteur 3D Background -->
 <div id="tsparticles"></div>
 
-<!-- HEADER (Contient la seule barre de recherche) -->
 <header class="exec-header" th:fragment="navbar">
     <a class="brand" href="/">
         <i class="fas fa-shield-halved text-gold"></i> AFRIQUE ÉQUIPEMENTS & SERVICES
@@ -308,10 +303,10 @@
                 <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-diagram-project me-1 text-gold"></i> Projets</a></li>
                 <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-newspaper me-1 text-gold"></i> Actualités</a></li>
                 <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-users me-1 text-gold"></i> Équipe</a></li>
+                <li class="nav-item"><a class="nav-link" href="/avis"><i class="fas fa-star me-1 text-gold"></i> Avis</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
 
-            <!-- Unique barre de recherche -->
             <div class="nav-search-form ms-lg-2 mt-2 mt-lg-0">
                 <i class="fas fa-magnifying-glass search-icon"></i>
                 <input type="text" id="navSearchInput" class="form-control" placeholder="Rechercher...">
@@ -320,7 +315,6 @@
     </nav>
 </header>
 
-<!-- CHATBOT FLOTTANT (Uniquement à Gauche) -->
 <div th:fragment="chat">
     <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant">
         <i class="fas fa-comments"></i>
@@ -345,10 +339,8 @@
     </div>
 </div>
 
-<!-- RETOUR EN HAUT -->
 <button id="backToTop" class="back-to-top" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
-<!-- FOOTER -->
 <footer th:fragment="footer" class="exec-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
@@ -373,12 +365,10 @@
     </div>
 </footer>
 
-<!-- SCRIPTS -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Particules 3D
             if (typeof tsParticles !== 'undefined') {
                 tsParticles.load("tsparticles", {
                     particles: {
@@ -394,7 +384,6 @@
                 });
             }
 
-            // Gestion Chatbot (Bulle flottante bas-gauche)
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
@@ -428,7 +417,6 @@
                 addMsg("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
             }
 
-            // Bouton Retour Haut
             const btt = document.getElementById('backToTop');
             if (btt) {
                 window.addEventListener('scroll', () => {
