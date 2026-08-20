@@ -4,22 +4,8 @@
 <body>
 <div th:replace="~{front/fragments/layout :: navbar}"></div>
 
-<!-- ====== CHATBOT ====== -->
-<button id="chatbotToggle" class="chatbot-toggle" aria-label="Assistant virtuel">
-    <i class="fas fa-comment-dots"></i>
-    <span class="notification-dot"></span>
-</button>
-<div id="chatbotWindow" class="chatbot-window">
-    <div class="chatbot-header">
-        <h6><i class="fas fa-robot me-2"></i>Assistant Afrique Équipements</h6>
-        <button id="closeChat" class="close-chat"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="chatMessages" class="chatbot-messages"></div>
-    <div class="chatbot-input">
-        <input type="text" id="chatInput" placeholder="Posez votre question...">
-        <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
-    </div>
-</div>
+<!-- Fragment Chatbot global (Bulle bas-gauche uniquement) -->
+<div th:replace="~{front/fragments/layout :: chat}"></div>
 
 <!-- Hero -->
 <section class="hero text-center position-relative overflow-hidden">
@@ -40,16 +26,6 @@
             <button id="readingModeBtn" class="btn btn-outline-light btn-lg rounded-pill px-4 shadow-sm" onclick="toggleReadingMode()">
                 <i class="fas fa-expand me-1"></i> Lecture
             </button>
-        </div>
-    </div>
-</section>
-
-<!-- Barre de recherche -->
-<section class="py-4 bg-white shadow-sm position-relative" style="z-index: 3; margin-top: -20px; border-radius: 12px 12px 0 0;">
-    <div class="container">
-        <div class="search-bar mx-auto" style="max-width: 550px;">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="form-control form-control-lg rounded-pill ps-5 shadow-none" placeholder="Rechercher un service (ex: BTP, Forage, Engins)...">
         </div>
     </div>
 </section>
@@ -271,11 +247,10 @@
 <div th:replace="~{front/fragments/layout :: footer}"></div>
 <div th:replace="~{front/fragments/layout :: scripts}"></div>
 
-<!-- Scripts interactifs & Filtre -->
+<!-- Script relié à la barre de recherche du Header -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Filtrage en direct des services
-        const searchInput = document.getElementById('searchInput');
+        const searchInput = document.getElementById('navSearchInput');
         const serviceCards = document.querySelectorAll('.service-card-wrapper');
         const noResult = document.getElementById('noResult');
 
