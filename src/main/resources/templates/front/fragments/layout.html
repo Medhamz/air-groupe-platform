@@ -21,15 +21,16 @@
         :root {
             /* Palette Executive Gold & Navy */
             --theme-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0b132b 100%);
-            --theme-card-bg: rgba(30, 41, 59, 0.75);
-            --theme-card-border: rgba(212, 175, 55, 0.25);
+            --theme-card-bg: rgba(30, 41, 59, 0.85);
+            --theme-card-border: rgba(212, 175, 55, 0.3);
 
             --gold-primary: #d4af37;
             --gold-light: #f3e5ab;
             --gold-glow: rgba(212, 175, 55, 0.3);
 
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
         }
 
         body {
@@ -39,10 +40,10 @@
             font-family: 'Plus Jakarta Sans', sans-serif !important;
             min-height: 100vh;
             margin: 0;
-            padding-top: 80px;
+            padding-top: 85px;
         }
 
-        /* 3D Canvas / Background */
+        /* Canvas 3D d'arrière-plan */
         #tsparticles {
             position: fixed !important;
             top: 0 !important;
@@ -78,39 +79,40 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
         }
 
-        /* Header Épuré (Sans barre de recherche haut) */
+        /* En-tête / Header avec barre de recherche intégrée */
         .exec-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 80px;
-            background: rgba(15, 23, 42, 0.9);
+            height: 85px;
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--theme-card-border);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
+            padding: 0 30px;
         }
 
         .exec-header .brand {
             font-family: 'Cinzel', serif;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--gold-primary);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            white-space: nowrap;
         }
 
         .exec-nav .nav-link {
             color: var(--text-secondary) !important;
             font-weight: 500;
-            font-size: 0.92rem;
-            padding: 8px 14px !important;
+            font-size: 0.9rem;
+            padding: 8px 12px !important;
             transition: all 0.3s ease;
         }
 
@@ -118,11 +120,41 @@
             color: var(--gold-primary) !important;
         }
 
-        /* Chatbot Flottant (Effet Verre & Bouton Doré) */
+        /* Barre de recherche intégrée au Header (Discrète et Professionnelle) */
+        .nav-search-form {
+            position: relative;
+            max-width: 220px;
+        }
+
+        .nav-search-form .form-control {
+            background: rgba(30, 41, 59, 0.7) !important;
+            border: 1px solid var(--theme-card-border) !important;
+            color: #ffffff !important;
+            border-radius: 20px;
+            padding-left: 35px;
+            padding-right: 12px;
+            font-size: 0.82rem;
+            height: 36px;
+        }
+
+        .nav-search-form .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .nav-search-form .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-primary);
+            font-size: 0.85rem;
+        }
+
+        /* Chatbot Flottant repositionné à GAUCHE */
         .exec-chat-btn {
             position: fixed !important;
             bottom: 30px !important;
-            right: 30px !important;
+            left: 30px !important;
             width: 58px !important;
             height: 58px !important;
             border-radius: 50% !important;
@@ -147,13 +179,13 @@
         .exec-chat-window {
             position: fixed !important;
             bottom: 100px !important;
-            right: 30px !important;
-            width: 360px !important;
-            height: 480px !important;
-            background: rgba(15, 23, 42, 0.95) !important;
+            left: 30px !important;
+            width: 350px !important;
+            height: 460px !important;
+            background: rgba(15, 23, 42, 0.98) !important;
             border: 1px solid var(--theme-card-border) !important;
             border-radius: 16px !important;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
             display: none;
             flex-direction: column;
             z-index: 99999 !important;
@@ -166,8 +198,8 @@
         }
 
         .exec-chat-header {
-            padding: 16px 20px;
-            background: rgba(30, 41, 59, 0.8);
+            padding: 14px 18px;
+            background: rgba(30, 41, 59, 0.9);
             border-bottom: 1px solid var(--theme-card-border);
             display: flex;
             justify-content: space-between;
@@ -194,7 +226,7 @@
         .exec-chat-body .chat-msg.bot {
             background: rgba(30, 41, 59, 0.9);
             border-left: 3px solid var(--gold-primary);
-            color: var(--text-primary);
+            color: #ffffff;
             align-self: flex-start;
         }
 
@@ -210,50 +242,36 @@
             border-top: 1px solid var(--theme-card-border);
             display: flex;
             gap: 8px;
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(30, 41, 59, 0.9);
         }
 
-        /* Barre de Recherche Positionnée en Bas */
-        .bottom-search-wrapper {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid var(--theme-card-border);
-            border-radius: 50px;
-            padding: 8px 24px;
-            display: flex;
-            align-items: center;
-            max-width: 580px;
-            margin: 50px auto 30px auto;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .bottom-search-wrapper input {
-            background: transparent !important;
-            border: none !important;
+        /* Footer à contraste élevé pour une lisibilité parfaite */
+        .exec-footer {
+            background: rgba(10, 15, 26, 0.98) !important;
+            border-top: 1px solid var(--theme-card-border);
+            padding: 45px 0 25px;
             color: #ffffff !important;
-            box-shadow: none !important;
+        }
+
+        .exec-footer .footer-text {
+            color: #e2e8f0 !important;
             font-size: 0.95rem;
         }
 
-        .bottom-search-wrapper input::placeholder {
-            color: var(--text-secondary);
+        .exec-footer .footer-info-item {
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        /* Footer */
-        .exec-footer {
-            background: rgba(15, 23, 42, 0.95) !important;
-            border-top: 1px solid var(--theme-card-border);
-            padding: 40px 0 20px;
-        }
-
-        /* Bouton Retour Haut */
+        /* Bouton Retour Haut (Placé à droite) */
         .back-to-top {
             position: fixed;
             bottom: 30px;
-            left: 30px;
+            right: 30px;
             width: 44px;
             height: 44px;
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(30, 41, 59, 0.9);
             border: 1px solid var(--theme-card-border);
             color: var(--gold-primary);
             border-radius: 50%;
@@ -271,21 +289,21 @@
 </head>
 <body>
 
-<!-- Fond Moteur 3D étendu sur toute la hauteur -->
+<!-- Moteur 3D d'arrière-plan -->
 <div id="tsparticles"></div>
 
-<!-- HEADER (Barre de recherche retirée) -->
+<!-- HEADER / BARRE DE NAVIGATION -->
 <header class="exec-header" th:fragment="navbar">
     <a class="brand" href="/">
-        <i class="fas fa-shield-halved text-gold"></i> AES GROUP
+        <i class="fas fa-shield-halved text-gold"></i> AFRIQUE ÉQUIPEMENTS & SERVICES
     </a>
 
     <nav class="navbar navbar-expand-lg p-0">
-        <button class="navbar-toggler text-gold border-0" type="button" data-bs-toggle="collapse" data-bs-target="#execNav">
+        <button class="navbar-toggler text-gold border-0 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#execNav">
             <i class="fas fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="execNav">
-            <ul class="navbar-nav exec-nav mx-auto">
+            <ul class="navbar-nav exec-nav mx-auto align-items-center">
                 <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-house me-1 text-gold"></i> Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-cubes me-1 text-gold"></i> Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-diagram-project me-1 text-gold"></i> Projets</a></li>
@@ -293,13 +311,19 @@
                 <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-users me-1 text-gold"></i> Équipe</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
+
+            <!-- Barre de recherche déplacée dans le Header -->
+            <div class="nav-search-form ms-lg-2 mt-2 mt-lg-0">
+                <i class="fas fa-magnifying-glass search-icon"></i>
+                <input type="text" id="navSearchInput" class="form-control" placeholder="Rechercher...">
+            </div>
         </div>
     </nav>
 </header>
 
-<!-- CHATBOT FLOTTANT -->
+<!-- CHATBOT FLOTTANT (POSITIONNÉ À GAUCHE) -->
 <div th:fragment="chat">
-    <button id="chatbotToggle" class="exec-chat-btn" aria-label="Assistant">
+    <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant">
         <i class="fas fa-comments"></i>
     </button>
 
@@ -316,39 +340,35 @@
         </div>
         <div id="chatMessages" class="exec-chat-body"></div>
         <div class="exec-chat-footer">
-            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez une question...">
+            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez votre question...">
             <button id="chatSend" class="btn btn-sm" style="background: var(--gold-primary); color: #0b132b;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
-<!-- BARRE DE RECHERCHE EN BAS DE PAGE -->
-<div class="container">
-    <div class="bottom-search-wrapper">
-        <i class="fas fa-magnifying-glass text-gold me-3"></i>
-        <input type="text" id="bottomSearchInput" class="form-control" placeholder="Rechercher un service, un projet ou poser une question...">
-    </div>
-</div>
-
-<!-- RETOUR EN HAUT -->
+<!-- RETOUR EN HAUT (POSITIONNÉ À DROITE) -->
 <button id="backToTop" class="back-to-top" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
-<!-- FOOTER -->
+<!-- FOOTER Lisibilité Maximale -->
 <footer th:fragment="footer" class="exec-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-lg-6">
                 <h5 class="text-gold mb-2"><i class="fas fa-shield-halved me-2"></i> AFRIQUE ÉQUIPEMENTS & SERVICES</h5>
-                <p class="text-muted small mb-0">Excellence en BTP, Ingénierie Hydraulique & Solutions Logistiques au Niger.</p>
+                <p class="footer-text mb-0">Partenaire stratégique en BTP, Ingénierie Hydraulique, Transport & Logistique au Niger.</p>
             </div>
             <div class="col-lg-6 text-lg-end">
-                <p class="text-muted small mb-1"><i class="fas fa-location-dot text-gold me-2"></i>Agadez, Niger</p>
-                <p class="text-muted small mb-0"><i class="fas fa-phone text-gold me-2"></i>+227 96 96 74 74 / 90 96 74 74</p>
+                <p class="footer-info-item mb-1">
+                    <i class="fas fa-location-dot text-gold me-2"></i>Agadez, Quartier Aéroport, Niger
+                </p>
+                <p class="footer-info-item mb-0">
+                    <i class="fas fa-phone text-gold me-2"></i><span class="text-white">+227 96 96 74 74 / 90 96 74 74</span>
+                </p>
             </div>
         </div>
-        <hr style="border-color: rgba(212,175,55,0.15);" class="my-4">
+        <hr style="border-color: rgba(212,175,55,0.25);" class="my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <p class="mb-0 text-muted small">&copy; 2026 Afrique Équipements et Services</p>
+            <p class="mb-0 footer-text small">&copy; 2026 AFRIQUE ÉQUIPEMENTS & SERVICES. Tous droits réservés.</p>
             <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Sécurisé</a>
         </div>
     </div>
@@ -359,15 +379,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Configuration Particules 3D
+            // Background Particules 3D
             if (typeof tsParticles !== 'undefined') {
                 tsParticles.load("tsparticles", {
                     particles: {
-                        number: { value: 55, density: { enable: true, value_area: 900 } },
+                        number: { value: 50, density: { enable: true, value_area: 900 } },
                         color: { value: ["#d4af37", "#94a3b8"] },
                         shape: { type: "circle" },
                         opacity: { value: 0.35 },
-                        size: { value: 2.8 },
+                        size: { value: 2.5 },
                         move: { enable: true, speed: 0.8 },
                         line_linked: { enable: true, distance: 130, color: "#d4af37", opacity: 0.18, width: 1 }
                     },
@@ -375,7 +395,7 @@
                 });
             }
 
-            // Gestionnaire Chatbot
+            // Gestionnaire de Bulle Chatbot (Gauche)
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
@@ -406,10 +426,10 @@
                 if (send) send.addEventListener('click', handleSend);
                 if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 
-                addMsg("Bienvenue ! Comment pouvons-nous vous assister aujourd'hui ?", "bot");
+                addMsg("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
             }
 
-            // Retour Haut
+            // Bouton Retour Haut
             const btt = document.getElementById('backToTop');
             if (btt) {
                 window.addEventListener('scroll', () => {
