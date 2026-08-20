@@ -179,10 +179,15 @@
             border: 1px solid var(--theme-card-border) !important;
             border-radius: 16px !important;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+            display: flex;
             flex-direction: column;
             z-index: 999999 !important;
             overflow: hidden;
             backdrop-filter: blur(20px);
+        }
+
+        #chatbotWindow.chat-closed {
+            display: none !important;
         }
 
         .exec-chat-header {
@@ -349,7 +354,7 @@
         <i class="fas fa-comments"></i>
     </button>
 
-    <div id="chatbotWindow" style="display: none !important;">
+    <div id="chatbotWindow" class="chat-closed">
         <div class="exec-chat-header">
             <div class="d-flex align-items-center gap-2">
                 <i class="fas fa-robot text-gold"></i>
@@ -440,67 +445,86 @@
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function setupChatbot() {
-            var toggleBtn = document.getElementById('chatbotToggle');
-            var win = document.getElementById('chatbotWindow');
-            var closeBtn = document.getElementById('closeChat');
-            var tabBtnHome = document.getElementById('tabBtnHome');
-            var tabBtnMsg = document.getElementById('tabBtnMsg');
-            var tabHome = document.getElementById('tab-home');
-            var tabMsg = document.getElementById('tab-messages');
+        // Fonction d'ajout de message globalisée
+        window.appendChatMessage = function(text, sender) {
             var chatMessages = document.getElementById('chatMessages');
-            var chatInput = document.getElementById('chatInput');
-            var chatSend = document.getElementById('chatSend');
+            if (!chatMessages) return;
+            var div = document.createElement('div');
+            div.className = 'chat-msg ' + sender;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
 
-            if (!toggleBtn || !win) return;
+        // Délégation d'événements globale sur le document
+        document.addEventListener('click', function (e) {
+            var win = document.getElementById('chatbotWindow');
 
-            // Basculer l'affichage de la fenêtre
-            toggleBtn.onclick = function(e) {
-                if (e) e.stopPropagation();
-                if (win.style.display === 'none' || win.style.display === '') {
-                    win.style.setProperty('display', 'flex', 'important');
-                } else {
-                    win.style.setProperty('display', 'none', 'important');
+            // 1. Bouton Toggle (Ouvrir / Fermer)
+            var toggleBtn = e.target.closest('#chatbotToggle');
+            if (toggleBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (win) {
+                    win.classList.toggle('chat-closed');
+                    // Ajout d'un message d'accueil à la première ouverture si vide
+                    var chatMessages = document.getElementById('chatMessages');
+                    if (chatMessages && chatMessages.children.length === 0) {
+                        appendChatMessage("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
+                    }
                 }
-            };
+                return;
+            }
 
+            // 2. Bouton Fermer (Croix)
+            var closeBtn = e.target.closest('#closeChat');
             if (closeBtn) {
-                closeBtn.onclick = function(e) {
-                    if (e) e.stopPropagation();
-                    win.style.setProperty('display', 'none', 'important');
-                };
+                e.preventDefault();
+                if (win) win.classList.add('chat-closed');
+                return;
             }
 
-            // Gestion des onglets
-            if (tabBtnHome && tabBtnMsg) {
-                tabBtnHome.onclick = function(e) {
-                    if (e) e.stopPropagation();
-                    tabBtnHome.classList.add('active');
-                    tabBtnMsg.classList.remove('active');
-                    tabHome.classList.add('active');
-                    tabMsg.classList.remove('active');
-                };
-
-                tabBtnMsg.onclick = function(e) {
-                    if (e) e.stopPropagation();
-                    tabBtnMsg.classList.add('active');
-                    tabBtnHome.classList.remove('active');
-                    tabMsg.classList.add('active');
-                    tabHome.classList.remove('active');
-                };
+            // 3. Onglet Home
+            var tabHomeBtn = e.target.closest('#tabBtnHome');
+            if (tabHomeBtn) {
+                e.preventDefault();
+                document.getElementById('tabBtnHome').classList.add('active');
+                document.getElementById('tabBtnMsg').classList.remove('active');
+                document.getElementById('tab-home').classList.add('active');
+                document.getElementById('tab-messages').classList.remove('active');
+                return;
             }
 
-            // Fonction pour ajouter un message
-            window.appendChatMessage = function(text, sender) {
-                if (!chatMessages) return;
-                var div = document.createElement('div');
-                div.className = 'chat-msg ' + sender;
-                div.textContent = text;
-                chatMessages.appendChild(div);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            };
+            // 4. Onglet Message
+            var tabMsgBtn = e.target.closest('#tabBtnMsg');
+            if (tabMsgBtn) {
+                e.preventDefault();
+                document.getElementById('tabBtnMsg').classList.add('active');
+                document.getElementById('tabBtnHome').classList.remove('active');
+                document.getElementById('tab-messages').classList.add('active');
+                document.getElementById('tab-home').classList.remove('active');
+                return;
+            }
 
-            // Envoi de message
+            // 5. Clic sur une option rapide
+            var quickCard = e.target.closest('.chat-quick-card');
+            if (quickCard) {
+                var msgText = quickCard.getAttribute('data-msg');
+                var tabMsg = document.getElementById('tabBtnMsg');
+                if (tabMsg) tabMsg.click();
+
+                appendChatMessage(msgText, 'user');
+                setTimeout(function() {
+                    appendChatMessage("Merci pour votre demande ! Un conseiller va traiter votre besoin très rapidement.", "bot");
+                }, 500);
+            }
+        });
+
+        // Gestion de la saisie manuelle et de la touche Entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            var chatSend = document.getElementById('chatSend');
+            var chatInput = document.getElementById('chatInput');
+
             function handleSend() {
                 if (!chatInput) return;
                 var text = chatInput.value.trim();
@@ -514,40 +538,15 @@
                 }, 500);
             }
 
-            if (chatSend) chatSend.onclick = handleSend;
+            if (chatSend) {
+                chatSend.addEventListener('click', handleSend);
+            }
             if (chatInput) {
-                chatInput.onkeypress = function(e) {
+                chatInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') handleSend();
-                };
+                });
             }
-
-            // Cartes d'actions rapides
-            var quickCards = document.querySelectorAll('.chat-quick-card');
-            quickCards.forEach(function(card) {
-                card.onclick = function(e) {
-                    if (e) e.stopPropagation();
-                    var msgText = this.getAttribute('data-msg');
-                    if (tabBtnMsg) tabBtnMsg.click();
-                    appendChatMessage(msgText, 'user');
-
-                    setTimeout(function() {
-                        appendChatMessage("Merci pour votre demande ! Un conseiller va traiter votre besoin très rapidement.", "bot");
-                    }, 500);
-                };
-            });
-
-            // Message initial d'accueil
-            if (chatMessages && chatMessages.children.length === 0) {
-                appendChatMessage("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
-            }
-        }
-
-        // Exécution immédiate si prêt, sinon attente du DOM
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            setupChatbot();
-        } else {
-            document.addEventListener('DOMContentLoaded', setupChatbot);
-        }
+        });
 
         // Configuration tsParticles
         if (typeof tsParticles !== 'undefined') {
