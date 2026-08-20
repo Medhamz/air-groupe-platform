@@ -144,7 +144,7 @@
             font-size: 0.85rem;
         }
 
-        /* CHATBOT FLOTTANT (Bas-Droite) */
+        /* CHATBOT FLOTTANT (Z-INDEX FORCÉ À 999999) */
         .exec-chat-btn {
             position: fixed !important;
             bottom: 30px !important;
@@ -158,11 +158,15 @@
             font-size: 22px !important;
             cursor: pointer !important;
             box-shadow: 0 8px 25px var(--gold-glow) !important;
-            z-index: 99999 !important;
+            z-index: 999999 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .exec-chat-btn i {
+            pointer-events: none; /* Évite les problèmes de clic sur l'icône */
         }
 
         .exec-chat-btn:hover {
@@ -180,15 +184,15 @@
             border: 1px solid var(--theme-card-border) !important;
             border-radius: 16px !important;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
-            display: none; /* Masqué par défaut */
+            display: none;
             flex-direction: column;
-            z-index: 99999 !important;
+            z-index: 999999 !important;
             overflow: hidden;
             backdrop-filter: blur(20px);
         }
 
         .exec-chat-window.show {
-            display: flex !important; /* Affiché lors de l'ajout de la classe .show */
+            display: flex !important; /* Forcé pour passer au-dessus du display:none */
         }
 
         .exec-chat-header {
@@ -488,7 +492,7 @@
                 });
             }
 
-            // Gestionnaire du Chatbot
+            // Script Chatbot avec déclenchement direct
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
@@ -497,17 +501,16 @@
             const messages = document.getElementById('chatMessages');
 
             if (toggle && win) {
-                // Ouverture / Fermeture par ajout de la classe .show
-                toggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                toggle.onclick = function(e) {
+                    e.preventDefault();
                     win.classList.toggle('show');
-                });
+                };
 
                 if (close) {
-                    close.addEventListener('click', (e) => {
-                        e.stopPropagation();
+                    close.onclick = function(e) {
+                        e.preventDefault();
                         win.classList.remove('show');
-                    });
+                    };
                 }
 
                 // Onglets
@@ -517,7 +520,6 @@
                 tabBtns.forEach(btn => {
                     btn.addEventListener('click', () => {
                         const targetTab = btn.getAttribute('data-tab');
-
                         tabBtns.forEach(b => b.classList.remove('active'));
                         tabContents.forEach(c => c.classList.remove('active'));
 
