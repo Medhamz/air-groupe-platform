@@ -19,7 +19,6 @@
 
     <style type="text/css">
         :root {
-            /* Palette Executive Gold & Navy */
             --theme-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0b132b 100%);
             --theme-card-bg: rgba(30, 41, 59, 0.85);
             --theme-card-border: rgba(212, 175, 55, 0.3);
@@ -79,7 +78,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
         }
 
-        /* En-tête / Header avec barre de recherche intégrée */
+        /* En-tête / Header */
         .exec-header {
             position: fixed;
             top: 0;
@@ -120,10 +119,10 @@
             color: var(--gold-primary) !important;
         }
 
-        /* Barre de recherche intégrée au Header (Discrète et Professionnelle) */
+        /* Barre de recherche uniquement dans le Header */
         .nav-search-form {
             position: relative;
-            max-width: 220px;
+            max-width: 200px;
         }
 
         .nav-search-form .form-control {
@@ -150,7 +149,7 @@
             font-size: 0.85rem;
         }
 
-        /* Chatbot Flottant repositionné à GAUCHE */
+        /* Chatbot Flottant UNIQUEMENT en bas à GAUCHE */
         .exec-chat-btn {
             position: fixed !important;
             bottom: 30px !important;
@@ -245,7 +244,7 @@
             background: rgba(30, 41, 59, 0.9);
         }
 
-        /* Footer à contraste élevé pour une lisibilité parfaite */
+        /* Footer haute lisibilité */
         .exec-footer {
             background: rgba(10, 15, 26, 0.98) !important;
             border-top: 1px solid var(--theme-card-border);
@@ -264,7 +263,7 @@
             font-size: 0.95rem;
         }
 
-        /* Bouton Retour Haut (Placé à droite) */
+        /* Bouton Retour Haut (à droite) */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -312,7 +311,7 @@
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
 
-            <!-- Barre de recherche déplacée dans le Header -->
+            <!-- Recherche intégrée discrètement au menu -->
             <div class="nav-search-form ms-lg-2 mt-2 mt-lg-0">
                 <i class="fas fa-magnifying-glass search-icon"></i>
                 <input type="text" id="navSearchInput" class="form-control" placeholder="Rechercher...">
@@ -321,7 +320,7 @@
     </nav>
 </header>
 
-<!-- CHATBOT FLOTTANT (POSITIONNÉ À GAUCHE) -->
+<!-- CHATBOT FLOTTANT (GAUCHE UNIQUEMENT) -->
 <div th:fragment="chat">
     <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant">
         <i class="fas fa-comments"></i>
@@ -346,10 +345,10 @@
     </div>
 </div>
 
-<!-- RETOUR EN HAUT (POSITIONNÉ À DROITE) -->
+<!-- RETOUR EN HAUT (DROITE) -->
 <button id="backToTop" class="back-to-top" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
-<!-- FOOTER Lisibilité Maximale -->
+<!-- FOOTER -->
 <footer th:fragment="footer" class="exec-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
@@ -374,12 +373,12 @@
     </div>
 </footer>
 
-<!-- SCRIPT EMBARQUÉ SANS FICHIER EXTERNE -->
+<!-- SCRIPTS -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Background Particules 3D
+            // Particules 3D
             if (typeof tsParticles !== 'undefined') {
                 tsParticles.load("tsparticles", {
                     particles: {
@@ -395,7 +394,7 @@
                 });
             }
 
-            // Gestionnaire de Bulle Chatbot (Gauche)
+            // Gestionnaire Chatbot (Bulle Gauche)
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
