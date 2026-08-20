@@ -78,7 +78,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
         }
 
-        /* En-tête / Header */
+        /* EN-TÊTE / HEADER */
         .exec-header {
             position: fixed;
             top: 0;
@@ -119,7 +119,7 @@
             color: var(--gold-primary) !important;
         }
 
-        /* Barre de recherche uniquement dans le Header */
+        /* Seule et unique barre de recherche (dans le Header) */
         .nav-search-form {
             position: relative;
             max-width: 200px;
@@ -149,7 +149,7 @@
             font-size: 0.85rem;
         }
 
-        /* Chatbot Flottant UNIQUEMENT en bas à GAUCHE */
+        /* CHATBOT FLOTTANT (Exclusivité Bas-Gauche) */
         .exec-chat-btn {
             position: fixed !important;
             bottom: 30px !important;
@@ -244,7 +244,7 @@
             background: rgba(30, 41, 59, 0.9);
         }
 
-        /* Footer haute lisibilité */
+        /* FOOTER */
         .exec-footer {
             background: rgba(10, 15, 26, 0.98) !important;
             border-top: 1px solid var(--theme-card-border);
@@ -263,7 +263,7 @@
             font-size: 0.95rem;
         }
 
-        /* Bouton Retour Haut (à droite) */
+        /* RETOUR HAUT (Droite) */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -288,10 +288,10 @@
 </head>
 <body>
 
-<!-- Moteur 3D d'arrière-plan -->
+<!-- Moteur 3D Background -->
 <div id="tsparticles"></div>
 
-<!-- HEADER / BARRE DE NAVIGATION -->
+<!-- HEADER (Contient la seule barre de recherche) -->
 <header class="exec-header" th:fragment="navbar">
     <a class="brand" href="/">
         <i class="fas fa-shield-halved text-gold"></i> AFRIQUE ÉQUIPEMENTS & SERVICES
@@ -311,7 +311,7 @@
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
 
-            <!-- Recherche intégrée discrètement au menu -->
+            <!-- Unique barre de recherche -->
             <div class="nav-search-form ms-lg-2 mt-2 mt-lg-0">
                 <i class="fas fa-magnifying-glass search-icon"></i>
                 <input type="text" id="navSearchInput" class="form-control" placeholder="Rechercher...">
@@ -320,7 +320,7 @@
     </nav>
 </header>
 
-<!-- CHATBOT FLOTTANT (GAUCHE UNIQUEMENT) -->
+<!-- CHATBOT FLOTTANT (Uniquement à Gauche) -->
 <div th:fragment="chat">
     <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant">
         <i class="fas fa-comments"></i>
@@ -345,7 +345,7 @@
     </div>
 </div>
 
-<!-- RETOUR EN HAUT (DROITE) -->
+<!-- RETOUR EN HAUT -->
 <button id="backToTop" class="back-to-top" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
 <!-- FOOTER -->
@@ -394,7 +394,7 @@
                 });
             }
 
-            // Gestionnaire Chatbot (Bulle Gauche)
+            // Gestion Chatbot (Bulle flottante bas-gauche)
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
