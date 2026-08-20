@@ -74,7 +74,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
         }
 
-        /* EN-TÊTE / HEADER */
+        /* HEADER */
         .exec-header {
             position: fixed;
             top: 0;
@@ -144,37 +144,36 @@
             font-size: 0.85rem;
         }
 
-        /* CHATBOT FLOTTANT (Z-INDEX FORCÉ À 999999) */
-        .exec-chat-btn {
+        /* CHATBOT STYLES */
+        #chatbotToggle {
             position: fixed !important;
             bottom: 30px !important;
             right: 30px !important;
-            width: 58px !important;
-            height: 58px !important;
+            width: 60px !important;
+            height: 60px !important;
             border-radius: 50% !important;
             background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
             border: none !important;
             color: #0b132b !important;
-            font-size: 22px !important;
+            font-size: 24px !important;
             cursor: pointer !important;
             box-shadow: 0 8px 25px var(--gold-glow) !important;
             z-index: 999999 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
-        .exec-chat-btn i {
-            pointer-events: none; /* Évite les problèmes de clic sur l'icône */
+        #chatbotToggle * {
+            pointer-events: none !important;
         }
 
-        .exec-chat-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5) !important;
+        #chatbotToggle:hover {
+            transform: scale(1.08);
         }
 
-        .exec-chat-window {
+        #chatbotWindow {
             position: fixed !important;
             bottom: 100px !important;
             right: 30px !important;
@@ -183,7 +182,7 @@
             background: rgba(15, 23, 42, 0.98) !important;
             border: 1px solid var(--theme-card-border) !important;
             border-radius: 16px !important;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
             display: none;
             flex-direction: column;
             z-index: 999999 !important;
@@ -191,8 +190,8 @@
             backdrop-filter: blur(20px);
         }
 
-        .exec-chat-window.show {
-            display: flex !important; /* Forcé pour passer au-dessus du display:none */
+        #chatbotWindow.open {
+            display: flex !important;
         }
 
         .exec-chat-header {
@@ -204,7 +203,6 @@
             align-items: center;
         }
 
-        /* Onglets */
         .chat-tabs {
             display: flex;
             background: rgba(15, 23, 42, 0.95);
@@ -219,12 +217,7 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 600;
-            transition: all 0.3s;
             cursor: pointer;
-        }
-
-        .chat-tab-btn:hover {
-            color: #ffffff;
         }
 
         .chat-tab-btn.active {
@@ -248,7 +241,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .chat-quick-card {
@@ -261,35 +254,35 @@
         }
 
         .chat-quick-card:hover {
-            background: rgba(212, 175, 55, 0.1);
-            transform: translateY(-2px);
+            background: rgba(212, 175, 55, 0.15);
         }
 
         .exec-chat-body {
             padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
             overflow-y: auto;
         }
 
-        .exec-chat-body .chat-msg {
+        .chat-msg {
             padding: 10px 14px;
             border-radius: 10px;
             font-size: 0.88rem;
             line-height: 1.4;
             max-width: 85%;
+            word-break: break-word;
         }
 
-        .exec-chat-body .chat-msg.bot {
+        .chat-msg.bot {
             background: rgba(30, 41, 59, 0.9);
             border-left: 3px solid var(--gold-primary);
             color: #ffffff;
             align-self: flex-start;
         }
 
-        .exec-chat-body .chat-msg.user {
+        .chat-msg.user {
             background: var(--gold-primary);
             color: #0b132b;
             font-weight: 600;
@@ -304,7 +297,6 @@
             background: rgba(30, 41, 59, 0.9);
         }
 
-        /* FOOTER */
         .exec-footer {
             background: rgba(10, 15, 26, 0.98) !important;
             border-top: 1px solid var(--theme-card-border);
@@ -312,18 +304,6 @@
             color: #ffffff !important;
         }
 
-        .exec-footer .footer-text {
-            color: #e2e8f0 !important;
-            font-size: 0.95rem;
-        }
-
-        .exec-footer .footer-info-item {
-            color: #ffffff !important;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        /* RETOUR EN HAUT */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -337,12 +317,6 @@
             cursor: pointer;
             z-index: 999;
             display: none;
-            transition: all 0.3s;
-        }
-
-        .back-to-top:hover {
-            background: var(--gold-primary);
-            color: #0b132b;
         }
     </style>
 </head>
@@ -378,13 +352,13 @@
     </nav>
 </header>
 
-<!-- CHATBOT FLOTTANT -->
+<!-- FRAGMENT CHATBOT -->
 <div th:fragment="chat">
-    <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant" type="button">
+    <button id="chatbotToggle" type="button" aria-label="Ouvrir le chat">
         <i class="fas fa-comments"></i>
     </button>
 
-    <div id="chatbotWindow" class="exec-chat-window">
+    <div id="chatbotWindow">
         <div class="exec-chat-header">
             <div class="d-flex align-items-center gap-2">
                 <i class="fas fa-robot text-gold"></i>
@@ -397,19 +371,19 @@
         </div>
 
         <div class="chat-tabs">
-            <button class="chat-tab-btn active" data-tab="tab-home" type="button"><i class="fas fa-house me-1"></i> Home</button>
-            <button class="chat-tab-btn" data-tab="tab-messages" type="button"><i class="fas fa-comment-dots me-1"></i> Message</button>
+            <button class="chat-tab-btn active" id="tabBtnHome" type="button"><i class="fas fa-house me-1"></i> Home</button>
+            <button class="chat-tab-btn" id="tabBtnMsg" type="button"><i class="fas fa-comment-dots me-1"></i> Message</button>
         </div>
 
-        <!-- Onglet Home -->
+        <!-- Onglet Accueil -->
         <div id="tab-home" class="chat-tab-content active">
             <div class="chat-home-view">
                 <div class="text-center py-2">
                     <h6 class="text-gold fw-bold mb-1">Comment pouvons-nous vous aider ?</h6>
-                    <small class="text-muted">Sélectionnez une option rapide ci-dessous :</small>
+                    <small class="text-muted">Sélectionnez une option rapide :</small>
                 </div>
 
-                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Je souhaite obtenir un devis pour un projet.')">
+                <div class="chat-quick-card d-flex align-items-center gap-3" data-msg="Je souhaite obtenir un devis pour un projet.">
                     <i class="fas fa-file-invoice text-gold fs-4"></i>
                     <div>
                         <strong class="d-block text-white" style="font-size: 0.85rem;">Demander un devis</strong>
@@ -417,7 +391,7 @@
                     </div>
                 </div>
 
-                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Quels sont vos équipements et services disponibles ?')">
+                <div class="chat-quick-card d-flex align-items-center gap-3" data-msg="Quels sont vos équipements et services disponibles ?">
                     <i class="fas fa-cubes text-gold fs-4"></i>
                     <div>
                         <strong class="d-block text-white" style="font-size: 0.85rem;">Nos Services & Engins</strong>
@@ -425,7 +399,7 @@
                     </div>
                 </div>
 
-                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Comment contacter directement votre équipe commerciale ?')">
+                <div class="chat-quick-card d-flex align-items-center gap-3" data-msg="Comment contacter directement votre équipe commerciale ?">
                     <i class="fas fa-phone text-gold fs-4"></i>
                     <div>
                         <strong class="d-block text-white" style="font-size: 0.85rem;">Contacter l'équipe</strong>
@@ -435,7 +409,7 @@
             </div>
         </div>
 
-        <!-- Onglet Messages -->
+        <!-- Onglet Message -->
         <div id="tab-messages" class="chat-tab-content">
             <div id="chatMessages" class="exec-chat-body"></div>
             <div class="exec-chat-footer">
@@ -446,27 +420,27 @@
     </div>
 </div>
 
-<button id="backToTop" class="back-to-top" title="Retour en haut" type="button"><i class="fas fa-arrow-up"></i></button>
+<button id="backToTop" class="back-to-top" type="button"><i class="fas fa-arrow-up"></i></button>
 
 <footer th:fragment="footer" class="exec-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-lg-6">
                 <h5 class="text-gold mb-2"><i class="fas fa-shield-halved me-2"></i> AFRIQUE ÉQUIPEMENTS & SERVICES</h5>
-                <p class="footer-text mb-0">Partenaire stratégique en BTP, Ingénierie Hydraulique, Transport & Logistique au Niger.</p>
+                <p class="text-secondary mb-0">Partenaire stratégique en BTP, Ingénierie Hydraulique, Transport & Logistique au Niger.</p>
             </div>
             <div class="col-lg-6 text-lg-end">
-                <p class="footer-info-item mb-1">
+                <p class="text-white fw-bold mb-1">
                     <i class="fas fa-location-dot text-gold me-2"></i>Agadez, Quartier Aéroport, Niger
                 </p>
-                <p class="footer-info-item mb-0">
-                    <i class="fas fa-phone text-gold me-2"></i><span class="text-white">+227 96 96 74 74 / 90 96 74 74</span>
+                <p class="text-white fw-bold mb-0">
+                    <i class="fas fa-phone text-gold me-2"></i>+227 96 96 74 74 / 90 96 74 74
                 </p>
             </div>
         </div>
         <hr style="border-color: rgba(212,175,55,0.25);" class="my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <p class="mb-0 footer-text small">&copy; 2026 AFRIQUE ÉQUIPEMENTS & SERVICES. Tous droits réservés.</p>
+            <p class="mb-0 text-secondary small">&copy; 2026 AFRIQUE ÉQUIPEMENTS & SERVICES. Tous droits réservés.</p>
             <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Sécurisé</a>
         </div>
     </div>
@@ -475,103 +449,123 @@
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // tsParticles initialisation
+        (function() {
+            function initChatbot() {
+                const toggle = document.getElementById('chatbotToggle');
+                const win = document.getElementById('chatbotWindow');
+                const close = document.getElementById('closeChat');
+                const tabBtnHome = document.getElementById('tabBtnHome');
+                const tabBtnMsg = document.getElementById('tabBtnMsg');
+                const tabHome = document.getElementById('tab-home');
+                const tabMsg = document.getElementById('tab-messages');
+                const chatMessages = document.getElementById('chatMessages');
+                const chatInput = document.getElementById('chatInput');
+                const chatSend = document.getElementById('chatSend');
+
+                if (!toggle || !win) return;
+
+                // 1. Gestion de l'ouverture / fermeture
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    win.classList.toggle('open');
+                });
+
+                if (close) {
+                    close.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        win.classList.remove('open');
+                    });
+                }
+
+                // 2. Gestion des onglets
+                function switchTab(target) {
+                    if (target === 'home') {
+                        tabBtnHome.classList.add('active');
+                        tabBtnMsg.classList.remove('active');
+                        tabHome.classList.add('active');
+                        tabMsg.classList.remove('active');
+                    } else {
+                        tabBtnMsg.classList.add('active');
+                        tabBtnHome.classList.remove('active');
+                        tabMsg.classList.add('active');
+                        tabHome.classList.remove('active');
+                    }
+                }
+
+                if (tabBtnHome) tabBtnHome.addEventListener('click', () => switchTab('home'));
+                if (tabBtnMsg) tabBtnMsg.addEventListener('click', () => switchTab('msg'));
+
+                // 3. Ajouter un message au chat
+                function appendMessage(text, sender) {
+                    if (!chatMessages) return;
+                    const div = document.createElement('div');
+                    div.className = `chat-msg ${sender}`;
+                    div.textContent = text;
+                    chatMessages.appendChild(div);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+
+                // Message d'accueil par défaut
+                appendMessage("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
+
+                // 4. Envoi manuel
+                function sendMessage() {
+                    if (!chatInput) return;
+                    const text = chatInput.value.trim();
+                    if (!text) return;
+
+                    appendMessage(text, 'user');
+                    chatInput.value = '';
+
+                    setTimeout(() => {
+                        appendMessage("Merci pour votre message ! Un conseiller étudie votre demande et vous répondra très rapidement.", "bot");
+                    }, 500);
+                }
+
+                if (chatSend) chatSend.addEventListener('click', sendMessage);
+                if (chatInput) {
+                    chatInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') sendMessage();
+                    });
+                }
+
+                // 5. Clics sur les cartes rapides
+                const quickCards = document.querySelectorAll('.chat-quick-card');
+                quickCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const msgText = this.getAttribute('data-msg');
+                        switchTab('msg');
+                        appendMessage(msgText, 'user');
+
+                        setTimeout(() => {
+                            appendMessage("Merci pour votre demande ! Un conseiller va traiter votre besoin sous peu.", "bot");
+                        }, 500);
+                    });
+                });
+            }
+
+            // Exécution au chargement du DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initChatbot);
+            } else {
+                initChatbot();
+            }
+
+            // Particles
             if (typeof tsParticles !== 'undefined') {
                 tsParticles.load("tsparticles", {
                     particles: {
-                        number: { value: 50, density: { enable: true, value_area: 900 } },
-                        color: { value: ["#d4af37", "#94a3b8"] },
+                        number: { value: 45, density: { enable: true, value_area: 800 } },
+                        color: { value: "#d4af37" },
                         shape: { type: "circle" },
-                        opacity: { value: 0.35 },
-                        size: { value: 2.5 },
+                        opacity: { value: 0.3 },
+                        size: { value: 2 },
                         move: { enable: true, speed: 0.8 },
-                        line_linked: { enable: true, distance: 130, color: "#d4af37", opacity: 0.18, width: 1 }
-                    },
-                    interactivity: { events: { onhover: { enable: true, mode: "grab" } } }
+                        line_linked: { enable: true, distance: 120, color: "#d4af37", opacity: 0.15, width: 1 }
+                    }
                 });
             }
-
-            // Script Chatbot avec déclenchement direct
-            const toggle = document.getElementById('chatbotToggle');
-            const win = document.getElementById('chatbotWindow');
-            const close = document.getElementById('closeChat');
-            const input = document.getElementById('chatInput');
-            const send = document.getElementById('chatSend');
-            const messages = document.getElementById('chatMessages');
-
-            if (toggle && win) {
-                toggle.onclick = function(e) {
-                    e.preventDefault();
-                    win.classList.toggle('show');
-                };
-
-                if (close) {
-                    close.onclick = function(e) {
-                        e.preventDefault();
-                        win.classList.remove('show');
-                    };
-                }
-
-                // Onglets
-                const tabBtns = document.querySelectorAll('.chat-tab-btn');
-                const tabContents = document.querySelectorAll('.chat-tab-content');
-
-                tabBtns.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const targetTab = btn.getAttribute('data-tab');
-                        tabBtns.forEach(b => b.classList.remove('active'));
-                        tabContents.forEach(c => c.classList.remove('active'));
-
-                        btn.classList.add('active');
-                        const targetElement = document.getElementById(targetTab);
-                        if (targetElement) {
-                            targetElement.classList.add('active');
-                        }
-                    });
-                });
-
-                function addMsg(txt, type) {
-                    if (!messages) return;
-                    const msg = document.createElement('div');
-                    msg.className = `chat-msg ${type}`;
-                    msg.textContent = txt;
-                    messages.appendChild(msg);
-                    messages.scrollTop = messages.scrollHeight;
-                }
-
-                function handleSend() {
-                    if (!input) return;
-                    const txt = input.value.trim();
-                    if (!txt) return;
-                    addMsg(txt, 'user');
-                    input.value = '';
-                    setTimeout(() => addMsg("Bonjour ! Un conseiller étudie votre message et reviendra vers vous sous peu.", "bot"), 400);
-                }
-
-                window.sendQuickMsg = function(text) {
-                    const msgTabBtn = document.querySelector('.chat-tab-btn[data-tab="tab-messages"]');
-                    if (msgTabBtn) msgTabBtn.click();
-
-                    addMsg(text, 'user');
-                    setTimeout(() => addMsg("Merci pour votre message ! Un agent va vous répondre dans quelques instants.", "bot"), 400);
-                };
-
-                if (send) send.addEventListener('click', handleSend);
-                if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
-
-                addMsg("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous assister ?", "bot");
-            }
-
-            // Bouton Retour Haut
-            const btt = document.getElementById('backToTop');
-            if (btt) {
-                window.addEventListener('scroll', () => {
-                    btt.style.display = window.scrollY > 300 ? 'block' : 'none';
-                });
-                btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-            }
-        });
+        })();
     </script>
 </div>
 </body>
