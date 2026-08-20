@@ -146,11 +146,11 @@
             font-size: 0.85rem;
         }
 
-        /* CHATBOT FLOTTANT (Exclusivité Bas-Gauche) */
+        /* CHATBOT FLOTTANT (Bas-Droite) */
         .exec-chat-btn {
             position: fixed !important;
             bottom: 30px !important;
-            left: 30px !important;
+            right: 30px !important;
             width: 58px !important;
             height: 58px !important;
             border-radius: 50% !important;
@@ -175,9 +175,9 @@
         .exec-chat-window {
             position: fixed !important;
             bottom: 100px !important;
-            left: 30px !important;
-            width: 350px !important;
-            height: 460px !important;
+            right: 30px !important;
+            width: 360px !important;
+            height: 480px !important;
             background: rgba(15, 23, 42, 0.98) !important;
             border: 1px solid var(--theme-card-border) !important;
             border-radius: 16px !important;
@@ -202,10 +202,71 @@
             align-items: center;
         }
 
-        .exec-chat-body {
+        /* Navigation onglets Chatbot */
+        .chat-tabs {
+            display: flex;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--theme-card-border);
+        }
+
+        .chat-tab-btn {
             flex: 1;
-            padding: 16px;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .chat-tab-btn:hover {
+            color: #ffffff;
+        }
+
+        .chat-tab-btn.active {
+            color: var(--gold-primary);
+            border-bottom: 2px solid var(--gold-primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .chat-tab-content {
+            display: none;
+            flex: 1;
             overflow-y: auto;
+        }
+
+        .chat-tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Onglet Home */
+        .chat-home-view {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-quick-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--theme-card-border);
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chat-quick-card:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Onglet Messages */
+        .exec-chat-body {
+            padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -260,11 +321,11 @@
             font-size: 0.95rem;
         }
 
-        /* RETOUR HAUT (Droite) */
+        /* RETOUR HAUT (Positionné à côté du chatbot) */
         .back-to-top {
             position: fixed;
             bottom: 30px;
-            right: 30px;
+            right: 100px;
             width: 44px;
             height: 44px;
             background: rgba(30, 41, 59, 0.9);
@@ -315,12 +376,14 @@
     </nav>
 </header>
 
+<!-- CHATBOT FLOTTANT -->
 <div th:fragment="chat">
     <button id="chatbotToggle" class="exec-chat-btn" aria-label="Ouvrir l'Assistant">
         <i class="fas fa-comments"></i>
     </button>
 
     <div id="chatbotWindow" class="exec-chat-window">
+        <!-- Header Chatbot -->
         <div class="exec-chat-header">
             <div class="d-flex align-items-center gap-2">
                 <i class="fas fa-robot text-gold"></i>
@@ -331,10 +394,54 @@
             </div>
             <button id="closeChat" class="btn-close btn-close-white small"></button>
         </div>
-        <div id="chatMessages" class="exec-chat-body"></div>
-        <div class="exec-chat-footer">
-            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez votre question...">
-            <button id="chatSend" class="btn btn-sm" style="background: var(--gold-primary); color: #0b132b;"><i class="fas fa-paper-plane"></i></button>
+
+        <!-- Onglets Navigation -->
+        <div class="chat-tabs">
+            <button class="chat-tab-btn active" data-tab="tab-home"><i class="fas fa-house me-1"></i> Home</button>
+            <button class="chat-tab-btn" data-tab="tab-messages"><i class="fas fa-comment-dots me-1"></i> Message</button>
+        </div>
+
+        <!-- Onglet Home -->
+        <div id="tab-home" class="chat-tab-content active">
+            <div class="chat-home-view">
+                <div class="text-center py-2">
+                    <h6 class="text-gold fw-bold mb-1">Comment pouvons-nous vous aider ?</h6>
+                    <small class="text-muted">Sélectionnez une option rapide ci-dessous :</small>
+                </div>
+
+                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Je souhaite obtenir un devis pour un projet.')">
+                    <i class="fas fa-file-invoice text-gold fs-4"></i>
+                    <div>
+                        <strong class="d-block text-white style-sm" style="font-size: 0.85rem;">Demander un devis</strong>
+                        <small class="text-muted" style="font-size: 0.75rem;">Estimation rapide de votre projet</small>
+                    </div>
+                </div>
+
+                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Quels sont vos équipements et services disponibles ?')">
+                    <i class="fas fa-cubes text-gold fs-4"></i>
+                    <div>
+                        <strong class="d-block text-white" style="font-size: 0.85rem;">Nos Services & Engins</strong>
+                        <small class="text-muted" style="font-size: 0.75rem;">Consulter notre catalogue</small>
+                    </div>
+                </div>
+
+                <div class="chat-quick-card d-flex align-items-center gap-3" onclick="sendQuickMsg('Comment contacter directement votre équipe commerciale ?')">
+                    <i class="fas fa-phone text-gold fs-4"></i>
+                    <div>
+                        <strong class="d-block text-white" style="font-size: 0.85rem;">Contacter l'équipe</strong>
+                        <small class="text-muted" style="font-size: 0.75rem;">Appels et informations de contact</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onglet Messages -->
+        <div id="tab-messages" class="chat-tab-content">
+            <div id="chatMessages" class="exec-chat-body"></div>
+            <div class="exec-chat-footer">
+                <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez votre question...">
+                <button id="chatSend" class="btn btn-sm" style="background: var(--gold-primary); color: #0b132b;"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 </div>
@@ -395,6 +502,22 @@
                 toggle.addEventListener('click', () => win.classList.toggle('active'));
                 if (close) close.addEventListener('click', () => win.classList.remove('active'));
 
+                // Gestion des Onglets
+                const tabBtns = document.querySelectorAll('.chat-tab-btn');
+                const tabContents = document.querySelectorAll('.chat-tab-content');
+
+                tabBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const targetTab = btn.getAttribute('data-tab');
+
+                        tabBtns.forEach(b => b.classList.remove('active'));
+                        tabContents.forEach(c => c.classList.remove('active'));
+
+                        btn.classList.add('active');
+                        document.getElementById(targetTab).classList.add('active');
+                    });
+                });
+
                 function addMsg(txt, type) {
                     const msg = document.createElement('div');
                     msg.className = `chat-msg ${type}`;
@@ -408,8 +531,17 @@
                     if (!txt) return;
                     addMsg(txt, 'user');
                     input.value = '';
-                    setTimeout(() => addMsg("Bonjour ! Un conseiller étudie votre message et reviendra vers vous.", "bot"), 400);
+                    setTimeout(() => addMsg("Bonjour ! Un conseiller étudie votre message et reviendra vers vous sous peu.", "bot"), 400);
                 }
+
+                window.sendQuickMsg = function(text) {
+                    // Basculer vers l'onglet Messages
+                    const msgTabBtn = document.querySelector('.chat-tab-btn[data-tab="tab-messages"]');
+                    if (msgTabBtn) msgTabBtn.click();
+
+                    addMsg(text, 'user');
+                    setTimeout(() => addMsg("Merci pour votre message ! Un agent va vous répondre dans quelques instants.", "bot"), 400);
+                };
 
                 if (send) send.addEventListener('click', handleSend);
                 if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
