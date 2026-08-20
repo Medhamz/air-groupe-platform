@@ -6,212 +6,186 @@
     <meta name="description" content="Afrique Équipements & Services">
     <title>Afrique Équipements & Services</title>
 
-    <!-- Polices Hi-Tech / Cyber Pro -->
+    <!-- Polices & Icônes identiques à l'Admin -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Style Cyber Clair, Lisible & Isolé -->
+    <!-- tsParticles & VanillaTilt identiques à l'Admin -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+    <!-- Style Thème Cyber Or identique à l'Admin avec correctifs d'isolation -->
     <style>
         :root {
-            --bg-dark: #0b0f19;
-            --bg-card: #131a2a;
-            --bg-input: #1a2336;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --cyber-cyan: #00f3ff;
-            --cyber-purple: #9d4edd;
-            --cyber-border: rgba(0, 243, 255, 0.3);
-            --glow-cyan: 0 0 12px rgba(0, 243, 255, 0.4);
-            --font-heading: 'Orbitron', sans-serif;
-            --font-body: 'Rajdhani', sans-serif;
+            --cyber-gold: #d4af37;
+            --cyber-gold-glow: rgba(212, 175, 55, 0.4);
+            --cyber-blue: #00f0ff;
+            --cyber-bg: #0a0e17;
+            --glass-bg: rgba(16, 24, 39, 0.85);
+            --glass-border: rgba(212, 175, 55, 0.25);
+            --text-main: #e2e8f0;
         }
 
-        /* Reset & Correction Lisibilité */
-        body.cyber-theme {
-            background-color: var(--bg-dark) !important;
+        body {
+            background-color: var(--cyber-bg) !important;
             color: var(--text-main) !important;
-            font-family: var(--font-body) !important;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin: 0;
-            padding-top: 75px; /* Évite la superposition sous la navbar */
+            font-family: 'Rajdhani', sans-serif !important;
+            min-height: 100vh;
             overflow-x: hidden;
+            margin: 0;
+            padding-top: 70px; /* Évite la chevauchement sous le header fixe */
         }
 
-        /* Force l'arrière-plan sombre sur tous les blocs Bootstrap d'origine */
-        main, section, div, .container, .container-fluid, .row, .col {
+        /* Particles en arrière-plan */
+        #tsparticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Correction lisibilité : Annulation des fonds blancs Bootstrap par défaut */
+        main, section, header, footer, div, .container, .container-fluid, .row, .col {
             background-color: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         .card, .bg-white, .bg-light, .list-group-item, .modal-content, .dropdown-menu {
-            background-color: var(--bg-card) !important;
-            border: 1px solid var(--cyber-border) !important;
+            background: var(--glass-bg) !important;
+            border: 1px solid var(--glass-border) !important;
             color: var(--text-main) !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-heading) !important;
+            font-family: 'Orbitron', sans-serif !important;
             color: #ffffff !important;
-            letter-spacing: 0.5px;
         }
 
         p, span, li, td, th, label {
             color: var(--text-main) !important;
         }
 
-        .text-muted, small {
-            color: var(--text-muted) !important;
-        }
+        .text-gold { color: var(--cyber-gold) !important; }
 
-        .text-cyber { color: var(--cyber-cyan) !important; }
-
-        /* Arrière-plan Canvas Animé */
-        #cyberCanvas {
+        /* HEADER FRONT IDENTIQUE À L'ADMIN */
+        .front-header {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Navbar Sophistiquée Fixe */
-        .cyber-navbar {
-            background: rgba(11, 15, 25, 0.95) !important;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 14, 23, 0.90);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--cyber-border);
-            z-index: 1030;
-            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .cyber-brand {
+        .front-header .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyber-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--cyber-gold-glow);
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: var(--font-heading);
-            font-size: 1.15rem;
-            color: #ffffff !important;
-            text-decoration: none;
         }
 
-        .brand-glitch-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--cyber-cyan);
-            color: #000;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--glow-cyan);
-        }
-
-        .cyber-navbar .nav-link {
-            color: var(--text-main) !important;
+        .front-nav .nav-link {
+            color: #a0aec0 !important;
             font-weight: 600;
-            padding: 6px 10px !important;
             font-size: 0.95rem;
-            transition: all 0.2s;
+            padding: 8px 12px !important;
+            transition: all 0.3s;
         }
 
-        .cyber-navbar .nav-link:hover {
-            color: var(--cyber-cyan) !important;
-            text-shadow: 0 0 8px var(--cyber-cyan);
+        .front-nav .nav-link:hover, .front-nav .nav-link.active {
+            color: var(--cyber-gold) !important;
+            text-shadow: 0 0 8px var(--cyber-gold-glow);
         }
 
-        .cyber-search-box {
-            position: relative;
-        }
-
-        .cyber-search-box input {
-            background: var(--bg-input) !important;
-            border: 1px solid var(--cyber-border) !important;
-            border-radius: 4px;
-            padding: 5px 10px 5px 30px;
+        .cyber-search-input {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid var(--glass-border) !important;
+            color: var(--cyber-gold) !important;
+            border-radius: 20px;
+            padding: 4px 15px;
             font-size: 0.85rem;
-            color: var(--cyber-cyan) !important;
-            outline: none;
         }
 
-        .cyber-search-box .search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--cyber-cyan);
-            font-size: 0.8rem;
-        }
-
-        /* Formulaires & Champs de Saisie */
+        /* FORMULAIRES & INPUTS */
         input, select, textarea, .form-control, .form-select {
-            background-color: var(--bg-input) !important;
-            border: 1px solid var(--cyber-border) !important;
+            background-color: rgba(16, 24, 39, 0.8) !important;
+            border: 1px solid var(--glass-border) !important;
             color: #ffffff !important;
         }
 
         input:focus, select:focus, textarea:focus, .form-control:focus {
-            border-color: var(--cyber-cyan) !important;
-            box-shadow: var(--glow-cyan) !important;
+            border-color: var(--cyber-gold) !important;
+            box-shadow: 0 0 10px var(--cyber-gold-glow) !important;
         }
 
-        /* Chatbot visible et fixé au-dessus de tout */
+        /* CHATBOT CYBER OR */
         .cyber-chat-btn {
             position: fixed !important;
             bottom: 25px !important;
             right: 25px !important;
-            width: 60px !important;
-            height: 60px !important;
+            width: 55px !important;
+            height: 55px !important;
             border-radius: 50% !important;
-            background: #131a2a !important;
-            border: 2px solid var(--cyber-cyan) !important;
-            color: var(--cyber-cyan) !important;
-            font-size: 24px !important;
+            background: var(--glass-bg) !important;
+            border: 1px solid var(--cyber-gold) !important;
+            color: var(--cyber-gold) !important;
+            font-size: 22px !important;
             cursor: pointer !important;
-            box-shadow: var(--glow-cyan) !important;
+            box-shadow: 0 0 15px var(--cyber-gold-glow) !important;
             z-index: 99999 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            transition: all 0.3s;
         }
 
         .cyber-chat-btn:hover {
             transform: scale(1.1);
-            background: var(--cyber-cyan) !important;
+            background: var(--cyber-gold) !important;
             color: #000 !important;
-        }
-
-        .cyber-pulse {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 12px;
-            height: 12px;
-            background: #00ff66;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
         }
 
         .cyber-chat-window {
             position: fixed !important;
-            bottom: 95px !important;
+            bottom: 90px !important;
             right: 25px !important;
-            width: 350px !important;
-            height: 480px !important;
-            background: rgba(19, 26, 42, 0.98) !important;
-            border: 1px solid var(--cyber-cyan) !important;
-            border-radius: 8px !important;
-            box-shadow: var(--glow-cyan) !important;
+            width: 340px !important;
+            height: 450px !important;
+            background: rgba(10, 14, 23, 0.95) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
             display: none;
             flex-direction: column;
             z-index: 99999 !important;
             overflow: hidden;
+            backdrop-filter: blur(16px);
         }
 
         .cyber-chat-window.active {
@@ -219,9 +193,9 @@
         }
 
         .cyber-chat-header {
-            background: #0b0f19;
-            padding: 12px;
-            border-bottom: 1px solid var(--cyber-border);
+            padding: 12px 15px;
+            background: rgba(16, 24, 39, 0.9);
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -229,7 +203,7 @@
 
         .cyber-chat-body {
             flex: 1;
-            padding: 12px;
+            padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -238,207 +212,163 @@
 
         .cyber-chat-body .chat-msg {
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.9rem;
             max-width: 85%;
         }
 
         .cyber-chat-body .chat-msg.bot {
-            background: rgba(255, 255, 255, 0.08);
-            border-left: 3px solid var(--cyber-cyan);
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid var(--cyber-gold);
+            color: #fff;
             align-self: flex-start;
         }
 
         .cyber-chat-body .chat-msg.user {
-            background: var(--cyber-cyan);
+            background: var(--cyber-gold);
             color: #000;
-            font-weight: bold;
+            font-weight: 600;
             align-self: flex-end;
         }
 
         .cyber-chat-footer {
             padding: 10px;
-            background: #0b0f19;
-            border-top: 1px solid var(--cyber-border);
+            border-top: 1px solid var(--glass-border);
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            background: rgba(16, 24, 39, 0.9);
         }
 
-        .cyber-chat-footer input {
-            flex: 1;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        .cyber-chat-footer button {
-            background: var(--cyber-cyan);
-            border: none;
-            color: #000;
-            padding: 0 14px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        /* Footer */
-        .cyber-footer {
-            background: #080c14 !important;
-            border-top: 1px solid var(--cyber-border);
+        /* FOOTER */
+        .front-footer {
+            background: rgba(10, 14, 23, 0.95) !important;
+            border-top: 1px solid var(--glass-border);
             padding: 40px 0 20px;
             margin-top: 60px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .cyber-globe-container {
-            width: 100%;
-            height: 160px;
         }
 
         .back-to-top-cyber {
             position: fixed;
             bottom: 25px;
             left: 25px;
-            width: 42px;
-            height: 42px;
-            background: var(--bg-card);
-            border: 1px solid var(--cyber-cyan);
-            color: var(--cyber-cyan);
-            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--cyber-gold);
+            color: var(--cyber-gold);
+            border-radius: 8px;
             cursor: pointer;
             z-index: 999;
             display: none;
         }
     </style>
 </head>
-<body class="cyber-theme">
+<body>
 
-<!-- Canvas Grille Matrix -->
-<canvas id="cyberCanvas"></canvas>
+<div id="tsparticles"></div>
 
-<!-- Top Navbar Cyber Pro -->
-<nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top cyber-navbar">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand cyber-brand" href="/">
-            <div class="brand-glitch-icon"><i class="fas fa-terminal"></i></div>
-            <span>AES<span class="text-cyber">//</span>SYSTEM</span>
-        </a>
-        <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#cyberNav">
+<!-- HEADER / NAVBAR -->
+<header class="front-header" th:fragment="navbar">
+    <a class="brand" href="/">
+        <i class="fas fa-cube text-gold"></i> AES SYSTEM
+    </a>
+
+    <nav class="navbar navbar-expand-lg p-0">
+        <button class="navbar-toggler text-gold border-0" type="button" data-bs-toggle="collapse" data-bs-target="#frontNav">
             <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="cyberNav">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-microchip me-1"></i> Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-layer-group me-1"></i> Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-project-diagram me-1"></i> Projets</a></li>
-                <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-rss me-1"></i> News</a></li>
-                <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-user-shield me-1"></i> Équipe</a></li>
-                <li class="nav-item"><a class="nav-link" href="/galerie"><i class="fas fa-photo-film me-1"></i> Galerie</a></li>
-                <li class="nav-item"><a class="nav-link" href="/avis"><i class="fas fa-star-half-stroke me-1"></i> Avis</a></li>
-                <li class="nav-item"><a class="nav-link" href="/devis-calculator"><i class="fas fa-calculator me-1"></i> Estimation</a></li>
-                <li class="nav-item"><a class="nav-link" href="/devis"><i class="fas fa-file-contract me-1"></i> Devis</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-headset me-1"></i> Contact</a></li>
+        <div class="collapse navbar-collapse" id="frontNav">
+            <ul class="navbar-nav front-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-microchip me-1 text-gold"></i> Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-layer-group me-1 text-gold"></i> Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-project-diagram me-1 text-gold"></i> Projets</a></li>
+                <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-rss me-1 text-gold"></i> News</a></li>
+                <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-user-shield me-1 text-gold"></i> Équipe</a></li>
+                <li class="nav-item"><a class="nav-link" href="/galerie"><i class="fas fa-photo-film me-1 text-gold"></i> Galerie</a></li>
+                <li class="nav-item"><a class="nav-link" href="/avis"><i class="fas fa-star me-1 text-gold"></i> Avis</a></li>
+                <li class="nav-item"><a class="nav-link" href="/devis-calculator"><i class="fas fa-calculator me-1 text-gold"></i> Estimation</a></li>
+                <li class="nav-item"><a class="nav-link" href="/devis"><i class="fas fa-file-contract me-1 text-gold"></i> Devis</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-headset me-1 text-gold"></i> Contact</a></li>
             </ul>
-            <div class="d-flex align-items-center gap-3">
-                <div class="cyber-search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="SEARCH_DATABASE...">
-                </div>
-            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Bouton Retour en Haut -->
+    <div class="d-none d-xl-block">
+        <input type="text" id="searchInput" class="cyber-search-input" placeholder="Rechercher...">
+    </div>
+</header>
+
+<!-- BOUTON RETOUR EN HAUT -->
 <button id="backToTop" class="back-to-top-cyber" title="Retour au sommet"><i class="fas fa-chevron-up"></i></button>
 
-<!-- ASSISTANT CHAT CYBER -->
+<!-- ASSISTANT CHATBOT -->
 <div th:fragment="chat">
     <button id="chatbotToggle" class="cyber-chat-btn" aria-label="Ouvrir le Chatbot">
-        <i class="fas fa-brain"></i>
-        <span class="cyber-pulse"></span>
+        <i class="fas fa-robot"></i>
     </button>
 
     <div id="chatbotWindow" class="cyber-chat-window">
         <div class="cyber-chat-header">
             <div class="d-flex align-items-center gap-2">
-                <div class="text-cyber"><i class="fas fa-robot"></i></div>
+                <i class="fas fa-robot text-gold"></i>
                 <div>
-                    <h6 class="mb-0 text-cyber font-monospace">AI_ASSISTANT_v2.6</h6>
-                    <small class="text-success" style="font-size: 0.7rem;"><i class="fas fa-circle me-1"></i> ONLINE</small>
+                    <h6 class="mb-0 text-gold font-monospace" style="font-size: 0.85rem;">ASSISTANT AES</h6>
+                    <small class="text-success" style="font-size: 0.7rem;"><i class="fas fa-circle me-1"></i> EN LIGNE</small>
                 </div>
             </div>
-            <button id="closeChat" class="btn-close btn-close-white" style="font-size: 0.8rem;"></button>
+            <button id="closeChat" class="btn-close btn-close-white" style="font-size: 0.75rem;"></button>
         </div>
         <div id="chatMessages" class="cyber-chat-body"></div>
         <div class="cyber-chat-footer">
-            <input type="text" id="chatInput" placeholder="COMMAND_PROMPT >">
-            <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Posez une question...">
+            <button id="chatSend" class="btn btn-sm btn-gold"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
-<!-- Footer Cyber Grid -->
-<footer th:fragment="footer" class="cyber-footer">
+<!-- FOOTER -->
+<footer th:fragment="footer" class="front-footer">
     <div class="container">
         <div class="row gy-4 align-items-center">
-            <div class="col-lg-4">
-                <h5 class="text-white"><span class="text-cyber">•</span> AES CORPORATE</h5>
-                <p class="text-muted">Partenaire stratégique au Niger : BTP, Hydraulique, Location d'engins, Transport & Logistique HAUTE PRÉCISION.</p>
+            <div class="col-lg-6">
+                <h5 class="text-gold"><i class="fas fa-cube me-2"></i> AFRIQUE ÉQUIPEMENTS & SERVICES</h5>
+                <p class="text-muted mb-0">Partenaire stratégique au Niger : BTP, Hydraulique, Location d'engins, Transport & Logistique.</p>
             </div>
-            <div class="col-lg-4 text-center">
-                <h5 class="text-white mb-2 justify-content-center"><i class="fas fa-globe me-2 text-cyber"></i>RESEAU GLOBAL</h5>
-                <div id="globeContainer" class="cyber-globe-container"></div>
-            </div>
-            <div class="col-lg-4">
-                <h5 class="text-white"><span class="text-cyber">•</span> COORDONNÉES SYS</h5>
-                <p class="text-muted mb-1"><i class="fas fa-location-dot me-2 text-cyber"></i>Agadez, quartier aéroport, Niger</p>
-                <p class="text-muted mb-1"><i class="fas fa-phone-volume me-2 text-cyber"></i>+227 96 96 74 74 / 90 96 74 74</p>
-                <p class="text-muted mb-0"><i class="fas fa-envelope-open-text me-2 text-cyber"></i>tidjani22686@gmail.com</p>
+            <div class="col-lg-6 text-lg-end">
+                <p class="text-muted mb-1"><i class="fas fa-location-dot text-gold me-2"></i>Agadez, quartier aéroport, Niger</p>
+                <p class="text-muted mb-0"><i class="fas fa-phone text-gold me-2"></i>+227 96 96 74 74 / 90 96 74 74</p>
             </div>
         </div>
-        <hr class="border-secondary my-4">
+        <hr style="border-color: rgba(255,255,255,0.1);" class="my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <p class="mb-0 text-muted small">&copy; 2026 AFRIQUE ÉQUIPEMENTS ET SERVICES | CYBER CORE SYSTEM</p>
-            <a href="/admin/dashboard" class="text-cyber text-decoration-none small"><i class="fas fa-terminal me-1"></i> [TERMINAL_ADMIN]</a>
+            <p class="mb-0 text-muted small">&copy; 2026 AFRIQUE ÉQUIPEMENTS ET SERVICES</p>
+            <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Administration</a>
         </div>
     </div>
 </footer>
 
-<!-- Fragment Scripts & Logique JS embarquée -->
+<!-- SCRIPTS INTELLIGENTS -->
 <div th:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Grid Canvas Background
-            const canvas = document.getElementById('cyberCanvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                let w = canvas.width = window.innerWidth;
-                let h = canvas.height = window.innerHeight;
-
-                window.addEventListener('resize', () => {
-                    w = canvas.width = window.innerWidth;
-                    h = canvas.height = window.innerHeight;
+            // 1. Particules tsParticles (Identique au Back-office)
+            if (typeof tsParticles !== 'undefined') {
+                tsParticles.load("tsparticles", {
+                    particles: {
+                        number: { value: 40, density: { enable: true, value_area: 800 } },
+                        color: { value: ["#d4af37", "#00f0ff", "#ffffff"] },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.3, random: true },
+                        size: { value: 3, random: true },
+                        move: { enable: true, speed: 1, direction: "none", out_mode: "out" },
+                        line_linked: { enable: true, distance: 150, color: "#d4af37", opacity: 0.12, width: 1 }
+                    },
+                    interactivity: { events: { onhover: { enable: true, mode: "grab" } } }
                 });
-
-                function draw() {
-                    ctx.clearRect(0, 0, w, h);
-                    ctx.strokeStyle = 'rgba(0, 243, 255, 0.03)';
-                    ctx.lineWidth = 1;
-                    for (let x = 0; x < w; x += 45) {
-                        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-                    }
-                    for (let y = 0; y < h; y += 45) {
-                        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-                    }
-                    requestAnimationFrame(draw);
-                }
-                draw();
             }
 
-            // 2. Chatbot Logic
+            // 2. Chatbot
             const toggle = document.getElementById('chatbotToggle');
             const win = document.getElementById('chatbotWindow');
             const close = document.getElementById('closeChat');
@@ -464,47 +394,30 @@
                     addMsg(val, 'user');
                     input.value = '';
                     setTimeout(() => {
-                        addMsg("[SYS_RESP]: Commande reçue. Analyse en cours...", "bot");
-                    }, 300);
+                        addMsg("Bonjour ! Un conseiller Afrique Équipements analysera votre demande sous peu.", "bot");
+                    }, 350);
                 }
 
                 if (send) send.addEventListener('click', sendHandler);
                 if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendHandler(); });
 
-                addMsg("SYSTEM_READY // Posez votre question au support AES.", "bot");
+                addMsg("Bienvenue chez Afrique Équipements & Services ! Comment pouvons-nous vous aider ?", "bot");
             }
 
-            // 3. Globe 3D
-            const container = document.getElementById('globeContainer');
-            if (container && typeof THREE !== 'undefined') {
-                const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-                camera.position.z = 180;
-                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                container.appendChild(renderer.domElement);
-
-                const globe = new THREE.Mesh(
-                    new THREE.SphereGeometry(45, 20, 20),
-                    new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.35 })
-                );
-                scene.add(globe);
-
-                function animate() {
-                    requestAnimationFrame(animate);
-                    globe.rotation.y += 0.005;
-                    renderer.render(scene, camera);
-                }
-                animate();
-            }
-
-            // 4. Back To Top
+            // 3. Bouton Retour en Haut
             const btt = document.getElementById('backToTop');
             if (btt) {
                 window.addEventListener('scroll', () => {
                     btt.style.display = window.scrollY > 300 ? 'block' : 'none';
                 });
                 btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+
+            // 4. Cartes effet Tilt (Identique à l'Admin)
+            if (typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+                    max: 10, speed: 400, glare: true, "max-glare": 0.15
+                });
             }
         });
     </script>
