@@ -6,8 +6,15 @@
 
 <div th:replace="~{front/fragments/layout :: chat}"></div>
 
+<!-- SECTION HERO AVEC GLOBE 3D CENTRAL -->
 <section class="hero text-center position-relative overflow-hidden py-5">
     <div class="container position-relative" style="z-index: 1;">
+
+        <!-- Globe 3D Central de Présentation -->
+        <div class="d-flex justify-content-center mb-3">
+            <div id="heroGlobe" style="width: 140px; height: 140px;" title="Globe 3D interactif avec la lune en orbite"></div>
+        </div>
+
         <h1 class="display-3 fw-bold mb-3 text-white">
             Bienvenue chez <span class="text-gold">Afrique Équipements et Services</span>
         </h1>
@@ -235,6 +242,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation du Globe Hero 3D grand format
+        if (document.getElementById('heroGlobe') && typeof window.init3DGlobe === 'function') {
+            window.init3DGlobe('heroGlobe');
+        }
+
         const searchInput = document.getElementById('navSearchInput');
         const serviceCards = document.querySelectorAll('.service-card-wrapper');
         const noResult = document.getElementById('noResult');
