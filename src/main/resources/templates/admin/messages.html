@@ -7,62 +7,245 @@
 <div th:replace="~{admin/fragments/layout :: sidebar}"></div>
 
 <div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
-    <div id="page-content" class="cyber-card">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h2 text-gold m-0">
-                <i class="fas fa-envelope-open-text me-2"></i>Gestion des messages
-            </h1>
+    <div id="page-content" class="container-fluid p-0">
+
+        <!-- En-tête & Métriques -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h1 class="h3 text-gold m-0 fw-bold">
+                    <i class="fas fa-inbox me-2"></i>Messagerie Client
+                </h1>
+                <p class="text-secondary small m-0">Gérez et répondez aux demandes d'information de vos clients</p>
+            </div>
+
+            <div class="d-flex gap-2">
+                <div class="bg-dark p-2 px-3 rounded border border-secondary d-flex align-items-center gap-2">
+                    <i class="fas fa-envelope text-gold"></i>
+                    <span class="text-white small">Total : <strong th:text="${messages != null ? messages.size() : 0}">0</strong></span>
+                </div>
+                <div class="bg-dark p-2 px-3 rounded border border-warning d-flex align-items-center gap-2">
+                    <i class="fas fa-bell text-warning"></i>
+                    <span class="text-white small">Non lus : <strong th:text="${messages != null ? messages.stream().filter(m -> m.isRead == null || !m.isRead).count() : 0}">0</strong></span>
+                </div>
+            </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-admin table-hover align-middle">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Sujet</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="msg : ${messages}">
-                    <td th:text="${msg.id}">1</td>
-                    <td class="fw-bold" th:text="${msg.name}">Nom</td>
-                    <td th:text="${msg.email}">email@example.com</td>
-                    <td th:text="${msg.subject}">Sujet</td>
-                    <td>
-                        <span class="badge"
-                              th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success' : 'bg-warning text-dark'"
-                              th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Non lu'">Non lu</span>
-                    </td>
-                    <td th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
-                    <td class="text-end">
-                        <a th:href="@{/admin/messages/read/{id}(id=${msg.id})}"
-                           class="btn btn-sm btn-outline-success me-1"
-                           th:unless="${msg.isRead}"
-                           title="Marquer comme lu">
-                            <i class="fas fa-check"></i>
-                        </a>
-                        <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}"
-                           class="btn btn-sm btn-outline-danger"
-                           onclick="return confirm('Supprimer ce message ?')"
-                           title="Supprimer">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr th:if="${messages == null or messages.isEmpty()}">
-                    <td colspan="7" class="text-center text-muted py-4">Aucun message reçu pour le moment.</td>
-                </tr>
-                </tbody>
-            </table>
+        <!-- Barre de Recherche et Filtres -->
+        <div class="cyber-card mb-4 p-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-secondary text-secondary">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control border-secondary text-white bg-transparent" placeholder="Rechercher par nom, email, sujet...">
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <select id="statusFilter" class="form-select border-secondary text-white bg-dark">
+                        <option value="all">Tous les messages</option>
+                        <option value="unread">Non lus uniquement</option>
+                        <option value="read">Lus uniquement</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table des Messages -->
+        <div class="cyber-card p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle m-0 border-0" id="messagesTable">
+                    <thead class="bg-black text-gold border-bottom border-secondary">
+                    <tr>
+                        <th class="ps-4">Expéditeur</th>
+                        <th>Sujet</th>
+                        <th>Téléphone</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="msg : ${messages}"
+                        class="message-row border-bottom border-secondary"
+                        th:data-status="${msg.isRead != null and msg.isRead} ? 'read' : 'unread'"
+                        th:classappend="${msg.isRead == null or !msg.isRead} ? 'fw-bold bg-dark-accent' : ''">
+
+                        <!-- Nom & Email -->
+                        <td class="ps-4 py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-3 bg-gold-subtle text-gold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
+                                    <span th:text="${#strings.substring(msg.name,0,1).toUpperCase()}">N</span>
+                                </div>
+                                <div>
+                                    <div class="text-white fw-bold" th:text="${msg.name}">Nom Client</div>
+                                    <div class="text-secondary small" th:text="${msg.email}">email@domain.com</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Sujet -->
+                        <td>
+                            <span class="text-truncate d-inline-block" style="max-width: 220px;" th:text="${msg.subject}">Sujet du message</span>
+                        </td>
+
+                        <!-- Téléphone -->
+                        <td class="text-secondary small" th:text="${msg.phone != null and !msg.phone.isEmpty() ? msg.phone : '-'}">+227 -- -- -- --</td>
+
+                        <!-- Statut -->
+                        <td>
+                                <span class="badge rounded-pill px-3 py-2"
+                                      th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'"
+                                      th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Nouveau'">Statut</span>
+                        </td>
+
+                        <!-- Date -->
+                        <td class="text-secondary small" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
+
+                        <!-- Actions -->
+                        <td class="text-end pe-4">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-gold me-1"
+                                        title="Consulter"
+                                        th:data-id="${msg.id}"
+                                        th:data-name="${msg.name}"
+                                        th:data-email="${msg.email}"
+                                        th:data-phone="${msg.phone}"
+                                        th:data-subject="${msg.subject}"
+                                        th:data-message="${msg.message}"
+                                        th:data-date="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}"
+                                        onclick="openMessageModal(this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                <a th:href="@{/admin/messages/read/{id}(id=${msg.id})}"
+                                   class="btn btn-sm btn-outline-success me-1"
+                                   th:unless="${msg.isRead}"
+                                   title="Marquer comme lu">
+                                    <i class="fas fa-check"></i>
+                                </a>
+
+                                <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?')"
+                                   title="Supprimer">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Message vide -->
+                    <tr id="emptyRow" th:if="${messages == null or messages.isEmpty()}">
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="fas fa-inbox fa-3x mb-3 text-secondary"></i>
+                            <p class="m-0">Aucun message reçu dans la boîte de réception.</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal d'affichage du message -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark border border-gold text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-gold"><i class="fas fa-envelope-open me-2"></i>Détails du message</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <small class="text-secondary d-block">Expéditeur</small>
+                        <strong id="modalName" class="fs-5 text-white"></strong>
+                        <div id="modalEmail" class="text-gold small"></div>
+                        <div id="modalPhone" class="text-secondary small"></div>
+                    </div>
+                    <div class="col-md-6 text-md-end mt-2 mt-md-0">
+                        <small class="text-secondary d-block">Date de réception</small>
+                        <span id="modalDate" class="badge bg-secondary"></span>
+                    </div>
+                </div>
+                <hr class="border-secondary">
+                <div class="mb-3">
+                    <small class="text-secondary d-block">Sujet</small>
+                    <h6 id="modalSubject" class="fw-bold text-gold"></h6>
+                </div>
+                <div class="mb-3">
+                    <small class="text-secondary d-block mb-1">Message</small>
+                    <div id="modalContent" class="p-3 rounded bg-black border border-secondary" style="white-space: pre-wrap; min-height: 120px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <a id="replyButton" href="#" class="btn btn-gold rounded-pill px-4">
+                    <i class="fas fa-paper-plane me-2"></i>Répondre par Email
+                </a>
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Fermer</button>
+            </div>
         </div>
     </div>
 </div>
 
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
+
+<!-- JS pour recherche, filtres et modal -->
+<script>
+    function openMessageModal(btn) {
+        const id = btn.getAttribute('data-id');
+        const name = btn.getAttribute('data-name');
+        const email = btn.getAttribute('data-email');
+        const phone = btn.getAttribute('data-phone');
+        const subject = btn.getAttribute('data-subject');
+        const message = btn.getAttribute('data-message');
+        const date = btn.getAttribute('data-date');
+
+        document.getElementById('modalName').textContent = name;
+        document.getElementById('modalEmail').textContent = email;
+        document.getElementById('modalPhone').textContent = phone ? "Tél: " + phone : "";
+        document.getElementById('modalSubject').textContent = subject;
+        document.getElementById('modalContent').textContent = message;
+        document.getElementById('modalDate').textContent = date;
+        document.getElementById('replyButton').href = "mailto:" + email + "?subject=Re: " + encodeURIComponent(subject);
+
+        const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+        modal.show();
+    }
+
+    // Filtrage et Recherche dynamique
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const rows = document.querySelectorAll('.message-row');
+
+        function filterMessages() {
+            const query = searchInput.value.toLowerCase();
+            const status = statusFilter.value;
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const rowStatus = row.getAttribute('data-status');
+
+                const matchesSearch = text.includes(query);
+                const matchesStatus = (status === 'all') || (status === rowStatus);
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        if (searchInput && statusFilter) {
+            searchInput.addEventListener('input', filterMessages);
+            statusFilter.addEventListener('change', filterMessages);
+        }
+    });
+</script>
 </body>
 </html>
