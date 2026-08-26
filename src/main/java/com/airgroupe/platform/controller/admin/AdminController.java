@@ -1,6 +1,5 @@
 package com.airgroupe.platform.controller.admin;
 
-import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,19 +23,18 @@ public class AdminController {
 
     // ===================== AUTHENTICATION & WELCOME =====================
 
-    // 1. Page de bienvenue (Accès public via SecurityConfig)
     @GetMapping({"", "/"})
     public String welcome() {
         return "admin/welcome";
     }
 
-    // 2. Page de formulaire de connexion
     @GetMapping("/login")
     public String login() {
         return "admin/login";
     }
 
     // ===================== DASHBOARD =====================
+
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("totalServices", serviceRepository.count());
@@ -52,6 +48,7 @@ public class AdminController {
     }
 
     // ===================== SERVICES =====================
+
     @GetMapping("/services")
     public String listServices(Model model) {
         model.addAttribute("services", serviceRepository.findAll());
@@ -72,6 +69,21 @@ public class AdminController {
         model.addAttribute("service", service);
         return "admin/services-form";
     }
+
+    @PostMapping("/services/save")
+    public String saveService(@ModelAttribute ServiceEntity service, RedirectAttributes redirectAttributes) {
+        serviceRepository.save(service);
+        redirectAttributes.addFlashAttribute("successMessage", "Service enregistré avec succès !");
+        return "redirect:/admin/services";
+    }
+
+    @GetMapping("/services/delete/{id}")
+    public String deleteService(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        serviceRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Service supprimé avec succès !");
+        return "redirect:/admin/services";
+    }
+}   }
 
     @PostMapping("/services/save")
     public String saveService(@ModelAttribute ServiceEntity service, RedirectAttributes redirect) {
