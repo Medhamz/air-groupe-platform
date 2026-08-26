@@ -9,236 +9,270 @@
 <div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
     <div id="page-content">
 
-        <!-- En-tête de page & Cartes Métriques -->
+        <!-- En-tête de page -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
             <div>
                 <h1 class="h2 text-gold m-0 fw-bold">
-                    <i class="fas fa-envelope-open-text me-2"></i>Gestion des messages
+                    <i class="fas fa-inbox me-2"></i>Messagerie & Support
                 </h1>
-                <p class="text-muted small m-0">Consultez et répondez aux messages reçus depuis le site</p>
+                <p class="text-muted small m-0">Gérez vos communications client en temps réel</p>
             </div>
 
-            <div class="d-flex gap-3">
-                <div class="cyber-card py-2 px-3 d-flex align-items-center gap-2">
-                    <i class="fas fa-inbox text-gold"></i>
-                    <span class="small text-white">Total : <strong th:text="${messages != null ? messages.size() : 0}">0</strong></span>
+            <!-- Badges Statistiques -->
+            <div class="d-flex gap-2">
+                <div class="cyber-card py-2 px-3 text-center">
+                    <span class="d-block text-muted style-micro">TOTAL</span>
+                    <strong class="text-white fs-5" id="statTotal" th:text="${messages != null ? messages.size() : 0}">0</strong>
                 </div>
-                <div class="cyber-card py-2 px-3 d-flex align-items-center gap-2" style="border-color: rgba(255, 183, 3, 0.4);">
-                    <i class="fas fa-bell text-warning"></i>
-                    <span class="small text-white">Non lus : <strong th:text="${unreadCount != null ? unreadCount : 0}">0</strong></span>
+                <div class="cyber-card py-2 px-3 text-center border-warning">
+                    <span class="d-block text-warning style-micro">NON LUS</span>
+                    <strong class="text-warning fs-5" id="statUnread" th:text="${unreadCount != null ? unreadCount : 0}">0</strong>
                 </div>
             </div>
         </div>
 
-        <!-- Filtres et Recherche -->
-        <div class="cyber-card mb-4 p-3">
-            <div class="row g-3">
-                <div class="col-md-6 col-lg-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-secondary text-gold">
+        <!-- Application de Messagerie (2 Colonnes) -->
+        <div class="row g-3" style="min-height: 70vh;">
+
+            <!-- COLONNE GAUCHE : Liste des messages -->
+            <div class="col-lg-5 col-xl-4">
+                <div class="cyber-card p-3 h-100 d-flex flex-column">
+
+                    <!-- Barre de Recherche -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary text-gold">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-secondary text-white bg-transparent" placeholder="Rechercher nom, email, sujet...">
+                        <input type="text" id="searchInput" class="form-control bg-dark border-secondary text-white" placeholder="Rechercher un contact, sujet...">
+                    </div>
+
+                    <!-- Filtres Rapides (Tabs) -->
+                    <div class="nav nav-pills nav-fill bg-dark p-1 rounded mb-3 border border-secondary style-tabs">
+                        <button class="nav-link active py-1 btn-sm text-gold" data-filter="all" onclick="filterMessages('all', this)">Tous</button>
+                        <button class="nav-link py-1 btn-sm text-white" data-filter="unread" onclick="filterMessages('unread', this)">
+                            Non lus (<span th:text="${unreadCount != null ? unreadCount : 0}">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Liste Déroulante -->
+                    <div class="message-list flex-grow-1 overflow-auto pe-1" style="max-height: 580px;">
+
+                        <div th:each="msg : ${messages}"
+                             class="message-item cyber-card p-3 mb-2 cursor-pointer transition-all"
+                             th:data-id="${msg.id}"
+                             th:data-name="${msg.name}"
+                             th:data-email="${msg.email}"
+                             th:data-phone="${msg.phone != null ? msg.phone : ''}"
+                             th:data-subject="${msg.subject}"
+                             th:data-message="${msg.message}"
+                             th:data-date="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd MMM yyyy à HH:mm') : '-'}"
+                             th:data-read="${msg.isRead}"
+                             th:classappend="${msg.isRead == null or !msg.isRead} ? 'unread-card' : ''"
+                             onclick="selectMessage(this)">
+
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar-circle" th:text="${msg.name != null and !msg.name.isEmpty() ? #strings.substring(msg.name,0,1).toUpperCase() : '?'}">U</div>
+                                    <span class="fw-bold text-white text-truncate" style="max-width: 130px;" th:text="${msg.name}">Nom</span>
+                                </div>
+                                <span class="small text-muted" style="font-size: 0.75rem;" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM') : ''}">Date</span>
+                            </div>
+
+                            <div class="fw-semibold text-gold small text-truncate mb-1" th:text="${msg.subject}">Sujet du message</div>
+                            <p class="text-muted small m-0 text-truncate" style="font-size: 0.8rem;" th:text="${msg.message}">Aperçu du contenu...</p>
+                        </div>
+
+                        <!-- État vide -->
+                        <div id="emptyList" th:if="${messages == null or #lists.isEmpty(messages)}" class="text-center py-5 text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2 text-gold opacity-50"></i>
+                            <p class="small m-0">Aucun message trouvé.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <select id="statusFilter" class="form-select border-secondary text-white" style="background-color: var(--cyber-bg);">
-                        <option value="all">Tous les messages</option>
-                        <option value="unread">Non lus uniquement</option>
-                        <option value="read">Lus uniquement</option>
-                    </select>
-                </div>
             </div>
-        </div>
 
-        <!-- Table des Messages -->
-        <div class="cyber-card p-0 overflow-hidden">
-            <div class="table-responsive">
-                <table class="table table-admin table-hover align-middle m-0" id="messagesTable">
-                    <thead>
-                    <tr>
-                        <th class="ps-4">Expéditeur</th>
-                        <th>Sujet</th>
-                        <th>Téléphone</th>
-                        <th>Statut</th>
-                        <th>Date</th>
-                        <th class="text-end pe-4">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="msg : ${messages}"
-                        class="message-row"
-                        th:data-status="${msg.isRead != null and msg.isRead} ? 'read' : 'unread'"
-                        th:style="${msg.isRead == null or !msg.isRead} ? 'background: rgba(212, 175, 55, 0.05);' : ''">
+            <!-- COLONNE DROITE : Vue détaillée du message -->
+            <div class="col-lg-7 col-xl-8">
+                <div class="cyber-card p-4 h-100 d-flex flex-column justify-content-between" id="detailPanel">
 
-                        <!-- Expéditeur -->
-                        <td class="ps-4 py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="rounded-circle bg-dark border border-warning text-gold d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px; font-weight: bold;">
-                                    <span th:text="${msg.name != null and !msg.name.isEmpty() ? #strings.substring(msg.name,0,1).toUpperCase() : '?'}">U</span>
-                                </div>
-                                <div>
-                                    <div class="fw-bold text-white" th:text="${msg.name}">Nom Client</div>
-                                    <div class="text-muted small" th:text="${msg.email}">email@example.com</div>
+                    <!-- Placeholder au chargement -->
+                    <div id="noSelection" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted py-5">
+                        <i class="fas fa-paper-plane fa-3x mb-3 text-gold opacity-25"></i>
+                        <p>Sélectionnez un message dans la liste pour afficher la discussion</p>
+                    </div>
+
+                    <!-- Contenu du message (masqué par défaut) -->
+                    <div id="selectedContent" class="d-none flex-grow-1 d-flex flex-column">
+
+                        <!-- Header Message -->
+                        <div class="d-flex justify-content-between align-items-start border-bottom border-secondary pb-3 mb-3">
+                            <div>
+                                <h4 class="text-gold fw-bold mb-1" id="detailSubject">Sujet</h4>
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong class="text-white" id="detailName">Nom</strong>
+                                    <span class="text-muted">&lt;<span id="detailEmail">email</span>&gt;</span>
+                                    <span class="badge bg-dark border border-secondary text-gold" id="detailPhone"></span>
                                 </div>
                             </div>
-                        </td>
+                            <div class="text-end">
+                                <span class="badge bg-dark text-muted mb-2 border border-secondary d-block" id="detailDate">Date</span>
+                                <div class="btn-group">
+                                    <a id="markReadBtn" href="#" class="btn btn-sm btn-outline-success" title="Marquer comme lu">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                    <a id="deleteBtn" href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce message ?')" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- Sujet -->
-                        <td>
-                            <span class="text-truncate d-inline-block" style="max-width: 200px;" th:text="${msg.subject}">Sujet</span>
-                        </td>
+                        <!-- Body Message -->
+                        <div class="flex-grow-1 mb-4">
+                            <label class="text-muted style-micro mb-2">MESSAGE</label>
+                            <div class="p-3 rounded bg-dark border border-secondary text-light leading-relaxed" id="detailBody" style="min-height: 180px; white-space: pre-wrap;">
+                            </div>
+                        </div>
 
-                        <!-- Téléphone -->
-                        <td class="text-muted small" th:text="${msg.phone != null and !msg.phone.isEmpty() ? msg.phone : '-'}">-</td>
-
-                        <!-- Statut -->
-                        <td>
-                                <span class="badge"
-                                      th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success text-white' : 'bg-warning text-dark'"
-                                      th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Nouveau'">Nouveau</span>
-                        </td>
-
-                        <!-- Date -->
-                        <td class="text-muted small" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
-
-                        <!-- Actions -->
-                        <td class="text-end pe-4">
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-warning me-1"
-                                        title="Lire le message"
-                                        th:data-id="${msg.id}"
-                                        th:data-name="${msg.name}"
-                                        th:data-email="${msg.email}"
-                                        th:data-phone="${msg.phone}"
-                                        th:data-subject="${msg.subject}"
-                                        th:data-message="${msg.message}"
-                                        th:data-date="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}"
-                                        onclick="openMessageModal(this)">
-                                    <i class="fas fa-eye"></i>
+                        <!-- Zone de Réponse Rapide -->
+                        <div class="border-top border-secondary pt-3">
+                            <label class="text-gold style-micro mb-2"><i class="fas fa-reply me-1"></i>RÉPONSE RAPIDE</label>
+                            <div class="input-group">
+                                <textarea id="replyText" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="Saisissez votre réponse..."></textarea>
+                                <button type="button" class="btn btn-gold px-4" onclick="sendQuickReply()">
+                                    <i class="fas fa-paper-plane"></i>
                                 </button>
-
-                                <a th:href="@{/admin/messages/read/{id}(id=${msg.id})}"
-                                   class="btn btn-sm btn-outline-success me-1"
-                                   th:unless="${msg.isRead}"
-                                   title="Marquer comme lu">
-                                    <i class="fas fa-check"></i>
-                                </a>
-
-                                <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('Confirmer la suppression de ce message ?')"
-                                   title="Supprimer">
-                                    <i class="fas fa-trash"></i>
-                                </a>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
 
-                    <!-- Boîte vide -->
-                    <tr id="emptyRow" th:if="${messages == null or #lists.isEmpty(messages)}">
-                        <td colspan="6" class="text-center text-muted py-5">
-                            <i class="fas fa-inbox fa-3x mb-3 text-gold opacity-50"></i>
-                            <p class="m-0">Aucun message disponible.</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<!-- Modal Visualisation & Réponse -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content cyber-card text-white border-warning">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title text-gold"><i class="fas fa-envelope-open me-2"></i>Détails du message</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <small class="text-muted d-block">Expéditeur</small>
-                        <strong id="modalName" class="fs-5 text-white"></strong>
-                        <div id="modalEmail" class="text-gold small"></div>
-                        <div id="modalPhone" class="text-muted small"></div>
-                    </div>
-                    <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                        <small class="text-muted d-block">Reçu le</small>
-                        <span id="modalDate" class="badge bg-dark border border-secondary text-white"></span>
                     </div>
                 </div>
-                <hr style="border-color: rgba(255,255,255,0.1);">
-                <div class="mb-3">
-                    <small class="text-muted d-block">Sujet</small>
-                    <h6 id="modalSubject" class="fw-bold text-gold"></h6>
-                </div>
-                <div class="mb-3">
-                    <small class="text-muted d-block mb-1">Contenu</small>
-                    <div id="modalContent" class="p-3 rounded bg-dark text-light border border-secondary" style="white-space: pre-wrap; min-height: 120px;"></div>
-                </div>
             </div>
-            <div class="modal-footer border-secondary">
-                <a id="replyButton" href="#" class="btn btn-gold rounded-pill px-4">
-                    <i class="fas fa-paper-plane me-2"></i>Répondre
-                </a>
-                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Fermer</button>
-            </div>
+
         </div>
+
     </div>
 </div>
 
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
 
-<script>
-    function openMessageModal(btn) {
-        const name = btn.getAttribute('data-name');
-        const email = btn.getAttribute('data-email');
-        const phone = btn.getAttribute('data-phone');
-        const subject = btn.getAttribute('data-subject');
-        const message = btn.getAttribute('data-message');
-        const date = btn.getAttribute('data-date');
+<style>
+    .cursor-pointer { cursor: pointer; }
+    .transition-all { transition: all 0.2s ease; }
+    .style-micro { font-size: 0.68rem; letter-spacing: 1px; font-weight: bold; }
 
-        document.getElementById('modalName').textContent = name || '';
-        document.getElementById('modalEmail').textContent = email || '';
-        document.getElementById('modalPhone').textContent = phone ? "Tél: " + phone : '';
-        document.getElementById('modalSubject').textContent = subject || '';
-        document.getElementById('modalContent').textContent = message || '';
-        document.getElementById('modalDate').textContent = date || '';
-        document.getElementById('replyButton').href = "mailto:" + email + "?subject=Re: " + encodeURIComponent(subject || '');
-
-        const modal = new bootstrap.Modal(document.getElementById('messageModal'));
-        modal.show();
+    .unread-card {
+        border-left: 3px solid var(--bs-warning, #ffc107) !important;
+        background: rgba(212, 175, 55, 0.05);
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const statusFilter = document.getElementById('statusFilter');
-        const rows = document.querySelectorAll('.message-row');
+    .message-item:hover {
+        border-color: rgba(212, 175, 55, 0.5) !important;
+        transform: translateX(3px);
+    }
 
-        function filterTable() {
-            const query = searchInput.value.toLowerCase();
-            const status = statusFilter.value;
+    .message-item.active {
+        border-color: #d4af37 !important;
+        background: rgba(212, 175, 55, 0.12) !important;
+    }
 
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                const rowStatus = row.getAttribute('data-status');
+    .avatar-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #111;
+        border: 1px solid #d4af37;
+        color: #d4af37;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+</style>
 
-                const matchesSearch = text.includes(query);
-                const matchesStatus = (status === 'all') || (status === rowStatus);
+<script>
+    let activeEmail = '';
+    let activeSubject = '';
 
-                row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+    function selectMessage(element) {
+        document.querySelectorAll('.message-item').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
+
+        const id = element.getAttribute('data-id');
+        const name = element.getAttribute('data-name');
+        activeEmail = element.getAttribute('data-email');
+        const phone = element.getAttribute('data-phone');
+        activeSubject = element.getAttribute('data-subject');
+        const message = element.getAttribute('data-message');
+        const date = element.getAttribute('data-date');
+        const isRead = element.getAttribute('data-read') === 'true';
+
+        document.getElementById('noSelection').classList.add('d-none');
+        document.getElementById('selectedContent').classList.remove('d-none');
+
+        document.getElementById('detailName').textContent = name;
+        document.getElementById('detailEmail').textContent = activeEmail;
+        document.getElementById('detailSubject').textContent = activeSubject;
+        document.getElementById('detailBody').textContent = message;
+        document.getElementById('detailDate').textContent = date;
+
+        const phoneBadge = document.getElementById('detailPhone');
+        if(phone) {
+            phoneBadge.textContent = "Tél: " + phone;
+            phoneBadge.classList.remove('d-none');
+        } else {
+            phoneBadge.classList.add('d-none');
+        }
+
+        document.getElementById('deleteBtn').href = `/admin/messages/delete/${id}`;
+
+        const markReadBtn = document.getElementById('markReadBtn');
+        if(!isRead) {
+            markReadBtn.href = `/admin/messages/read/${id}`;
+            markReadBtn.classList.remove('d-none');
+        } else {
+            markReadBtn.classList.add('d-none');
+        }
+    }
+
+    function filterMessages(type, btn) {
+        if(btn) {
+            document.querySelectorAll('.style-tabs .nav-link').forEach(b => {
+                b.classList.remove('active', 'text-gold');
+                b.classList.add('text-white');
             });
+            btn.classList.add('active', 'text-gold');
+            btn.classList.remove('text-white');
         }
 
-        if (searchInput && statusFilter) {
-            searchInput.addEventListener('input', filterTable);
-            statusFilter.addEventListener('change', filterTable);
-        }
+        const items = document.querySelectorAll('.message-item');
+        items.forEach(item => {
+            const isRead = item.getAttribute('data-read') === 'true';
+            if (type === 'all') {
+                item.style.display = 'block';
+            } else if (type === 'unread') {
+                item.style.display = !isRead ? 'block' : 'none';
+            }
+        });
+    }
+
+    function sendQuickReply() {
+        const text = document.getElementById('replyText').value;
+        if (!text) return;
+
+        const mailtoUrl = `mailto:${activeEmail}?subject=Re: ${encodeURIComponent(activeSubject)}&body=${encodeURIComponent(text)}`;
+        window.location.href = mailtoUrl;
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.message-item').forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(query) ? 'block' : 'none';
+        });
     });
 </script>
+
 </body>
 </html>
