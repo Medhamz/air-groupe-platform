@@ -21,6 +21,7 @@ public class Review {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public void setApproved(boolean b) {
+
     }
 
     // Getters & Setters
