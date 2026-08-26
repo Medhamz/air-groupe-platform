@@ -1,6 +1,5 @@
 package com.airgroupe.platform.controller.admin;
 
-import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -85,33 +82,5 @@ public class AdminController {
         serviceRepository.deleteById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Service supprimé avec succès !");
         return "redirect:/admin/services";
-    }
-
-    // ===================== MESSAGES =====================
-
-    @GetMapping("/messages")
-    public String messages(Model model) {
-        List<ContactMessage> messages = contactMessageRepository.findAllByOrderByCreatedAtDesc();
-        long unread = contactMessageRepository.countByIsReadFalse();
-        model.addAttribute("messages", messages);
-        model.addAttribute("unreadCount", unread);
-        return "admin/messages";
-    }
-
-    @GetMapping("/messages/read/{id}")
-    public String markAsRead(@PathVariable Long id, RedirectAttributes redirect) {
-        ContactMessage msg = contactMessageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Message invalide : " + id));
-        msg.setIsRead(true);
-        contactMessageRepository.save(msg);
-        redirect.addFlashAttribute("success", "Message marqué comme lu.");
-        return "redirect:/admin/messages";
-    }
-
-    @GetMapping("/messages/delete/{id}")
-    public String deleteMessage(@PathVariable Long id, RedirectAttributes redirect) {
-        contactMessageRepository.deleteById(id);
-        redirect.addFlashAttribute("success", "Message supprimé.");
-        return "redirect:/admin/messages";
     }
 }
