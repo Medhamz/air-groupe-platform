@@ -7,42 +7,42 @@
 <div th:replace="~{admin/fragments/layout :: sidebar}"></div>
 
 <div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
-    <div id="page-content" class="container-fluid p-0">
+    <div id="page-content">
 
-        <!-- En-tête & Métriques -->
+        <!-- En-tête de page & Cartes Métriques -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
             <div>
-                <h1 class="h3 text-gold m-0 fw-bold">
-                    <i class="fas fa-inbox me-2"></i>Messagerie Client
+                <h1 class="h2 text-gold m-0 fw-bold">
+                    <i class="fas fa-envelope-open-text me-2"></i>Gestion des messages
                 </h1>
-                <p class="text-secondary small m-0">Gérez et répondez aux demandes d'information de vos clients</p>
+                <p class="text-muted small m-0">Consultez et répondez aux messages reçus depuis le site</p>
             </div>
 
-            <div class="d-flex gap-2">
-                <div class="bg-dark p-2 px-3 rounded border border-secondary d-flex align-items-center gap-2">
-                    <i class="fas fa-envelope text-gold"></i>
-                    <span class="text-white small">Total : <strong th:text="${messages != null ? messages.size() : 0}">0</strong></span>
+            <div class="d-flex gap-3">
+                <div class="cyber-card py-2 px-3 d-flex align-items-center gap-2">
+                    <i class="fas fa-inbox text-gold"></i>
+                    <span class="small text-white">Total : <strong th:text="${messages != null ? messages.size() : 0}">0</strong></span>
                 </div>
-                <div class="bg-dark p-2 px-3 rounded border border-warning d-flex align-items-center gap-2">
+                <div class="cyber-card py-2 px-3 d-flex align-items-center gap-2" style="border-color: rgba(255, 183, 3, 0.4);">
                     <i class="fas fa-bell text-warning"></i>
-                    <span class="text-white small">Non lus : <strong th:text="${messages != null ? messages.stream().filter(m -> m.isRead == null || !m.isRead).count() : 0}">0</strong></span>
+                    <span class="small text-white">Non lus : <strong th:text="${unreadCount != null ? unreadCount : 0}">0</strong></span>
                 </div>
             </div>
         </div>
 
-        <!-- Barre de Recherche et Filtres -->
+        <!-- Filtres et Recherche -->
         <div class="cyber-card mb-4 p-3">
-            <div class="row g-3 align-items-center">
+            <div class="row g-3">
                 <div class="col-md-6 col-lg-4">
                     <div class="input-group">
-                        <span class="input-group-text bg-transparent border-secondary text-secondary">
+                        <span class="input-group-text bg-transparent border-secondary text-gold">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-secondary text-white bg-transparent" placeholder="Rechercher par nom, email, sujet...">
+                        <input type="text" id="searchInput" class="form-control border-secondary text-white bg-transparent" placeholder="Rechercher nom, email, sujet...">
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <select id="statusFilter" class="form-select border-secondary text-white bg-dark">
+                    <select id="statusFilter" class="form-select border-secondary text-white" style="background-color: var(--cyber-bg);">
                         <option value="all">Tous les messages</option>
                         <option value="unread">Non lus uniquement</option>
                         <option value="read">Lus uniquement</option>
@@ -54,8 +54,8 @@
         <!-- Table des Messages -->
         <div class="cyber-card p-0 overflow-hidden">
             <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle m-0 border-0" id="messagesTable">
-                    <thead class="bg-black text-gold border-bottom border-secondary">
+                <table class="table table-admin table-hover align-middle m-0" id="messagesTable">
+                    <thead>
                     <tr>
                         <th class="ps-4">Expéditeur</th>
                         <th>Sujet</th>
@@ -67,46 +67,46 @@
                     </thead>
                     <tbody>
                     <tr th:each="msg : ${messages}"
-                        class="message-row border-bottom border-secondary"
+                        class="message-row"
                         th:data-status="${msg.isRead != null and msg.isRead} ? 'read' : 'unread'"
-                        th:classappend="${msg.isRead == null or !msg.isRead} ? 'fw-bold bg-dark-accent' : ''">
+                        th:style="${msg.isRead == null or !msg.isRead} ? 'background: rgba(212, 175, 55, 0.05);' : ''">
 
-                        <!-- Nom & Email -->
+                        <!-- Expéditeur -->
                         <td class="ps-4 py-3">
                             <div class="d-flex align-items-center">
-                                <div class="avatar-circle me-3 bg-gold-subtle text-gold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
-                                    <span th:text="${#strings.substring(msg.name,0,1).toUpperCase()}">N</span>
+                                <div class="rounded-circle bg-dark border border-warning text-gold d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px; font-weight: bold;">
+                                    <span th:text="${msg.name != null and !msg.name.isEmpty() ? #strings.substring(msg.name,0,1).toUpperCase() : '?'}">U</span>
                                 </div>
                                 <div>
-                                    <div class="text-white fw-bold" th:text="${msg.name}">Nom Client</div>
-                                    <div class="text-secondary small" th:text="${msg.email}">email@domain.com</div>
+                                    <div class="fw-bold text-white" th:text="${msg.name}">Nom Client</div>
+                                    <div class="text-muted small" th:text="${msg.email}">email@example.com</div>
                                 </div>
                             </div>
                         </td>
 
                         <!-- Sujet -->
                         <td>
-                            <span class="text-truncate d-inline-block" style="max-width: 220px;" th:text="${msg.subject}">Sujet du message</span>
+                            <span class="text-truncate d-inline-block" style="max-width: 200px;" th:text="${msg.subject}">Sujet</span>
                         </td>
 
                         <!-- Téléphone -->
-                        <td class="text-secondary small" th:text="${msg.phone != null and !msg.phone.isEmpty() ? msg.phone : '-'}">+227 -- -- -- --</td>
+                        <td class="text-muted small" th:text="${msg.phone != null and !msg.phone.isEmpty() ? msg.phone : '-'}">-</td>
 
                         <!-- Statut -->
                         <td>
-                                <span class="badge rounded-pill px-3 py-2"
-                                      th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'"
-                                      th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Nouveau'">Statut</span>
+                                <span class="badge"
+                                      th:classappend="${msg.isRead != null and msg.isRead} ? 'bg-success text-white' : 'bg-warning text-dark'"
+                                      th:text="${msg.isRead != null and msg.isRead} ? 'Lu' : 'Nouveau'">Nouveau</span>
                         </td>
 
                         <!-- Date -->
-                        <td class="text-secondary small" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
+                        <td class="text-muted small" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
 
                         <!-- Actions -->
                         <td class="text-end pe-4">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-gold me-1"
-                                        title="Consulter"
+                                <button class="btn btn-sm btn-outline-warning me-1"
+                                        title="Lire le message"
                                         th:data-id="${msg.id}"
                                         th:data-name="${msg.name}"
                                         th:data-email="${msg.email}"
@@ -127,19 +127,19 @@
 
                                 <a th:href="@{/admin/messages/delete/{id}(id=${msg.id})}"
                                    class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?')"
+                                   onclick="return confirm('Confirmer la suppression de ce message ?')"
                                    title="Supprimer">
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
 
-                    <!-- Message vide -->
-                    <tr id="emptyRow" th:if="${messages == null or messages.isEmpty()}">
+                    <!-- Boîte vide -->
+                    <tr id="emptyRow" th:if="${messages == null or #lists.isEmpty(messages)}">
                         <td colspan="6" class="text-center text-muted py-5">
-                            <i class="fas fa-inbox fa-3x mb-3 text-secondary"></i>
-                            <p class="m-0">Aucun message reçu dans la boîte de réception.</p>
+                            <i class="fas fa-inbox fa-3x mb-3 text-gold opacity-50"></i>
+                            <p class="m-0">Aucun message disponible.</p>
                         </td>
                     </tr>
                     </tbody>
@@ -150,10 +150,10 @@
     </div>
 </div>
 
-<!-- Modal d'affichage du message -->
+<!-- Modal Visualisation & Réponse -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content bg-dark border border-gold text-white">
+        <div class="modal-content cyber-card text-white border-warning">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title text-gold"><i class="fas fa-envelope-open me-2"></i>Détails du message</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -161,29 +161,29 @@
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <small class="text-secondary d-block">Expéditeur</small>
+                        <small class="text-muted d-block">Expéditeur</small>
                         <strong id="modalName" class="fs-5 text-white"></strong>
                         <div id="modalEmail" class="text-gold small"></div>
-                        <div id="modalPhone" class="text-secondary small"></div>
+                        <div id="modalPhone" class="text-muted small"></div>
                     </div>
                     <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                        <small class="text-secondary d-block">Date de réception</small>
-                        <span id="modalDate" class="badge bg-secondary"></span>
+                        <small class="text-muted d-block">Reçu le</small>
+                        <span id="modalDate" class="badge bg-dark border border-secondary text-white"></span>
                     </div>
                 </div>
-                <hr class="border-secondary">
+                <hr style="border-color: rgba(255,255,255,0.1);">
                 <div class="mb-3">
-                    <small class="text-secondary d-block">Sujet</small>
+                    <small class="text-muted d-block">Sujet</small>
                     <h6 id="modalSubject" class="fw-bold text-gold"></h6>
                 </div>
                 <div class="mb-3">
-                    <small class="text-secondary d-block mb-1">Message</small>
-                    <div id="modalContent" class="p-3 rounded bg-black border border-secondary" style="white-space: pre-wrap; min-height: 120px;"></div>
+                    <small class="text-muted d-block mb-1">Contenu</small>
+                    <div id="modalContent" class="p-3 rounded bg-dark text-light border border-secondary" style="white-space: pre-wrap; min-height: 120px;"></div>
                 </div>
             </div>
             <div class="modal-footer border-secondary">
                 <a id="replyButton" href="#" class="btn btn-gold rounded-pill px-4">
-                    <i class="fas fa-paper-plane me-2"></i>Répondre par Email
+                    <i class="fas fa-paper-plane me-2"></i>Répondre
                 </a>
                 <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Fermer</button>
             </div>
@@ -193,10 +193,8 @@
 
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
 
-<!-- JS pour recherche, filtres et modal -->
 <script>
     function openMessageModal(btn) {
-        const id = btn.getAttribute('data-id');
         const name = btn.getAttribute('data-name');
         const email = btn.getAttribute('data-email');
         const phone = btn.getAttribute('data-phone');
@@ -204,25 +202,24 @@
         const message = btn.getAttribute('data-message');
         const date = btn.getAttribute('data-date');
 
-        document.getElementById('modalName').textContent = name;
-        document.getElementById('modalEmail').textContent = email;
-        document.getElementById('modalPhone').textContent = phone ? "Tél: " + phone : "";
-        document.getElementById('modalSubject').textContent = subject;
-        document.getElementById('modalContent').textContent = message;
-        document.getElementById('modalDate').textContent = date;
-        document.getElementById('replyButton').href = "mailto:" + email + "?subject=Re: " + encodeURIComponent(subject);
+        document.getElementById('modalName').textContent = name || '';
+        document.getElementById('modalEmail').textContent = email || '';
+        document.getElementById('modalPhone').textContent = phone ? "Tél: " + phone : '';
+        document.getElementById('modalSubject').textContent = subject || '';
+        document.getElementById('modalContent').textContent = message || '';
+        document.getElementById('modalDate').textContent = date || '';
+        document.getElementById('replyButton').href = "mailto:" + email + "?subject=Re: " + encodeURIComponent(subject || '');
 
         const modal = new bootstrap.Modal(document.getElementById('messageModal'));
         modal.show();
     }
 
-    // Filtrage et Recherche dynamique
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
         const statusFilter = document.getElementById('statusFilter');
         const rows = document.querySelectorAll('.message-row');
 
-        function filterMessages() {
+        function filterTable() {
             const query = searchInput.value.toLowerCase();
             const status = statusFilter.value;
 
@@ -233,17 +230,13 @@
                 const matchesSearch = text.includes(query);
                 const matchesStatus = (status === 'all') || (status === rowStatus);
 
-                if (matchesSearch && matchesStatus) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
             });
         }
 
         if (searchInput && statusFilter) {
-            searchInput.addEventListener('input', filterMessages);
-            statusFilter.addEventListener('change', filterMessages);
+            searchInput.addEventListener('input', filterTable);
+            statusFilter.addEventListener('change', filterTable);
         }
     });
 </script>
