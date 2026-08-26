@@ -1,5 +1,6 @@
 package com.airgroupe.platform.controller.admin;
 
+import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -83,23 +86,9 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("successMessage", "Service supprimé avec succès !");
         return "redirect:/admin/services";
     }
-}   }
-
-    @PostMapping("/services/save")
-    public String saveService(@ModelAttribute ServiceEntity service, RedirectAttributes redirect) {
-        serviceRepository.save(service);
-        redirect.addFlashAttribute("success", "Service sauvegardé !");
-        return "redirect:/admin/services";
-    }
-
-    @GetMapping("/services/delete/{id}")
-    public String deleteService(@PathVariable Long id, RedirectAttributes redirect) {
-        serviceRepository.deleteById(id);
-        redirect.addFlashAttribute("success", "Service supprimé !");
-        return "redirect:/admin/services";
-    }
 
     // ===================== MESSAGES =====================
+
     @GetMapping("/messages")
     public String messages(Model model) {
         List<ContactMessage> messages = contactMessageRepository.findAllByOrderByCreatedAtDesc();
