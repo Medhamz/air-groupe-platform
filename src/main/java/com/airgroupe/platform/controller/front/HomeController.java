@@ -1,11 +1,13 @@
 package com.airgroupe.platform.controller.front;
 
 import com.airgroupe.platform.model.ContactMessage;
+import com.airgroupe.platform.model.NewsletterSubscriber;
 import com.airgroupe.platform.model.Review;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.MediaItemRepository;
 import com.airgroupe.platform.repository.NewsArticleRepository;
+import com.airgroupe.platform.repository.NewsletterRepository;
 import com.airgroupe.platform.repository.ReviewRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import com.airgroupe.platform.repository.TeamRepository;
@@ -28,19 +30,22 @@ public class HomeController {
     private final NewsArticleRepository newsRepository;
     private final TeamRepository teamRepository;
     private final ReviewRepository reviewRepository;
+    private final NewsletterRepository newsletterRepository;
 
     public HomeController(ServiceRepository serviceRepository,
                           ContactMessageRepository contactMessageRepository,
                           MediaItemRepository mediaRepository,
                           NewsArticleRepository newsRepository,
                           TeamRepository teamRepository,
-                          ReviewRepository reviewRepository) {
+                          ReviewRepository reviewRepository,
+                          NewsletterRepository newsletterRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
         this.mediaRepository = mediaRepository;
         this.newsRepository = newsRepository;
         this.teamRepository = teamRepository;
         this.reviewRepository = reviewRepository;
+        this.newsletterRepository = newsletterRepository;
     }
 
     @GetMapping("/")
@@ -49,6 +54,17 @@ public class HomeController {
         model.addAttribute("services", services);
         model.addAttribute("reviews", reviewRepository.findByApprovedTrueOrderByCreatedAtDesc());
         return "front/index";
+    }
+
+    @PostMapping("/submit-newsletter")
+    public String submitNewsletter(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        if (newsletterRepository.existsByEmail(email)) {
+            redirectAttributes.addFlashAttribute("newsletterError", "Cette adresse email est déjà inscrite à la newsletter.");
+        } else {
+            newsletterRepository.save(new NewsletterSubscriber(email));
+            redirectAttributes.addFlashAttribute("newsletterSuccess", "Merci pour votre inscription à notre newsletter !");
+        }
+        return "redirect:/#newsletterForm";
     }
 
     @GetMapping("/services")

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin/fragments/layout :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{admin/fragments/layout :: header}"></div>
+<div th:replace="~{admin/fragments/layout :: sidebar}"></div>
+
+<main class="admin-wrapper">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 cyber-title text-gold mb-1"><i class="fas fa-paper-plane me-2"></i>ABONNÉS NEWSLETTER</h1>
+            <p class="text-muted mb-0">Gestion de la liste de diffusion de l'entreprise</p>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success border-0 bg-success text-white mb-4" th:text="${successMessage}"></div>
+
+    <div class="cyber-card">
+        <div class="table-responsive">
+            <table class="table table-admin mb-0">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Date d'inscription</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sub : ${subscribers}">
+                    <td th:text="${sub.id}">1</td>
+                    <td class="fw-bold text-white" th:text="${sub.email}">client@example.com</td>
+                    <td th:text="${#temporals.format(sub.subscribedAt, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                    <td class="text-end">
+                        <a th:href="@{/admin/newsletter/delete/{id}(id=${sub.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cet abonné ?');">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${subscribers == null or subscribers.isEmpty()}">
+                    <td colspan="4" class="text-center text-muted py-4">Aucun abonné enregistré.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{admin/fragments/layout :: scripts}"></div>
+</body>
+</html>

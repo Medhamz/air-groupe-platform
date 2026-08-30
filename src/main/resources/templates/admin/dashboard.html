@@ -31,11 +31,11 @@
         <div class="col-md-3">
             <div class="cyber-card tilt-card glow-green">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="stat-label">Total Messages</span>
-                    <span class="stat-icon" style="color: #00ff88;"><i class="fas fa-envelope"></i></span>
+                    <span class="stat-label">Newsletter</span>
+                    <span class="stat-icon" style="color: #00ff88;"><i class="fas fa-paper-plane"></i></span>
                 </div>
-                <div class="stat-number" th:text="${totalMessages != null ? totalMessages : 0}">0</div>
-                <small class="text-muted">Reçus via formulaire</small>
+                <div class="stat-number" th:text="${totalSubscribers != null ? totalSubscribers : 0}">0</div>
+                <small class="text-muted">Abonnés actifs</small>
             </div>
         </div>
         <div class="col-md-3">
@@ -103,7 +103,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('activityChart')?.getContext('2d');
         if (ctx) {
-            // Création du dégradé lumineux pour le graphique
             const gradient = ctx.createLinearGradient(0, 0, 0, 300);
             gradient.addColorStop(0, 'rgba(212, 175, 55, 0.4)');
             gradient.addColorStop(1, 'rgba(212, 175, 55, 0.0)');

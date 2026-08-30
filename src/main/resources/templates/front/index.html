@@ -229,8 +229,12 @@
         <div class="card text-center p-5 rounded-4 shadow-sm position-relative overflow-hidden">
             <h3 class="fw-bold mb-2 text-white">Restez informé</h3>
             <p class="text-secondary mb-4">Abonnez-vous pour recevoir nos actualités et nos disponibilités d'équipements.</p>
-            <form id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3 max-w-500 mx-auto">
-                <input type="email" class="form-control form-control-lg rounded-pill border-0 shadow-sm px-4 bg-dark text-white" placeholder="Votre adresse email" style="max-width: 320px;" required>
+
+            <div th:if="${newsletterSuccess}" class="alert alert-success max-w-500 mx-auto mb-3" th:text="${newsletterSuccess}"></div>
+            <div th:if="${newsletterError}" class="alert alert-danger max-w-500 mx-auto mb-3" th:text="${newsletterError}"></div>
+
+            <form th:action="@{/submit-newsletter}" method="post" id="newsletterForm" class="d-flex flex-wrap justify-content-center gap-3 max-w-500 mx-auto">
+                <input type="email" name="email" class="form-control form-control-lg rounded-pill border-0 shadow-sm px-4 bg-dark text-white" placeholder="Votre adresse email" style="max-width: 320px;" required>
                 <button type="submit" class="btn btn-lg rounded-pill px-4 shadow-sm" style="background: var(--gold-primary); color: #0b132b; font-weight: 700;">S'abonner</button>
             </form>
         </div>
@@ -242,7 +246,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialisation du Globe Hero 3D grand format
         if (document.getElementById('heroGlobe') && typeof window.init3DGlobe === 'function') {
             window.init3DGlobe('heroGlobe');
         }

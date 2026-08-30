@@ -252,9 +252,12 @@
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/galerie')} ? 'active'" href="/admin/galerie">
             <i class="fas fa-images"></i> Galerie
         </a>
-        <!-- Onglet Modération des Avis Ajouté -->
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/avis')} ? 'active'" href="/admin/avis">
             <i class="fas fa-star"></i> Avis Clients
+        </a>
+        <!-- Onglet Newsletter -->
+        <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/newsletter')} ? 'active'" href="/admin/newsletter">
+            <i class="fas fa-paper-plane"></i> Newsletter
         </a>
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/messages')} ? 'active'" href="/admin/messages">
             <i class="fas fa-envelope-open-text"></i> Messages

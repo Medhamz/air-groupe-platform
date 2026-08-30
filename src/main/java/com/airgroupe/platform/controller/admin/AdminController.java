@@ -2,6 +2,7 @@ package com.airgroupe.platform.controller.admin;
 
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
+import com.airgroupe.platform.repository.NewsletterRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,14 @@ public class AdminController {
 
     private final ServiceRepository serviceRepository;
     private final ContactMessageRepository contactMessageRepository;
+    private final NewsletterRepository newsletterRepository;
 
     public AdminController(ServiceRepository serviceRepository,
-                           ContactMessageRepository contactMessageRepository) {
+                           ContactMessageRepository contactMessageRepository,
+                           NewsletterRepository newsletterRepository) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
+        this.newsletterRepository = newsletterRepository;
     }
 
     // ===================== AUTHENTICATION & WELCOME =====================
@@ -41,10 +45,27 @@ public class AdminController {
         model.addAttribute("totalMessages", contactMessageRepository.count());
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        model.addAttribute("totalSubscribers", newsletterRepository.count());
         model.addAttribute("totalProjets", 0L);
         model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
 
         return "admin/dashboard";
+    }
+
+    // ===================== NEWSLETTER =====================
+
+    @GetMapping("/newsletter")
+    public String listNewsletter(Model model) {
+        model.addAttribute("subscribers", newsletterRepository.findAll());
+        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        return "admin/newsletter";
+    }
+
+    @GetMapping("/newsletter/delete/{id}")
+    public String deleteSubscriber(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        newsletterRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Abonné supprimé avec succès !");
+        return "redirect:/admin/newsletter";
     }
 
     // ===================== SERVICES =====================
