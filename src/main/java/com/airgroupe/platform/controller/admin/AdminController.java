@@ -5,8 +5,10 @@ import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.NewsletterRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
-import org.springframework.mail.SimpleMailMessage;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -82,16 +84,47 @@ public class AdminController {
         }
 
         try {
+            // Sauts de ligne convertis en balises HTML <br>
+            String formattedContent = content.replaceAll("\n", "<br>");
+
+            // Construction du modèle HTML avec la signature
+            String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
+                    + "<div>" + formattedContent + "</div>"
+                    + "<br><hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
+                    + "<!-- SIGNATURE ENTERPRISE -->"
+                    + "<table style='width: 100%; max-width: 550px; font-family: Arial, sans-serif;'>"
+                    + "  <tr>"
+                    + "    <td style='vertical-align: middle; width: 100px; padding-right: 15px;'>"
+                    + "      <img src='cid:companyLogo' alt='Air Groupe Logo' style='width: 90px; height: auto; display: block;' />"
+                    + "    </td>"
+                    + "    <td style='vertical-align: middle; border-left: 3px solid #ffc107; padding-left: 15px;'>"
+                    + "      <h3 style='margin: 0; color: #121824; font-size: 16px; font-weight: bold;'>AIR GROUPE</h3>"
+                    + "      <p style='margin: 3px 0; color: #555; font-size: 13px;'>Plateforme & Services Corporate</p>"
+                    + "      <p style='margin: 3px 0; color: #777; font-size: 12px;'>Email: <a href='mailto:sidimohamedhamza2@gmail.com' style='color: #d4a017; text-decoration: none;'>sidimohamedhamza2@gmail.com</a></p>"
+                    + "    </td>"
+                    + "  </tr>"
+                    + "</table>"
+                    + "</body></html>";
+
+            ClassPathResource logoResource = new ClassPathResource("static/images/logo.jpeg");
+
             for (NewsletterSubscriber subscriber : subscribers) {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom("sidimohamedhamza2@gmail.com");
-                message.setTo(subscriber.getEmail());
-                message.setSubject(subject);
-                message.setText(content);
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+                helper.setFrom("sidimohamedhamza2@gmail.com");
+                helper.setTo(subscriber.getEmail());
+                helper.setSubject(subject);
+                helper.setText(htmlBody, true);
+
+                if (logoResource.exists()) {
+                    helper.addInline("companyLogo", logoResource);
+                }
 
                 mailSender.send(message);
             }
-            redirectAttributes.addFlashAttribute("successMessage", "Campagne envoyée avec succès à " + subscribers.size() + " abonné(s) !");
+
+            redirectAttributes.addFlashAttribute("successMessage", "Campagne envoyée avec succès avec la signature à " + subscribers.size() + " abonné(s) !");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'envoi de la newsletter : " + e.getMessage());
         }
