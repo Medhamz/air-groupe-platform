@@ -9,39 +9,131 @@
 <div th:replace="~{admin/fragments/layout :: sidebar}"></div>
 
 <main class="admin-wrapper">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- EN-TÊTE PRINCIPAL -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-            <h1 class="h2 cyber-title text-gold mb-1"><i class="fas fa-paper-plane me-2"></i>ABONNÉS NEWSLETTER</h1>
-            <p class="text-muted mb-0">Gestion de la liste de diffusion de l'entreprise</p>
+            <h1 class="h2 cyber-title text-gold mb-1">
+                <i class="fas fa-paper-plane me-2"></i>GESTION DES ABONNÉS NEWSLETTER
+            </h1>
+            <p class="text-muted mb-0">Supervision de la liste de diffusion, segmentation et exportation</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-warning text-gold border-gold" onclick="exportToCSV()">
+                <i class="fas fa-file-csv me-2"></i>Exporter CSV
+            </button>
+            <button type="button" class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#composeModal">
+                <i class="fas fa-envelope-open-text me-2"></i>Rédiger un Mail
+            </button>
         </div>
     </div>
 
-    <div th:if="${successMessage}" class="alert alert-success border-0 bg-success text-white mb-4" th:text="${successMessage}"></div>
+    <!-- MESSAGES DE NOTIFICATION -->
+    <div th:if="${successMessage}" class="alert alert-success border-0 bg-success text-white mb-4 shadow-sm" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger border-0 bg-danger text-white mb-4 shadow-sm" th:text="${errorMessage}"></div>
 
+    <!-- CARTES STATISTIQUES CYBER -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="cyber-card tilt-card glow-gold py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label text-muted text-uppercase small">Total Abonnés</span>
+                    <span class="stat-icon text-gold fs-4"><i class="fas fa-users"></i></span>
+                </div>
+                <div class="stat-number fs-2 fw-bold text-white mt-1" id="statTotal" th:text="${subscribers != null ? subscribers.size() : 0}">0</div>
+                <small class="text-gold"><i class="fas fa-chart-line me-1"></i>Base de contacts active</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card tilt-card glow-blue py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label text-muted text-uppercase small">Statut de Liste</span>
+                    <span class="stat-icon fs-4" style="color: #00f0ff;"><i class="fas fa-shield-alt"></i></span>
+                </div>
+                <div class="stat-number fs-2 fw-bold text-white mt-1">Conforme</div>
+                <small class="text-info"><i class="fas fa-check-circle me-1"></i>RGPD / Opt-in Direct</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card tilt-card glow-green py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="stat-label text-muted text-uppercase small">Portée Globale</span>
+                    <span class="stat-icon fs-4" style="color: #00ff88;"><i class="fas fa-globe-africa"></i></span>
+                </div>
+                <div class="stat-number fs-2 fw-bold text-white mt-1">100%</div>
+                <small style="color: #00ff88;"><i class="fas fa-bolt me-1"></i>Délivrabilité optimale</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRE DE RECHERCHE ET TABLEAU -->
     <div class="cyber-card">
+        <!-- BARRE D'OUTILS ET RECHERCHE -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary">
+            <div class="input-group" style="max-width: 380px;">
+                <span class="input-group-text bg-dark border-secondary text-gold"><i class="fas fa-search"></i></span>
+                <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Rechercher une adresse email...">
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-secondary text-light" onclick="copyAllEmails()" title="Copier tous les emails">
+                    <i class="fas fa-copy me-1"></i>Copier la liste
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLEAU DES ABONNÉS -->
         <div class="table-responsive">
-            <table class="table table-admin mb-0">
+            <table class="table table-admin align-middle mb-0" id="newsletterTable">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Email</th>
+                    <th style="width: 80px;">#ID</th>
+                    <th>Adresse Email</th>
                     <th>Date d'inscription</th>
+                    <th>Statut</th>
                     <th class="text-end">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="sub : ${subscribers}">
-                    <td th:text="${sub.id}">1</td>
-                    <td class="fw-bold text-white" th:text="${sub.email}">client@example.com</td>
-                    <td th:text="${#temporals.format(sub.subscribedAt, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                <tr th:each="sub : ${subscribers}" class="subscriber-row">
+                    <td class="text-muted" th:text="${sub.id}">1</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center text-gold border border-gold" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span class="fw-bold text-white subscriber-email" th:text="${sub.email}">client@example.com</span>
+                        </div>
+                    </td>
+                    <td class="text-secondary" th:text="${#temporals.format(sub.subscribedAt, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                    <td>
+                            <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3">
+                                <i class="fas fa-dot-circle me-1 small"></i>Abonné
+                            </span>
+                    </td>
                     <td class="text-end">
-                        <a th:href="@{/admin/newsletter/delete/{id}(id=${sub.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cet abonné ?');">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <div class="btn-group">
+                            <a th:href="'mailto:' + ${sub.email}" class="btn btn-sm btn-outline-info" title="Envoyer un e-mail individuel">
+                                <i class="fas fa-paper-plane"></i>
+                            </a>
+                            <a th:href="@{/admin/newsletter/delete/{id}(id=${sub.id})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir retirer cet abonné de la liste ?');"
+                               title="Supprimer l'abonné">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="noResultsRow" style="display: none;">
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-search-minus fa-2x mb-2 d-block opacity-50"></i>
+                        Aucune adresse e-mail ne correspond à votre recherche.
                     </td>
                 </tr>
                 <tr th:if="${subscribers == null or subscribers.isEmpty()}">
-                    <td colspan="4" class="text-center text-muted py-4">Aucun abonné enregistré.</td>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>
+                        Aucun abonné enregistré pour le moment.
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -49,6 +141,106 @@
     </div>
 </main>
 
+<!-- MODAL COMPOSER UN EMAIL -->
+<div class="modal fade" id="composeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-white border border-warning">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-gold"><i class="fas fa-paper-plane me-2"></i>Rédiger une Newsletter</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Destinataires</label>
+                        <input type="text" class="form-control bg-secondary text-white border-0" th:value="'Tous les abonnés (' + ${subscribers != null ? subscribers.size() : 0} + ')'" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Sujet de la campagne</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Ex: Découvrez nos nouveaux équipements BTP">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Contenu du message</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" rows="6" placeholder="Rédigez le contenu de votre newsletter ici..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-gold" onclick="alert('Fonctionnalité d\'envoi groupé à configurer avec votre serveur SMTP.');">
+                    <i class="fas fa-paper-plane me-1"></i> Envoyer la campagne
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Recherche dynamique en temps réel
+        const searchInput = document.getElementById('searchInput');
+        const rows = document.querySelectorAll('.subscriber-row');
+        const noResultsRow = document.getElementById('noResultsRow');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const term = this.value.toLowerCase().trim();
+                let matches = 0;
+
+                rows.forEach(row => {
+                    const email = row.querySelector('.subscriber-email').textContent.toLowerCase();
+                    if (email.includes(term)) {
+                        row.style.display = '';
+                        matches++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                if (noResultsRow) {
+                    noResultsRow.style.display = (matches === 0 && rows.length > 0) ? '' : 'none';
+                }
+            });
+        }
+    });
+
+    // Exporter la liste au format CSV
+    function exportToCSV() {
+        const emails = document.querySelectorAll('.subscriber-email');
+        if (emails.length === 0) {
+            alert('Aucun abonné à exporter.');
+            return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,ID,Email\n";
+        emails.forEach((el, index) => {
+            csvContent += `${index + 1},${el.textContent.trim()}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "newsletter_subscribers.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Copier toutes les adresses e-mails dans le presse-papier
+    function copyAllEmails() {
+        const emails = Array.from(document.querySelectorAll('.subscriber-email'))
+                            .map(el => el.textContent.trim());
+        if (emails.length === 0) {
+            alert('Aucune adresse à copier.');
+            return;
+        }
+
+        navigator.clipboard.writeText(emails.join(', ')).then(() => {
+            alert(emails.length + ' adresse(s) e-mail copiée(s) dans le presse-papier !');
+        });
+    }
+</script>
 </body>
 </html>
