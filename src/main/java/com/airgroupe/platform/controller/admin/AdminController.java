@@ -100,7 +100,7 @@ public class AdminController {
                     + "    <td style='vertical-align: middle; border-left: 3px solid #ffc107; padding-left: 15px;'>"
                     + "      <h3 style='margin: 0; color: #121824; font-size: 16px; font-weight: bold;'>Afrique Équipements et Services</h3>"
                     + "      <p style='margin: 3px 0; color: #555; font-size: 13px;'>Plateforme & Services Corporate</p>"
-                    + "      <p style='margin: 3px 0; color: #777; font-size: 12px;'>Email: <a href='mailto:sidimohamedhamza2@gmail.com' style='color: #d4a017; text-decoration: none;'>sidimohamedhamza2@gmail.com</a></p>"
+                    + "      <p style='margin: 3px 0; color: #777; font-size: 12px;'>Email: <a href='mailto:aes@aes-sarlu.com' style='color: #d4a017; text-decoration: none;'>sidimohamedhamza2@gmail.com</a></p>"
                     + "    </td>"
                     + "  </tr>"
                     + "</table>"
@@ -112,7 +112,7 @@ public class AdminController {
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-                helper.setFrom("aes@aes-sarlu.com");
+                helper.setFrom("sidimohamedhamza2@gmail.com");
                 helper.setTo(subscriber.getEmail());
                 helper.setSubject(subject);
                 helper.setText(htmlBody, true);
