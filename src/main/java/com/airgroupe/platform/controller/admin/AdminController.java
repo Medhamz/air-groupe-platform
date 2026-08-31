@@ -112,7 +112,7 @@ public class AdminController {
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-                helper.setFrom("sidimohamedhamza2@gmail.com");
+                helper.setFrom("aes@aes-sarlu.com");
                 helper.setTo(subscriber.getEmail());
                 helper.setSubject(subject);
                 helper.setText(htmlBody, true);
