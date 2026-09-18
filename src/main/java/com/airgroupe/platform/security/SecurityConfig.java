@@ -4,6 +4,7 @@ import com.airgroupe.platform.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -49,20 +50,20 @@ public class SecurityConfig {
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin", "/admin/**")
-                // ATTACHEMENT DU PROVIDER D'AUTHENTIFICATION (Indispensable)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        // Dispatchers requis pour la résolution de vues internes
+                        // Dispatchers requis pour la résolution de vues internes (FORWARD & ERROR)
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
-                        // Autorise explicitement l'accès public à la page de bienvenue et de login
+                        // Autorise l'accès public à la page de connexion (GET et POST)
                         .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/admin/login").permitAll()
                         // Protège tout le reste de l'espace d'administration
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
-                        .defaultSuccessUrl("/admin/dashboard", true)
+                        .defaultSuccessUrl("/admin/dashboard", false) // false permet de rediriger correctement vers la page ciblée
                         .failureUrl("/admin/login?error")
                         .permitAll()
                 )
@@ -86,6 +87,7 @@ public class SecurityConfig {
         http
                 .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

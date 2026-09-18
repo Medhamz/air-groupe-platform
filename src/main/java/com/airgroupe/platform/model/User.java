@@ -36,7 +36,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        if (role == null || role.isBlank()) {
+            return List.of();
+        }
+        // Sécurise le préfixe pour éviter la duplication (ROLE_ROLE_ADMIN)
+        String authorityName = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+        return List.of(new SimpleGrantedAuthority(authorityName));
     }
 
     @Override
