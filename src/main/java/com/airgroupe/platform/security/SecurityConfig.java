@@ -49,6 +49,8 @@ public class SecurityConfig {
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin", "/admin/**")
+                // ATTACHEMENT DU PROVIDER D'AUTHENTIFICATION (Indispensable)
+                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         // Dispatchers requis pour la résolution de vues internes
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
@@ -61,6 +63,7 @@ public class SecurityConfig {
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
                         .defaultSuccessUrl("/admin/dashboard", true)
+                        .failureUrl("/admin/login?error")
                         .permitAll()
                 )
                 .logout(logout -> logout
