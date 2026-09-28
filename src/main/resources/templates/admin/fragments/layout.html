@@ -3,7 +3,11 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administration - Afrique Équipements</title>
+    <title>Administration - Afrique Équipements et Services</title>
+
+    <!-- FAVICON DANS L'ONGLET DU NAVIGATEUR -->
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpeg}" href="/images/logo.jpeg">
+    <link rel="shortcut icon" type="image/jpeg" th:href="@{/images/logo.jpeg}" href="/images/logo.jpeg">
 
     <!-- Bootstrap & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -67,11 +71,11 @@
 
         .admin-header .brand {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--cyber-gold);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-shadow: 0 0 10px var(--cyber-gold-glow);
             display: flex;
             align-items: center;
@@ -230,8 +234,8 @@
             <i class="fas fa-bars"></i>
         </button>
         <div class="brand">
-            <img th:src="@{/images/logo.jpeg}" src="/images/logo.jpeg" alt="Logo Afrique Équipements" class="brand-logo me-2">
-            Afrique Équipements
+            <img th:src="@{/images/logo.jpeg}" src="/images/logo.jpeg" alt="Logo Afrique Équipements et Services" class="brand-logo me-2">
+            Afrique Équipements et Services
         </div>
     </div>
     <div class="user-menu">
