@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afrique Équipements & Services</title>
 
+    <!-- Favicon / Logo de l'onglet -->
+    <link rel="icon" type="image/jpeg" th:href="@{/images/logo.jpeg}" href="/images/logo.jpeg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -337,7 +340,7 @@
 <div id="tsparticles"></div>
 
 <header class="exec-header" th:fragment="navbar">
-    <a class="brand" href="/">
+    <a class="brand" th:href="@{/}">
         <div id="headerGlobe" class="globe-3d-wrapper" title="Globe 3D interactif - Afrique Équipements & Services"></div>
         <span>AFRIQUE ÉQUIPEMENTS & SERVICES</span>
     </a>
@@ -348,13 +351,13 @@
         </button>
         <div class="collapse navbar-collapse" id="execNav">
             <ul class="navbar-nav exec-nav mx-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-house me-1 text-gold"></i> Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="/services"><i class="fas fa-cubes me-1 text-gold"></i> Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="/projets"><i class="fas fa-diagram-project me-1 text-gold"></i> Projets</a></li>
-                <li class="nav-item"><a class="nav-link" href="/actualites"><i class="fas fa-newspaper me-1 text-gold"></i> Actualités</a></li>
-                <li class="nav-item"><a class="nav-link" href="/equipe"><i class="fas fa-users me-1 text-gold"></i> Équipe</a></li>
-                <li class="nav-item"><a class="nav-link" href="/avis"><i class="fas fa-star me-1 text-gold"></i> Avis</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="fas fa-house me-1 text-gold"></i> Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/services}"><i class="fas fa-cubes me-1 text-gold"></i> Services</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/projets}"><i class="fas fa-diagram-project me-1 text-gold"></i> Projets</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/actualites}"><i class="fas fa-newspaper me-1 text-gold"></i> Actualités</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/equipe}"><i class="fas fa-users me-1 text-gold"></i> Équipe</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/avis}"><i class="fas fa-star me-1 text-gold"></i> Avis</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/contact}"><i class="fas fa-envelope me-1 text-gold"></i> Contact</a></li>
             </ul>
 
             <div class="nav-search-form ms-lg-2 mt-2 mt-lg-0">
@@ -454,7 +457,7 @@
         <hr style="border-color: rgba(212,175,55,0.25);" class="my-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <p class="mb-0 text-secondary small">&copy; 2026 AFRIQUE ÉQUIPEMENTS & SERVICES. Tous droits réservés.</p>
-            <a href="/admin/dashboard" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Sécurisé</a>
+            <a th:href="@{/admin/dashboard}" class="text-gold text-decoration-none small"><i class="fas fa-lock me-1"></i> Espace Sécurisé</a>
         </div>
     </div>
 </footer>
