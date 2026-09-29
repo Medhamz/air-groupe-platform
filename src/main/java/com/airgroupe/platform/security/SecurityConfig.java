@@ -14,6 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -44,26 +49,47 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    // ========== CONFIGURATION DU CORS ==========
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Autorise toutes les origines (ou spécifiez l'URL de votre front / requêtes mobiles)
+        configuration.setAllowedOriginPatterns(List.of("*"));
+
+        // Autorise les méthodes HTTP nécessaires
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        // Autorise tous les en-têtes (Headers)
+        configuration.setAllowedHeaders(List.of("*"));
+
+        // Autorise l'envoi de cookies / tokens d'authentification si nécessaire
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Applique ces règles à l'ensemble des routes API et web
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     // ========== ADMIN BACK-OFFICE ==========
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin", "/admin/**")
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activation CORS
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        // Dispatchers requis pour la résolution de vues internes (FORWARD & ERROR)
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
-                        // Autorise l'accès public à la page de connexion (GET et POST)
                         .requestMatchers("/admin", "/admin/", "/admin/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/admin/login").permitAll()
-                        // Protège tout le reste de l'espace d'administration
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
-                        .defaultSuccessUrl("/admin/dashboard", false) // false permet de rediriger correctement vers la page ciblée
+                        .defaultSuccessUrl("/admin/dashboard", false)
                         .failureUrl("/admin/login?error")
                         .permitAll()
                 )
@@ -80,14 +106,16 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ========== PUBLIC FRONT-OFFICE ==========
+    // ========== PUBLIC FRONT-OFFICE & API MOBILE ==========
     @Bean
     @Order(2)
     public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/**")
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activation CORS pour l'API
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/api/**").permitAll() // Autorise l'accès libre aux endpoints de l'API mobile
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
