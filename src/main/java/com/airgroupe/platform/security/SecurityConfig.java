@@ -54,31 +54,30 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Autorise toutes les origines (ou spécifiez l'URL de votre front / requêtes mobiles)
+        // Autorise toutes les origines (nécessaire pour les applications mobiles Android)
         configuration.setAllowedOriginPatterns(List.of("*"));
 
-        // Autorise les méthodes HTTP nécessaires
+        // Autorise les méthodes HTTP standard
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         // Autorise tous les en-têtes (Headers)
         configuration.setAllowedHeaders(List.of("*"));
 
-        // Autorise l'envoi de cookies / tokens d'authentification si nécessaire
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Applique ces règles à l'ensemble des routes API et web
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-    // ========== ADMIN BACK-OFFICE ==========
+    // ========== ADMIN BACK-OFFICE & ROUTAGE DE SÉCURITÉ ==========
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin", "/admin/**")
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activation CORS
+                // Correction ici: /admin* garantit la prise en charge de /admin, /admin/ et tous ses sous-dossiers
+                .securityMatcher("/admin/**", "/admin")
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
@@ -112,10 +111,10 @@ public class SecurityConfig {
     public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/**")
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activation CORS pour l'API
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                        .requestMatchers("/api/**").permitAll() // Autorise l'accès libre aux endpoints de l'API mobile
+                        .requestMatchers("/api/**").permitAll() // Autorise l'accès libre aux endpoints de l'API mobile (/api/v1/services, etc.)
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
