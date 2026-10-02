@@ -269,13 +269,17 @@
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/avis')} ? 'active'" href="/admin/avis">
             <i class="fas fa-star"></i> Avis Clients
         </a>
-        <!-- Onglet Newsletter -->
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/newsletter')} ? 'active'" href="/admin/newsletter">
             <i class="fas fa-paper-plane"></i> Newsletter
         </a>
         <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/messages')} ? 'active'" href="/admin/messages">
             <i class="fas fa-envelope-open-text"></i> Messages
             <span class="badge bg-warning text-dark ms-auto" th:text="${unreadCount != null ? unreadCount : 0}">0</span>
+        </a>
+        <!-- NOUVEL ONGLET SUPPORT & UTILISATEURS -->
+        <a class="nav-link" th:classappend="${currentUri != null and currentUri.startsWith('/admin/support')} ? 'active'" href="/admin/support">
+            <i class="fas fa-headset"></i> Support & Utilisateurs
+            <span class="badge bg-danger text-white ms-auto" th:if="${pendingTicketsCount != null and pendingTicketsCount > 0}" th:text="${pendingTicketsCount}">0</span>
         </a>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 20px;">
         <a class="nav-link text-muted" href="/">

@@ -75,7 +75,6 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
-                // Correction ici: /admin* garantit la prise en charge de /admin, /admin/ et tous ses sous-dossiers
                 .securityMatcher("/admin/**", "/admin")
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authenticationProvider(authenticationProvider())

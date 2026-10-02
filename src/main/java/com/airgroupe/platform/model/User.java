@@ -28,6 +28,9 @@ public class User implements UserDetails {
 
     private String fullName;
     private String email;
+    private String phone;
+
+    private boolean active = true;
 
     @Column(nullable = false)
     private String role; // ADMIN, PARTNER
@@ -51,5 +54,5 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() { return true; }
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return active; }
 }

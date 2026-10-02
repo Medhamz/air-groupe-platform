@@ -5,10 +5,13 @@ import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
 import com.airgroupe.platform.repository.NewsletterRepository;
 import com.airgroupe.platform.repository.ServiceRepository;
+import com.airgroupe.platform.repository.SupportTicketRepository;
+import com.airgroupe.platform.repository.UserRepository;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +26,25 @@ public class AdminController {
     private final ServiceRepository serviceRepository;
     private final ContactMessageRepository contactMessageRepository;
     private final NewsletterRepository newsletterRepository;
+    private final UserRepository userRepository;
+    private final SupportTicketRepository supportTicketRepository;
     private final JavaMailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminController(ServiceRepository serviceRepository,
                            ContactMessageRepository contactMessageRepository,
                            NewsletterRepository newsletterRepository,
-                           JavaMailSender mailSender) {
+                           UserRepository userRepository,
+                           SupportTicketRepository supportTicketRepository,
+                           JavaMailSender mailSender,
+                           PasswordEncoder passwordEncoder) {
         this.serviceRepository = serviceRepository;
         this.contactMessageRepository = contactMessageRepository;
         this.newsletterRepository = newsletterRepository;
+        this.userRepository = userRepository;
+        this.supportTicketRepository = supportTicketRepository;
         this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ===================== AUTHENTICATION & WELCOME =====================
@@ -56,10 +68,77 @@ public class AdminController {
         model.addAttribute("unreadMessages", contactMessageRepository.countByIsReadFalse());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
         model.addAttribute("totalSubscribers", newsletterRepository.count());
+        model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
         model.addAttribute("totalProjets", 0L);
         model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
 
         return "admin/dashboard";
+    }
+
+    // ===================== SUPPORT & UTILISATEURS =====================
+
+    @GetMapping("/support")
+    public String supportPage(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("tickets", supportTicketRepository.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
+        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        return "admin/support";
+    }
+
+    @PostMapping("/users/update")
+    public String updateUser(@RequestParam("id") Long id,
+                             @RequestParam("fullName") String fullName,
+                             @RequestParam("email") String email,
+                             @RequestParam(value = "phone", required = false) String phone,
+                             @RequestParam(value = "active", defaultValue = "false") boolean active,
+                             RedirectAttributes redirectAttributes) {
+        userRepository.findById(id).ifPresent(user -> {
+            user.setFullName(fullName);
+            user.setEmail(email);
+            user.setPhone(phone);
+            user.setActive(active);
+            userRepository.save(user);
+        });
+        redirectAttributes.addFlashAttribute("successMessage", "Informations de l'utilisateur mises à jour avec succès.");
+        return "redirect:/admin/support";
+    }
+
+    @PostMapping("/users/reset-password")
+    public String resetPassword(@RequestParam("userId") Long userId,
+                                @RequestParam("newPassword") String newPassword,
+                                RedirectAttributes redirectAttributes) {
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        });
+        redirectAttributes.addFlashAttribute("successMessage", "Le mot de passe a été réinitialisé avec succès !");
+        return "redirect:/admin/support";
+    }
+
+    @PostMapping("/support/tickets/update-status")
+    public String updateTicketStatus(@RequestParam("ticketId") Long ticketId,
+                                     @RequestParam("status") String status,
+                                     @RequestParam(value = "adminReply", required = false) String adminReply,
+                                     RedirectAttributes redirectAttributes) {
+        supportTicketRepository.findById(ticketId).ifPresent(ticket -> {
+            ticket.setStatus(status);
+            supportTicketRepository.save(ticket);
+
+            if (adminReply != null && !adminReply.isBlank()) {
+                try {
+                    MimeMessage message = mailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                    helper.setFrom("sidimohamedhamza2@gmail.com");
+                    helper.setTo(ticket.getUserEmail());
+                    helper.setSubject("Mise à jour concernant votre ticket #" + ticket.getId());
+                    helper.setText("<p>Bonjour,</p><p>" + adminReply.replaceAll("\n", "<br>") + "</p><p>Cordialement,<br>Support - Afrique Équipements et Services</p>", true);
+                    mailSender.send(message);
+                } catch (Exception ignored) {}
+            }
+        });
+        redirectAttributes.addFlashAttribute("successMessage", "Ticket mis à jour avec succès !");
+        return "redirect:/admin/support";
     }
 
     // ===================== NEWSLETTER =====================
@@ -68,6 +147,7 @@ public class AdminController {
     public String listNewsletter(Model model) {
         model.addAttribute("subscribers", newsletterRepository.findAll());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
         return "admin/newsletter";
     }
 
@@ -84,10 +164,8 @@ public class AdminController {
         }
 
         try {
-            // Conversion des sauts de ligne en balises <br>
             String formattedContent = content.replaceAll("\n", "<br>");
 
-            // Template HTML avec signature au nom de "Afrique Équipements et Services"
             String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
                     + "<div>" + formattedContent + "</div>"
                     + "<br><hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
@@ -145,6 +223,7 @@ public class AdminController {
     public String listServices(Model model) {
         model.addAttribute("services", serviceRepository.findAll());
         model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
         return "admin/services";
     }
 
