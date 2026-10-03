@@ -44,21 +44,29 @@ public class ApiController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody User userRequest) {
-        // Vérifier si l'adresse e-mail existe déjà
-        if (userRequest.getEmail() != null && userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "L'adresse email est obligatoire."));
+        }
+
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Un compte avec cet e-mail existe déjà."));
         }
 
-        // Encoder le mot de passe avant enregistrement
+        if (userRequest.getUsername() == null || userRequest.getUsername().isBlank()) {
+            userRequest.setUsername(userRequest.getEmail());
+        }
+
         if (userRequest.getPassword() != null) {
             userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
 
-        // Activer le compte par défaut pour les utilisateurs mobiles
-        userRequest.setActive(true);
+        if (userRequest.getRole() == null || userRequest.getRole().isBlank()) {
+            userRequest.setRole("CLIENT");
+        }
 
-        // Sauvegarder dans la base de données PostgreSQL
+        userRequest.setActive(true);
         userRepository.save(userRequest);
 
         return ResponseEntity.ok(Map.of("message", "Compte créé avec succès !"));
@@ -80,7 +88,7 @@ public class ApiController {
             User user = userOptional.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
                 return ResponseEntity.ok(Map.of(
-                        "token", "session-token-created",
+                        "token", "session-token-" + user.getId() + "-" + System.currentTimeMillis(),
                         "email", user.getEmail(),
                         "fullName", user.getFullName() != null ? user.getFullName() : ""
                 ));
@@ -99,9 +107,12 @@ public class ApiController {
     }
 
     @PostMapping("/quotes")
-    public ResponseEntity<Void> sendQuoteRequest(@RequestBody ContactMessage request) {
+    public ResponseEntity<?> sendQuoteRequest(@RequestBody ContactMessage request) {
+        if (request.getCreatedAt() == null) {
+            request.setCreatedAt(LocalDateTime.now());
+        }
         contactMessageRepository.save(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("message", "Demande de devis enregistrée avec succès."));
     }
 
     // ===================== TICKETS DE SUPPORT =====================

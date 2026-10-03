@@ -16,43 +16,59 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
     private String fullName;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String phone;
 
     private boolean active = true;
 
     @Column(nullable = false)
-    private String role; // ADMIN, PARTNER
+    private String role = "CLIENT"; // ROLE_ADMIN, ROLE_PARTNER, ROLE_CLIENT
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @PrePersist
+    public void prePersist() {
+        if (this.username == null || this.username.isBlank()) {
+            this.username = this.email;
+        }
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (role == null || role.isBlank()) {
-            return List.of();
+            return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
         }
-        // Sécurise le préfixe pour éviter la duplication (ROLE_ROLE_ADMIN)
         String authorityName = role.startsWith("ROLE_") ? role : "ROLE_" + role;
         return List.of(new SimpleGrantedAuthority(authorityName));
     }
 
     @Override
     public boolean isAccountNonExpired() { return true; }
+
     @Override
     public boolean isAccountNonLocked() { return true; }
+
     @Override
     public boolean isCredentialsNonExpired() { return true; }
+
     @Override
     public boolean isEnabled() { return active; }
 }
