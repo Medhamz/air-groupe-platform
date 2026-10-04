@@ -121,49 +121,80 @@ public class AdminController {
                                      @RequestParam("status") String status,
                                      @RequestParam(value = "adminReply", required = false) String adminReply,
                                      RedirectAttributes redirectAttributes) {
-        supportTicketRepository.findById(ticketId).ifPresent(ticket -> {
-            ticket.setStatus(status);
 
-            // Enregistrer la réponse
-            if (adminReply != null && !adminReply.isBlank()) {
-                ticket.setAdminReply(adminReply);
-                ticket.setRepliedAt(java.time.LocalDateTime.now());
+        // ===================== LOGS DE DÉBOGAGE =====================
+        System.out.println("========================================");
+        System.out.println("=== DÉBUT updateTicketStatus ===");
+        System.out.println("ticketId reçu = " + ticketId);
+        System.out.println("status reçu = " + status);
+        System.out.println("adminReply reçu = [" + adminReply + "]");
+        System.out.println("========================================");
 
-                // Envoi de l'email au client
-                try {
-                    jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
-                    org.springframework.mail.javamail.MimeMessageHelper helper =
-                            new org.springframework.mail.javamail.MimeMessageHelper(message, true, "UTF-8");
+        var ticketOpt = supportTicketRepository.findById(ticketId);
 
-                    helper.setFrom("sidimohamedhamza2@gmail.com");
-                    helper.setTo(ticket.getUserEmail());
-                    helper.setSubject("Réponse à votre ticket #" + ticket.getId() + " - " + ticket.getSubject());
+        if (ticketOpt.isEmpty()) {
+            System.out.println("=== ❌ TICKET NON TROUVÉ : " + ticketId + " ===");
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Ticket introuvable avec l'ID : " + ticketId);
+            return "redirect:/admin/support";
+        }
 
-                    String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
-                            + "<h2 style='color: #134074;'>Bonjour,</h2>"
-                            + "<p>Voici la réponse à votre demande de support :</p>"
-                            + "<div style='background: #f4f6f9; padding: 15px; border-left: 4px solid #d4af37; margin: 20px 0;'>"
-                            + adminReply.replaceAll("\n", "<br>")
-                            + "</div>"
-                            + "<p><strong>Statut du ticket :</strong> " + status + "</p>"
-                            + "<hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
-                            + "<p style='color: #777; font-size: 13px;'>Cordialement,<br>"
-                            + "<strong>Support - Afrique Équipements et Services</strong></p>"
-                            + "</body></html>";
+        var ticket = ticketOpt.get();
+        System.out.println("=== ✅ TICKET TROUVÉ : ID=" + ticket.getId()
+                + " | Email=" + ticket.getUserEmail()
+                + " | Sujet=" + ticket.getSubject() + " ===");
 
-                    helper.setText(htmlBody, true);
-                    mailSender.send(message);
+        ticket.setStatus(status);
 
-                    redirectAttributes.addFlashAttribute("successMessage", "Ticket mis à jour et réponse envoyée par email au client !");
-                } catch (Exception e) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Ticket mis à jour mais échec de l'envoi email : " + e.getMessage());
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("successMessage", "Statut du ticket mis à jour.");
+        // Enregistrer la réponse
+        if (adminReply != null && !adminReply.isBlank()) {
+            System.out.println("=== Réponse non vide, on l'enregistre ===");
+            ticket.setAdminReply(adminReply);
+            ticket.setRepliedAt(java.time.LocalDateTime.now());
+
+            // Envoi de l'email au client
+            try {
+                System.out.println("=== Tentative d'envoi email à : " + ticket.getUserEmail() + " ===");
+
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+                helper.setFrom("sidimohamedhamza2@gmail.com");
+                helper.setTo(ticket.getUserEmail());
+                helper.setSubject("Réponse à votre ticket #" + ticket.getId() + " - " + ticket.getSubject());
+
+                String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
+                        + "<h2 style='color: #134074;'>Bonjour,</h2>"
+                        + "<p>Voici la réponse à votre demande de support :</p>"
+                        + "<div style='background: #f4f6f9; padding: 15px; border-left: 4px solid #d4af37; margin: 20px 0;'>"
+                        + adminReply.replaceAll("\n", "<br>")
+                        + "</div>"
+                        + "<p><strong>Statut du ticket :</strong> " + status + "</p>"
+                        + "<hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
+                        + "<p style='color: #777; font-size: 13px;'>Cordialement,<br>"
+                        + "<strong>Support - Afrique Équipements et Services</strong></p>"
+                        + "</body></html>";
+
+                helper.setText(htmlBody, true);
+                mailSender.send(message);
+
+                System.out.println("=== ✅ Email envoyé avec succès ===");
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "Ticket mis à jour et réponse envoyée par email à " + ticket.getUserEmail() + " !");
+            } catch (Exception e) {
+                System.out.println("=== ❌ ERREUR envoi email : " + e.getMessage() + " ===");
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "Ticket mis à jour mais échec de l'envoi email : " + e.getMessage());
             }
+        } else {
+            System.out.println("=== Réponse vide, seul le statut est mis à jour ===");
+            redirectAttributes.addFlashAttribute("successMessage", "Statut du ticket mis à jour.");
+        }
 
-            supportTicketRepository.save(ticket);
-        });
+        supportTicketRepository.save(ticket);
+        System.out.println("=== FIN updateTicketStatus - Redirection vers /admin/support ===");
+        System.out.println("========================================");
 
         return "redirect:/admin/support";
     }
