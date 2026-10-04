@@ -35,8 +35,9 @@ public class User implements UserDetails {
 
     private String phone;
 
+    // ✅ Boolean (objet) au lieu de boolean (primitif)
     @Column(name = "is_active")
-    private boolean active = true;
+    private Boolean active = true;
 
     @Column(nullable = false)
     private String role = "CLIENT";
@@ -51,6 +52,10 @@ public class User implements UserDetails {
         }
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
+        }
+        // ✅ Forcer active à true si null
+        if (this.active == null) {
+            this.active = true;
         }
     }
 
@@ -72,6 +77,9 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() { return true; }
 
+    // ✅ isEnabled() retourne false si active est null
     @Override
-    public boolean isEnabled() { return active; }
+    public boolean isEnabled() {
+        return active != null && active;
+    }
 }
