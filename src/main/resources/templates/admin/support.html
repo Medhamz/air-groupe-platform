@@ -103,6 +103,62 @@
         </div>
     </div>
 
+    <!-- ===================================================== -->
+    <!-- ⚠️ FORMULAIRE DE TEST (à supprimer après débogage) -->
+    <!-- ===================================================== -->
+    <div style="background: #fff3cd; padding: 25px; margin: 30px 0; border: 4px solid #ff0000; border-radius: 8px;">
+        <h3 style="color: #ff0000; margin-bottom: 15px;">
+            🔧 FORMULAIRE DE TEST (ne pas laisser en production)
+        </h3>
+        <p style="color: #333; margin-bottom: 20px;">
+            Si vous voyez ce formulaire, le template est bien déployé. Remplissez-le pour tester la réponse aux tickets.
+        </p>
+
+        <form th:action="@{/admin/support/tickets/update-status}" method="post">
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                    ID du ticket :
+                </label>
+                <input type="number"
+                       name="ticketId"
+                       required
+                       style="border: 2px solid #000; padding: 8px; width: 200px; font-size: 16px;"
+                       placeholder="Ex: 1">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                    Statut :
+                </label>
+                <select name="status"
+                        style="border: 2px solid #000; padding: 8px; width: 250px; font-size: 16px;">
+                    <option value="OPEN">Ouvert (OPEN)</option>
+                    <option value="IN_PROGRESS">En cours (IN_PROGRESS)</option>
+                    <option value="RESOLVED">Résolu (RESOLVED)</option>
+                    <option value="CLOSED">Fermé (CLOSED)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                    Réponse au client :
+                </label>
+                <textarea name="adminReply"
+                          rows="5"
+                          required
+                          style="border: 2px solid #000; padding: 8px; width: 100%; max-width: 600px; font-size: 16px;"
+                          placeholder="Saisissez votre réponse ici... Le client recevra cette réponse par email."></textarea>
+            </div>
+
+            <button type="submit"
+                    style="background: #28a745; color: white; padding: 15px 30px; font-size: 18px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">
+                🔥 ENVOYER LA RÉPONSE
+            </button>
+
+        </form>
+    </div>
+
     <!-- MODALES : RÉINITIALISATION MOT DE PASSE -->
     <div th:each="user : ${users}" class="modal fade" th:id="'resetModal-' + ${user.id}" tabindex="-1">
         <div class="modal-dialog">
