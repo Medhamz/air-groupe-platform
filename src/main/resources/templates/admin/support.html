@@ -50,9 +50,24 @@
                               th:text="${user.active} ? 'Actif' : 'Inactif'">Actif</span>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" th:data-bs-target="'#resetModal-' + ${user.id}">
-                            <i class="fas fa-key"></i> Mot de passe
-                        </button>
+                        <!-- Réinitialisation mot de passe (formulaire inline via details) -->
+                        <details>
+                            <summary class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-key"></i> Mot de passe
+                            </summary>
+                            <form th:action="@{/admin/users/reset-password}" method="post" class="mt-3 p-3 bg-secondary rounded">
+                                <input type="hidden" name="userId" th:value="${user.id}" />
+                                <p class="text-white small mb-2">Modifier le mot de passe de : <strong th:text="${user.email}"></strong></p>
+                                <div class="mb-2">
+                                    <input type="password" name="newPassword"
+                                           class="form-control bg-dark text-white border-dark"
+                                           placeholder="Nouveau mot de passe" required>
+                                </div>
+                                <button type="submit" class="btn btn-gold btn-sm w-100">
+                                    <i class="fas fa-check"></i> Mettre à jour
+                                </button>
+                            </form>
+                        </details>
                     </td>
                 </tr>
                 <tr th:if="${users == null or #lists.isEmpty(users)}">
@@ -65,193 +80,109 @@
 
     <!-- SECTION TICKETS DE SUPPORT -->
     <div class="cyber-card">
-        <h5 class="cyber-title text-gold mb-4"><i class="fas fa-ticket-alt me-2"></i>Tickets de Support</h5>
-        <div class="table-responsive">
-            <table class="table table-admin align-middle">
-                <thead>
-                <tr>
-                    <th>#ID</th>
-                    <th>Utilisateur</th>
-                    <th>Sujet</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="ticket : ${tickets}">
-                    <td th:text="${ticket.id}">#1</td>
-                    <td th:text="${ticket.userEmail}">email@domain.com</td>
-                    <td th:text="${ticket.subject}">Problème d'accès</td>
-                    <td>
-                        <span class="badge"
-                              th:classappend="${ticket.status == 'OPEN' ? 'bg-danger' : (ticket.status == 'IN_PROGRESS' ? 'bg-warning text-dark' : 'bg-success')}"
-                              th:text="${ticket.status}">OPEN</span>
-                    </td>
-                    <td th:text="${#temporals.format(ticket.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2026</td>
-                    <td>
-                        <button class="btn btn-sm btn-gold" data-bs-toggle="modal" th:data-bs-target="'#ticketModal-' + ${ticket.id}">
-                            <i class="fas fa-reply"></i> Traiter
-                        </button>
-                    </td>
-                </tr>
-                <tr th:if="${tickets == null or #lists.isEmpty(tickets)}">
-                    <td colspan="6" class="text-center text-muted py-4">Aucun ticket pour le moment.</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <h5 class="cyber-title text-gold mb-4">
+            <i class="fas fa-ticket-alt me-2"></i>Tickets de Support
+            <span class="badge bg-danger ms-2" th:if="${pendingTicketsCount != null and pendingTicketsCount > 0}"
+                  th:text="${pendingTicketsCount} + ' en attente'">0</span>
+        </h5>
 
-    <!-- ===================================================== -->
-    <!-- ⚠️ FORMULAIRE DE TEST (à supprimer après débogage) -->
-    <!-- ===================================================== -->
-    <div style="background: #fff3cd; padding: 25px; margin: 30px 0; border: 4px solid #ff0000; border-radius: 8px;">
-        <h3 style="color: #ff0000; margin-bottom: 15px;">
-            🔧 FORMULAIRE DE TEST (ne pas laisser en production)
-        </h3>
-        <p style="color: #333; margin-bottom: 20px;">
-            Si vous voyez ce formulaire, le template est bien déployé. Remplissez-le pour tester la réponse aux tickets.
+        <!-- Liste des tickets -->
+        <div th:each="ticket : ${tickets}" class="mb-4 p-3 border border-secondary rounded">
+
+            <!-- En-tête du ticket -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-gold mb-0">
+                    <i class="fas fa-ticket-alt me-2"></i>Ticket #<span th:text="${ticket.id}"></span>
+                </h6>
+                <span class="badge"
+                      th:classappend="${ticket.status == 'OPEN' ? 'bg-danger' : (ticket.status == 'IN_PROGRESS' ? 'bg-warning text-dark' : 'bg-success')}"
+                      th:text="${ticket.status}">OPEN</span>
+            </div>
+
+            <!-- Informations du ticket -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="mb-1 small text-muted">Client :</p>
+                    <p class="mb-0 text-white">
+                        <i class="fas fa-user me-2 text-gold"></i><span th:text="${ticket.userEmail}"></span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-1 small text-muted">Téléphone :</p>
+                    <p class="mb-0 text-white">
+                        <i class="fas fa-phone me-2 text-gold"></i>
+                        <span th:text="${ticket.userPhone != null ? ticket.userPhone : 'Non renseigné'}"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <p class="mb-1 small text-muted">Sujet :</p>
+                <p class="mb-0 text-white fw-bold" th:text="${ticket.subject}"></p>
+            </div>
+
+            <div class="mb-3">
+                <p class="mb-1 small text-muted">Description du problème :</p>
+                <p class="bg-secondary p-3 rounded text-white" th:text="${ticket.description}"></p>
+            </div>
+
+            <!-- Réponse déjà enregistrée (si elle existe) -->
+            <div th:if="${ticket.adminReply != null and !ticket.adminReply.isBlank()}" class="mb-3">
+                <p class="mb-1 small text-gold fw-bold">
+                    <i class="fas fa-reply me-2"></i>Réponse déjà envoyée :
+                </p>
+                <p class="bg-dark p-3 rounded border border-warning text-white"
+                   th:text="${ticket.adminReply}"></p>
+                <p class="small text-muted mb-0"
+                   th:if="${ticket.repliedAt != null}">
+                    Envoyée le <span th:text="${#temporals.format(ticket.repliedAt, 'dd/MM/yyyy HH:mm')}"></span>
+                </p>
+            </div>
+
+            <!-- Bouton pour déplier le formulaire de réponse -->
+            <details>
+                <summary class="btn btn-sm btn-gold">
+                    <i class="fas fa-reply"></i>
+                    <span th:text="${ticket.adminReply != null and !ticket.adminReply.isBlank() ? 'Modifier la réponse' : 'Répondre au client'}"></span>
+                </summary>
+
+                <!-- Formulaire de réponse -->
+                <form th:action="@{/admin/support/tickets/update-status}" method="post" class="mt-3 p-3 bg-secondary rounded">
+                    <input type="hidden" name="ticketId" th:value="${ticket.id}" />
+
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">Statut du ticket</label>
+                        <select name="status" class="form-select">
+                            <option value="OPEN" th:selected="${ticket.status == 'OPEN'}">Ouvert (OPEN)</option>
+                            <option value="IN_PROGRESS" th:selected="${ticket.status == 'IN_PROGRESS'}">En cours (IN_PROGRESS)</option>
+                            <option value="RESOLVED" th:selected="${ticket.status == 'RESOLVED'}">Résolu (RESOLVED)</option>
+                            <option value="CLOSED" th:selected="${ticket.status == 'CLOSED'}">Fermé (CLOSED)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-white fw-bold">
+                            <i class="fas fa-reply me-2 text-gold"></i>Réponse au client (envoyée par email)
+                        </label>
+                        <textarea name="adminReply"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Saisissez votre réponse ici... Le client recevra cette réponse par email."
+                                  th:text="${ticket.adminReply != null ? ticket.adminReply : ''}"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold">
+                        <i class="fas fa-paper-plane me-2"></i>Enregistrer et envoyer la réponse
+                    </button>
+                </form>
+            </details>
+        </div>
+
+        <!-- Message si aucun ticket -->
+        <p th:if="${tickets == null or #lists.isEmpty(tickets)}" class="text-center text-muted py-4">
+            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+            Aucun ticket pour le moment.
         </p>
-
-        <form th:action="@{/admin/support/tickets/update-status}" method="post">
-
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
-                    ID du ticket :
-                </label>
-                <input type="number"
-                       name="ticketId"
-                       required
-                       style="border: 2px solid #000; padding: 8px; width: 200px; font-size: 16px;"
-                       placeholder="Ex: 1">
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
-                    Statut :
-                </label>
-                <select name="status"
-                        style="border: 2px solid #000; padding: 8px; width: 250px; font-size: 16px;">
-                    <option value="OPEN">Ouvert (OPEN)</option>
-                    <option value="IN_PROGRESS">En cours (IN_PROGRESS)</option>
-                    <option value="RESOLVED">Résolu (RESOLVED)</option>
-                    <option value="CLOSED">Fermé (CLOSED)</option>
-                </select>
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">
-                    Réponse au client :
-                </label>
-                <textarea name="adminReply"
-                          rows="5"
-                          required
-                          style="border: 2px solid #000; padding: 8px; width: 100%; max-width: 600px; font-size: 16px;"
-                          placeholder="Saisissez votre réponse ici... Le client recevra cette réponse par email."></textarea>
-            </div>
-
-            <button type="submit"
-                    style="background: #28a745; color: white; padding: 15px 30px; font-size: 18px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">
-                🔥 ENVOYER LA RÉPONSE
-            </button>
-
-        </form>
-    </div>
-
-    <!-- MODALES : RÉINITIALISATION MOT DE PASSE -->
-    <div th:each="user : ${users}" class="modal fade" th:id="'resetModal-' + ${user.id}" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white border-secondary">
-                <form th:action="@{/admin/users/reset-password}" method="post">
-                    <div class="modal-header border-secondary">
-                        <h5 class="modal-title text-gold">Réinitialiser Mot de Passe</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="userId" th:value="${user.id}" />
-                        <p>Modifier le mot de passe de : <strong th:text="${user.email}"></strong></p>
-                        <div class="mb-3">
-                            <label class="form-label">Nouveau mot de passe</label>
-                            <input type="password" name="newPassword" class="form-control bg-secondary text-white border-dark" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-secondary">
-                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-gold">Mettre à jour</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODALES : TRAITEMENT DES TICKETS -->
-    <div th:each="ticket : ${tickets}" class="modal fade" th:id="'ticketModal-' + ${ticket.id}" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark text-white border-secondary">
-                <form th:action="@{/admin/support/tickets/update-status}" method="post">
-                    <div class="modal-header border-secondary">
-                        <h5 class="modal-title text-gold">
-                            <i class="fas fa-ticket-alt me-2"></i>Ticket #<span th:text="${ticket.id}"></span>
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="ticketId" th:value="${ticket.id}" />
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small">Client</label>
-                                <p class="mb-0"><i class="fas fa-user me-2 text-gold"></i><span th:text="${ticket.userEmail}"></span></p>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small">Téléphone</label>
-                                <p class="mb-0"><i class="fas fa-phone me-2 text-gold"></i><span th:text="${ticket.userPhone != null ? ticket.userPhone : 'Non renseigné'}"></span></p>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted small">Sujet</label>
-                            <p class="mb-0 fw-bold" th:text="${ticket.subject}"></p>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label text-muted small">Description du problème</label>
-                            <p class="bg-secondary p-3 rounded" th:text="${ticket.description}"></p>
-                        </div>
-
-                        <hr class="border-secondary">
-
-                        <div class="mb-3">
-                            <label class="form-label">Changer le statut</label>
-                            <select name="status" class="form-select bg-secondary text-white border-dark">
-                                <option value="OPEN" th:selected="${ticket.status == 'OPEN'}">Ouvert (OPEN)</option>
-                                <option value="IN_PROGRESS" th:selected="${ticket.status == 'IN_PROGRESS'}">En cours (IN_PROGRESS)</option>
-                                <option value="RESOLVED" th:selected="${ticket.status == 'RESOLVED'}">Résolu (RESOLVED)</option>
-                                <option value="CLOSED" th:selected="${ticket.status == 'CLOSED'}">Fermé (CLOSED)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-gold">
-                                <i class="fas fa-reply me-2"></i>Réponse au client (sera envoyée par email)
-                            </label>
-                            <textarea name="adminReply"
-                                      class="form-control bg-secondary text-white border-dark"
-                                      rows="5"
-                                      placeholder="Saisissez votre réponse ici... Le client recevra cette réponse par email."
-                                      th:text="${ticket.adminReply != null ? ticket.adminReply : ''}"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-secondary">
-                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-gold">
-                            <i class="fas fa-paper-plane me-2"></i>Enregistrer et envoyer la réponse
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 </main>
 
