@@ -26,19 +26,18 @@ public class SupportTicket {
     @Column(name = "user_phone")
     private String userPhone;
 
+    @Column(name = "admin_reply", columnDefinition = "TEXT")
+    private String adminReply;
+
+    @Column(name = "replied_at")
+    private LocalDateTime repliedAt;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public SupportTicket() {}
 
-    public SupportTicket(String subject, String description, String userEmail) {
-        this.subject = subject;
-        this.description = description;
-        this.userEmail = userEmail;
-        this.status = "OPEN";
-        this.createdAt = LocalDateTime.now();
-    }
-
+    // Getters/Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -56,6 +55,12 @@ public class SupportTicket {
 
     public String getUserPhone() { return userPhone; }
     public void setUserPhone(String userPhone) { this.userPhone = userPhone; }
+
+    public String getAdminReply() { return adminReply; }
+    public void setAdminReply(String adminReply) { this.adminReply = adminReply; }
+
+    public LocalDateTime getRepliedAt() { return repliedAt; }
+    public void setRepliedAt(LocalDateTime repliedAt) { this.repliedAt = repliedAt; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

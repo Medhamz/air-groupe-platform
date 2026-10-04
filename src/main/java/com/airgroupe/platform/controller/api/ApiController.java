@@ -136,4 +136,18 @@ public class ApiController {
     public Map<String, String> health() {
         return Map.of("status", "OK", "message", "AES API is running on Render");
     }
+
+    @GetMapping("/support/tickets")
+    public ResponseEntity<?> getUserTickets(@RequestParam("email") String email) {
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email requis"));
+        }
+
+        java.util.List<SupportTicket> tickets = supportTicketRepository.findAllByOrderByCreatedAtDesc()
+                .stream()
+                .filter(t -> email.equalsIgnoreCase(t.getUserEmail()))
+                .toList();
+
+        return ResponseEntity.ok(tickets);
+    }
 }

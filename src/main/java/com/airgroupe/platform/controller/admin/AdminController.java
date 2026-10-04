@@ -123,21 +123,48 @@ public class AdminController {
                                      RedirectAttributes redirectAttributes) {
         supportTicketRepository.findById(ticketId).ifPresent(ticket -> {
             ticket.setStatus(status);
-            supportTicketRepository.save(ticket);
 
+            // Enregistrer la réponse
             if (adminReply != null && !adminReply.isBlank()) {
+                ticket.setAdminReply(adminReply);
+                ticket.setRepliedAt(java.time.LocalDateTime.now());
+
+                // Envoi de l'email au client
                 try {
-                    MimeMessage message = mailSender.createMimeMessage();
-                    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                    jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+                    org.springframework.mail.javamail.MimeMessageHelper helper =
+                            new org.springframework.mail.javamail.MimeMessageHelper(message, true, "UTF-8");
+
                     helper.setFrom("sidimohamedhamza2@gmail.com");
                     helper.setTo(ticket.getUserEmail());
-                    helper.setSubject("Mise à jour concernant votre ticket #" + ticket.getId());
-                    helper.setText("<p>Bonjour,</p><p>" + adminReply.replaceAll("\n", "<br>") + "</p><p>Cordialement,<br>Support - Afrique Équipements et Services</p>", true);
+                    helper.setSubject("Réponse à votre ticket #" + ticket.getId() + " - " + ticket.getSubject());
+
+                    String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
+                            + "<h2 style='color: #134074;'>Bonjour,</h2>"
+                            + "<p>Voici la réponse à votre demande de support :</p>"
+                            + "<div style='background: #f4f6f9; padding: 15px; border-left: 4px solid #d4af37; margin: 20px 0;'>"
+                            + adminReply.replaceAll("\n", "<br>")
+                            + "</div>"
+                            + "<p><strong>Statut du ticket :</strong> " + status + "</p>"
+                            + "<hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
+                            + "<p style='color: #777; font-size: 13px;'>Cordialement,<br>"
+                            + "<strong>Support - Afrique Équipements et Services</strong></p>"
+                            + "</body></html>";
+
+                    helper.setText(htmlBody, true);
                     mailSender.send(message);
-                } catch (Exception ignored) {}
+
+                    redirectAttributes.addFlashAttribute("successMessage", "Ticket mis à jour et réponse envoyée par email au client !");
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Ticket mis à jour mais échec de l'envoi email : " + e.getMessage());
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("successMessage", "Statut du ticket mis à jour.");
             }
+
+            supportTicketRepository.save(ticket);
         });
-        redirectAttributes.addFlashAttribute("successMessage", "Ticket mis à jour avec succès !");
+
         return "redirect:/admin/support";
     }
 
