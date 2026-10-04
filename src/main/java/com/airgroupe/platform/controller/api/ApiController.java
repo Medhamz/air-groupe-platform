@@ -1,5 +1,7 @@
 package com.airgroupe.platform.controller.api;
 
+import com.airgroupe.platform.dto.RegisterRequest;
+import com.airgroupe.platform.dto.SupportTicketRequest;
 import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.model.SupportTicket;
@@ -43,31 +45,28 @@ public class ApiController {
     // ===================== AUTHENTIFICATION MOBILE =====================
 
     @PostMapping("/auth/register")
-    public ResponseEntity<?> register(@RequestBody User userRequest) {
-        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank()) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        if (request.getEmail() == null || request.getEmail().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "L'adresse email est obligatoire."));
         }
 
-        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Un compte avec cet e-mail existe déjà."));
         }
 
-        if (userRequest.getUsername() == null || userRequest.getUsername().isBlank()) {
-            userRequest.setUsername(userRequest.getEmail());
-        }
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setUsername(request.getEmail());
+        user.setFullName(request.getFullName());
+        user.setPhone(request.getPhone());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("CLIENT");
+        user.setActive(true);
+        user.setCreatedAt(LocalDateTime.now());
 
-        if (userRequest.getPassword() != null) {
-            userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        }
-
-        if (userRequest.getRole() == null || userRequest.getRole().isBlank()) {
-            userRequest.setRole("CLIENT");
-        }
-
-        userRequest.setActive(true);
-        userRepository.save(userRequest);
+        userRepository.save(user);
 
         return ResponseEntity.ok(Map.of("message", "Compte créé avec succès !"));
     }
@@ -99,7 +98,7 @@ public class ApiController {
                 .body(Map.of("message", "Identifiants incorrects."));
     }
 
-    // ===================== SERVICES ET DEVIS =====================
+    // ===================== SERVICES & DEVIS =====================
 
     @GetMapping("/services")
     public List<ServiceEntity> getServices() {
@@ -118,9 +117,15 @@ public class ApiController {
     // ===================== TICKETS DE SUPPORT =====================
 
     @PostMapping("/support/tickets")
-    public ResponseEntity<?> createSupportTicket(@RequestBody SupportTicket ticket) {
+    public ResponseEntity<?> createSupportTicket(@RequestBody SupportTicketRequest request) {
+        SupportTicket ticket = new SupportTicket();
+        ticket.setSubject(request.getSubject());
+        ticket.setDescription(request.getDescription());
+        ticket.setUserEmail(request.getUserEmail());
+        ticket.setUserPhone(request.getUserPhone());
         ticket.setStatus("OPEN");
         ticket.setCreatedAt(LocalDateTime.now());
+
         supportTicketRepository.save(ticket);
         return ResponseEntity.ok(Map.of("message", "Ticket créé avec succès !"));
     }

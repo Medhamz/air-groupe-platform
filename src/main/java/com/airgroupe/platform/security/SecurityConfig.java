@@ -49,11 +49,9 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // ========== CONFIGURATION DU CORS ==========
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
@@ -64,7 +62,7 @@ public class SecurityConfig {
         return source;
     }
 
-    // ========== ADMIN BACK-OFFICE & ROUTAGE DE SÉCURITÉ ==========
+    // ========== ADMIN ==========
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
@@ -90,15 +88,13 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/admin/login?logout")
                         .permitAll()
                 )
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/admin/login?accessDenied")
-                )
+                .exceptionHandling(ex -> ex.accessDeniedPage("/admin/login?accessDenied"))
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-    // ========== PUBLIC FRONT-OFFICE & API MOBILE ==========
+    // ========== PUBLIC & API MOBILE ==========
     @Bean
     @Order(2)
     public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
@@ -110,14 +106,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().permitAll()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/")
-                        .permitAll()
-                )
+                .formLogin(form -> form.loginPage("/login").permitAll())
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
                 .csrf(csrf -> csrf.disable());
 
         return http.build();

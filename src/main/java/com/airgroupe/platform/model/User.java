@@ -27,6 +27,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "full_name")
     private String fullName;
 
     @Column(unique = true, nullable = false)
@@ -34,11 +35,13 @@ public class User implements UserDetails {
 
     private String phone;
 
+    @Column(name = "is_active")
     private boolean active = true;
 
     @Column(nullable = false)
-    private String role = "CLIENT"; // ROLE_ADMIN, ROLE_PARTNER, ROLE_CLIENT
+    private String role = "CLIENT";
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @PrePersist

@@ -18,17 +18,18 @@ public class SupportTicket {
     private String description;
 
     @Column(nullable = false)
-    private String status = "OPEN"; // Ex: OPEN, IN_PROGRESS, RESOLVED, CLOSED
+    private String status = "OPEN";
 
     @Column(name = "user_email", nullable = false)
     private String userEmail;
 
+    @Column(name = "user_phone")
+    private String userPhone;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Constructeurs
-    public SupportTicket() {
-    }
+    public SupportTicket() {}
 
     public SupportTicket(String subject, String description, String userEmail) {
         this.subject = subject;
@@ -38,52 +39,24 @@ public class SupportTicket {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
 
-    public String getSubject() {
-        return subject;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getUserPhone() { return userPhone; }
+    public void setUserPhone(String userPhone) { this.userPhone = userPhone; }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
