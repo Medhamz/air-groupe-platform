@@ -50,7 +50,6 @@
                               th:text="${user.active} ? 'Actif' : 'Inactif'">Actif</span>
                     </td>
                     <td>
-                        <!-- Réinitialisation mot de passe (formulaire inline via details) -->
                         <details>
                             <summary class="btn btn-sm btn-outline-warning">
                                 <i class="fas fa-key"></i> Mot de passe
@@ -90,7 +89,7 @@
         <div th:each="ticket : ${tickets}" class="mb-4 p-3 border border-secondary rounded">
 
             <!-- En-tête du ticket -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="text-gold mb-0">
                     <i class="fas fa-ticket-alt me-2"></i>Ticket #<span th:text="${ticket.id}"></span>
                 </h6>
@@ -101,41 +100,45 @@
 
             <!-- Informations du ticket -->
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <p class="mb-1 small text-muted">Client :</p>
-                    <p class="mb-0 text-white">
-                        <i class="fas fa-user me-2 text-gold"></i><span th:text="${ticket.userEmail}"></span>
+                <div class="col-md-6 mb-2">
+                    <p class="mb-1 small fw-bold text-gold">
+                        <i class="fas fa-user me-2"></i>Client
                     </p>
+                    <p class="mb-0 text-white" th:text="${ticket.userEmail}"></p>
                 </div>
-                <div class="col-md-6">
-                    <p class="mb-1 small text-muted">Téléphone :</p>
-                    <p class="mb-0 text-white">
-                        <i class="fas fa-phone me-2 text-gold"></i>
-                        <span th:text="${ticket.userPhone != null ? ticket.userPhone : 'Non renseigné'}"></span>
+                <div class="col-md-6 mb-2">
+                    <p class="mb-1 small fw-bold text-gold">
+                        <i class="fas fa-phone me-2"></i>Téléphone
                     </p>
+                    <p class="mb-0 text-white"
+                       th:text="${ticket.userPhone != null ? ticket.userPhone : 'Non renseigné'}"></p>
                 </div>
             </div>
 
-            <div class="mb-2">
-                <p class="mb-1 small text-muted">Sujet :</p>
+            <div class="mb-3">
+                <p class="mb-1 small fw-bold text-gold">
+                    <i class="fas fa-tag me-2"></i>Sujet
+                </p>
                 <p class="mb-0 text-white fw-bold" th:text="${ticket.subject}"></p>
             </div>
 
             <div class="mb-3">
-                <p class="mb-1 small text-muted">Description du problème :</p>
-                <p class="bg-secondary p-3 rounded text-white" th:text="${ticket.description}"></p>
+                <p class="mb-1 small fw-bold text-gold">
+                    <i class="fas fa-align-left me-2"></i>Description du problème
+                </p>
+                <p class="bg-secondary p-3 rounded text-white mb-0" th:text="${ticket.description}"></p>
             </div>
 
             <!-- Réponse déjà enregistrée (si elle existe) -->
             <div th:if="${ticket.adminReply != null and !ticket.adminReply.isBlank()}" class="mb-3">
-                <p class="mb-1 small text-gold fw-bold">
-                    <i class="fas fa-reply me-2"></i>Réponse déjà envoyée :
+                <p class="mb-1 small fw-bold text-gold">
+                    <i class="fas fa-reply me-2"></i>Réponse déjà envoyée
                 </p>
-                <p class="bg-dark p-3 rounded border border-warning text-white"
+                <p class="bg-dark p-3 rounded border border-warning text-white mb-1"
                    th:text="${ticket.adminReply}"></p>
-                <p class="small text-muted mb-0"
-                   th:if="${ticket.repliedAt != null}">
-                    Envoyée le <span th:text="${#temporals.format(ticket.repliedAt, 'dd/MM/yyyy HH:mm')}"></span>
+                <p class="small text-muted mb-0" th:if="${ticket.repliedAt != null}">
+                    <i class="fas fa-clock me-1"></i>Envoyée le
+                    <span th:text="${#temporals.format(ticket.repliedAt, 'dd/MM/yyyy HH:mm')}"></span>
                 </p>
             </div>
 
@@ -151,7 +154,9 @@
                     <input type="hidden" name="ticketId" th:value="${ticket.id}" />
 
                     <div class="mb-3">
-                        <label class="form-label text-white fw-bold">Statut du ticket</label>
+                        <label class="form-label text-white fw-bold">
+                            <i class="fas fa-flag me-2 text-gold"></i>Statut du ticket
+                        </label>
                         <select name="status" class="form-select">
                             <option value="OPEN" th:selected="${ticket.status == 'OPEN'}">Ouvert (OPEN)</option>
                             <option value="IN_PROGRESS" th:selected="${ticket.status == 'IN_PROGRESS'}">En cours (IN_PROGRESS)</option>
