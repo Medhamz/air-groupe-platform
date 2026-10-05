@@ -159,4 +159,9 @@ public class HomeController {
         redirectAttributes.addFlashAttribute("success", "Merci ! Votre avis a été soumis et sera publié après validation.");
         return "redirect:/avis";
     }
+
+    @GetMapping("/telechargement")
+    public String telechargement() {
+        return "front/telechargement";
+    }
 }

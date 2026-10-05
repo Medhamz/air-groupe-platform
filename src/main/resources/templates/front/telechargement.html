@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{front/fragments/layout :: head}"></head>
+<body>
+<div th:replace="~{front/fragments/layout :: navbar}"></div>
+
+<!-- SECTION HERO TELECHARGEMENT -->
+<section class="hero text-center position-relative overflow-hidden py-5">
+    <div class="container position-relative" style="z-index: 1;">
+        <div class="d-flex justify-content-center mb-3">
+            <div id="downloadGlobe" style="width: 120px; height: 120px;"></div>
+        </div>
+
+        <h1 class="display-4 fw-bold mb-3 text-white">
+            Téléchargez <span class="text-gold">AES SARLU PRO</span>
+        </h1>
+        <p class="lead max-w-700 mx-auto mb-4 text-light">
+            L'application mobile officielle d'Afrique Équipements & Services. Consultez nos services,
+            demandez des devis, envoyez vos tickets support et suivez vos projets en temps réel.
+        </p>
+    </div>
+</section>
+
+<!-- SECTION PRINCIPALE -->
+<section class="py-5 section-animate">
+    <div class="container">
+        <div class="row justify-content-center g-4">
+
+            <!-- Carte principale de téléchargement -->
+            <div class="col-lg-6">
+                <div class="card p-5 text-center h-100 shadow-lg border-0">
+                    <div class="mb-4">
+                        <i class="fab fa-android text-gold" style="font-size: 5rem;"></i>
+                    </div>
+
+                    <h3 class="fw-bold text-white mb-2">AES SARLU PRO</h3>
+                    <p class="text-secondary mb-1">Application Android</p>
+                    <p class="text-muted small mb-4">
+                        Version 1.0.0 &middot; Compatible Android 7.0+
+                    </p>
+
+                    <div class="mb-4">
+                        <a th:href="@{/downloads/aes-sarlu-pro.apk}"
+                           download="aes-sarlu-pro.apk"
+                           class="btn btn-lg rounded-pill px-5 py-3 shadow"
+                           style="background: var(--gold-primary); color: #0b132b; font-weight: 700;">
+                            <i class="fas fa-download me-2"></i>
+                            Télécharger l'APK
+                        </a>
+                    </div>
+
+                    <p class="text-muted small mb-0">
+                        <i class="fas fa-shield-alt text-gold me-1"></i>
+                        Fichier sécurisé &middot; Taille approximative : 15 Mo
+                    </p>
+                </div>
+            </div>
+
+            <!-- Carte des fonctionnalités -->
+            <div class="col-lg-6">
+                <div class="card p-5 h-100 shadow-lg border-0">
+                    <h4 class="fw-bold text-gold mb-4">
+                        <i class="fas fa-star me-2"></i>Fonctionnalités principales
+                    </h4>
+
+                    <ul class="list-unstyled">
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-gold me-3 mt-1"></i>
+                            <div>
+                                <strong class="text-white d-block">Catalogue des services</strong>
+                                <span class="text-secondary small">Découvrez tous nos services et équipements disponibles.</span>
+                            </div>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-gold me-3 mt-1"></i>
+                            <div>
+                                <strong class="text-white d-block">Demande de devis en ligne</strong>
+                                <span class="text-secondary small">Recevez une estimation rapide et personnalisée.</span>
+                            </div>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-gold me-3 mt-1"></i>
+                            <div>
+                                <strong class="text-white d-block">Support & Assistance</strong>
+                                <span class="text-secondary small">Envoyez vos tickets et suivez leurs résolutions.</span>
+                            </div>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-gold me-3 mt-1"></i>
+                            <div>
+                                <strong class="text-white d-block">Estimateur IA de projet</strong>
+                                <span class="text-secondary small">Analyse intelligente de vos cahiers des charges.</span>
+                            </div>
+                        </li>
+                        <li class="mb-0 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-gold me-3 mt-1"></i>
+                            <div>
+                                <strong class="text-white d-block">Notifications en temps réel</strong>
+                                <span class="text-secondary small">Suivez vos demandes de devis et réponses support.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Guide d'installation -->
+            <div class="col-12 mt-4">
+                <div class="card p-5 shadow-lg border-0">
+                    <h4 class="fw-bold text-gold mb-4">
+                        <i class="fas fa-book me-2"></i>Guide d'installation
+                    </h4>
+
+                    <div class="row g-4">
+                        <div class="col-md-3 text-center">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px; background: var(--gold-primary); color: #0b132b; font-size: 1.5rem; font-weight: 700;">
+                                    1
+                                </div>
+                            </div>
+                            <h6 class="text-white fw-bold">Télécharger</h6>
+                            <p class="text-secondary small">Cliquez sur le bouton de téléchargement pour obtenir le fichier APK.</p>
+                        </div>
+
+                        <div class="col-md-3 text-center">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px; background: var(--gold-primary); color: #0b132b; font-size: 1.5rem; font-weight: 700;">
+                                    2
+                                </div>
+                            </div>
+                            <h6 class="text-white fw-bold">Autoriser l'installation</h6>
+                            <p class="text-secondary small">Dans les paramètres, autorisez les sources inconnues pour installer l'application.</p>
+                        </div>
+
+                        <div class="col-md-3 text-center">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px; background: var(--gold-primary); color: #0b132b; font-size: 1.5rem; font-weight: 700;">
+                                    3
+                                </div>
+                            </div>
+                            <h6 class="text-white fw-bold">Installer</h6>
+                            <p class="text-secondary small">Ouvrez le fichier téléchargé et suivez les instructions pour installer AES SARLU PRO.</p>
+                        </div>
+
+                        <div class="col-md-3 text-center">
+                            <div class="mb-3">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px; background: var(--gold-primary); color: #0b132b; font-size: 1.5rem; font-weight: 700;">
+                                    4
+                                </div>
+                            </div>
+                            <h6 class="text-white fw-bold">Utiliser</h6>
+                            <p class="text-secondary small">Lancez l'application et connectez-vous pour profiter de tous nos services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations sécurité -->
+            <div class="col-12 mt-4">
+                <div class="alert" style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--theme-card-border); color: #ffffff;">
+                    <h6 class="fw-bold text-gold mb-2">
+                        <i class="fas fa-info-circle me-2"></i>Informations importantes
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>L'application <strong>AES SARLU PRO</strong> est uniquement disponible pour <strong>Android</strong>.</li>
+                        <li>Vérifiez que votre appareil dispose d'un espace de stockage suffisant (environ 50 Mo).</li>
+                        <li>En cas de problème d'installation, contactez-nous au <strong>+227 96 96 74 74</strong>.</li>
+                        <li>Cette application est un produit officiel d'<strong>Afrique Équipements & Services</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{front/fragments/layout :: footer}"></div>
+<div th:replace="~{front/fragments/layout :: scripts}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('downloadGlobe') && typeof window.init3DGlobe === 'function') {
+            window.init3DGlobe('downloadGlobe');
+        }
+    });
+</script>
+
+</body>
+</html>
