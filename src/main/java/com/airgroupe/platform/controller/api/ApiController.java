@@ -107,10 +107,27 @@ public class ApiController {
 
     @PostMapping("/quotes")
     public ResponseEntity<?> sendQuoteRequest(@RequestBody ContactMessage request) {
+        // ===================== LOGS DE DÉBOGAGE =====================
+        System.out.println("========================================");
+        System.out.println("=== API REÇOIT UNE DEMANDE DE DEVIS ===");
+        System.out.println("name = " + request.getName());
+        System.out.println("email = " + request.getEmail());
+        System.out.println("phone = " + request.getPhone());
+        System.out.println("subject = " + request.getSubject());
+        System.out.println("message = " + request.getMessage());
+        System.out.println("========================================");
+
         if (request.getCreatedAt() == null) {
             request.setCreatedAt(LocalDateTime.now());
         }
+        if (request.getIsRead() == null) {
+            request.setIsRead(false);
+        }
         contactMessageRepository.save(request);
+
+        System.out.println("=== ✅ DEMANDE DE DEVIS ENREGISTRÉE EN BDD ===");
+        System.out.println("========================================");
+
         return ResponseEntity.ok(Map.of("message", "Demande de devis enregistrée avec succès."));
     }
 
@@ -130,24 +147,24 @@ public class ApiController {
         return ResponseEntity.ok(Map.of("message", "Ticket créé avec succès !"));
     }
 
-    // ===================== HEALTH CHECK =====================
-
-    @GetMapping("/public/health")
-    public Map<String, String> health() {
-        return Map.of("status", "OK", "message", "AES API is running on Render");
-    }
-
     @GetMapping("/support/tickets")
     public ResponseEntity<?> getUserTickets(@RequestParam("email") String email) {
         if (email == null || email.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Email requis"));
         }
 
-        java.util.List<SupportTicket> tickets = supportTicketRepository.findAllByOrderByCreatedAtDesc()
+        List<SupportTicket> tickets = supportTicketRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
                 .filter(t -> email.equalsIgnoreCase(t.getUserEmail()))
                 .toList();
 
         return ResponseEntity.ok(tickets);
+    }
+
+    // ===================== HEALTH CHECK =====================
+
+    @GetMapping("/public/health")
+    public Map<String, String> health() {
+        return Map.of("status", "OK", "message", "AES API is running on Render");
     }
 }
