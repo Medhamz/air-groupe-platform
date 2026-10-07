@@ -188,4 +188,46 @@ public class ApiController {
     public Map<String, String> health() {
         return Map.of("status", "OK", "message", "AES API is running on Render");
     }
+
+    /**
+     * Le client répond à l'admin depuis l'app mobile.
+     * URL : POST /api/v1/quotes/reply
+     * Body : { "messageId": 14, "reply": "Mon budget est 500 000 FCFA" }
+     */
+    @PostMapping("/quotes/reply")
+    public ResponseEntity<?> sendClientReply(@RequestBody Map<String, String> payload) {
+        try {
+            String messageIdStr = payload.get("messageId");
+            String replyText = payload.get("reply");
+
+            if (messageIdStr == null || replyText == null || replyText.isBlank()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "messageId et reply sont obligatoires."));
+            }
+
+            Long messageId = Long.parseLong(messageIdStr);
+            Optional<ContactMessage> msgOpt = contactMessageRepository.findById(messageId);
+
+            if (msgOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Devis introuvable."));
+            }
+
+            ContactMessage msg = msgOpt.get();
+            msg.setClientReply(replyText);
+            msg.setClientRepliedAt(LocalDateTime.now());
+            // Le message redevient "non lu" pour que l'admin soit notifié
+            msg.setIsRead(false);
+            contactMessageRepository.save(msg);
+
+            System.out.println("✅ Réponse client enregistrée pour le devis #" + messageId);
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Réponse envoyée à l'équipe AES SARLU."
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("message", "Erreur : " + e.getMessage()));
+        }
+    }
 }

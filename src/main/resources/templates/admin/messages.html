@@ -58,6 +58,8 @@
                              th:data-message="${msg.message}"
                              th:data-reply="${msg.adminReply != null ? msg.adminReply : ''}"
                              th:data-replied-at="${msg.repliedAt != null ? #temporals.format(msg.repliedAt, 'dd MMM yyyy à HH:mm') : ''}"
+                             th:data-client-reply="${msg.clientReply != null ? msg.clientReply : ''}"
+                             th:data-client-replied-at="${msg.clientRepliedAt != null ? #temporals.format(msg.clientRepliedAt, 'dd MMM yyyy à HH:mm') : ''}"
                              th:data-source="${msg.source != null ? msg.source : 'WEB'}"
                              th:data-date="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd MMM yyyy à HH:mm') : '-'}"
                              th:data-read="${msg.isRead}"
@@ -78,8 +80,12 @@
 
                             <div class="fw-semibold text-gold small text-truncate mb-1" th:text="${msg.subject}">Sujet</div>
                             <p class="text-muted small m-0 text-truncate" style="font-size: 0.8rem;" th:text="${msg.message}">Aperçu...</p>
+
                             <div th:if="${msg.adminReply != null}" class="mt-1 small text-success" style="font-size:0.7rem;">
                                 <i class="fas fa-check-circle me-1"></i>Répondu
+                            </div>
+                            <div th:if="${msg.clientReply != null}" class="mt-1 small" style="font-size:0.7rem; color:#4FC3F7;">
+                                <i class="fas fa-comment-dots me-1"></i>Client a répondu
                             </div>
                         </div>
 
@@ -129,7 +135,7 @@
                         <!-- Fil de discussion -->
                         <div class="flex-grow-1 mb-4 overflow-auto" style="max-height: 420px;">
 
-                            <!-- Message client -->
+                            <!-- 1. Message client -->
                             <div class="mb-3">
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <div class="avatar-circle" id="clientAvatar">C</div>
@@ -139,7 +145,7 @@
                                      id="detailBody" style="white-space: pre-wrap;"></div>
                             </div>
 
-                            <!-- Réponse admin existante -->
+                            <!-- 2. Réponse admin -->
                             <div id="adminReplyBlock" class="mb-3 d-none">
                                 <div class="d-flex align-items-center gap-2 mb-2 justify-content-end">
                                     <span class="text-muted style-micro"><span id="adminReplyDateLabel"></span> — ADMIN</span>
@@ -149,16 +155,25 @@
                                      id="adminReplyBody" style="white-space: pre-wrap;"></div>
                             </div>
 
+                            <!-- 3. Réponse du CLIENT (nouveau) -->
+                            <div id="clientReplyBlock" class="mb-3 d-none">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="avatar-circle client-avatar"><i class="fas fa-user"></i></div>
+                                    <span class="text-muted style-micro">CLIENT — <span id="clientReplyDateLabel"></span></span>
+                                </div>
+                                <div class="p-3 rounded client-reply-bubble text-light leading-relaxed"
+                                     id="clientReplyBody" style="white-space: pre-wrap;"></div>
+                            </div>
+
                         </div>
 
-                        <!-- Zone de réponse -->
+                        <!-- Zone de réponse admin -->
                         <div class="border-top border-secondary pt-3">
                             <label class="text-gold style-micro mb-2">
                                 <i class="fas fa-reply me-1"></i>
                                 <span id="replyLabel">RÉPONDRE AU CLIENT</span>
                             </label>
 
-                            <!-- Info : où va la réponse -->
                             <div class="alert alert-dark border border-secondary py-2 px-3 mb-2 small" id="replyChannelInfo">
                                 <i class="fas fa-info-circle text-gold me-1"></i>
                                 <span id="replyChannelText">La réponse sera envoyée par email au client.</span>
@@ -188,7 +203,7 @@
 
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
 
-<!-- CSRF meta pour AJAX (Spring Security) -->
+<!-- CSRF meta pour AJAX -->
 <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
 <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
@@ -219,10 +234,18 @@
     .admin-avatar {
         background: #d4af37; color: #111; border-color: #d4af37;
     }
+    .client-avatar {
+        background: #4FC3F7; color: #111; border-color: #4FC3F7;
+    }
     .admin-reply-bubble {
         background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
         border: 1px solid rgba(212,175,55,0.4);
         border-left: 3px solid #d4af37;
+    }
+    .client-reply-bubble {
+        background: linear-gradient(135deg, rgba(79,195,247,0.15), rgba(79,195,247,0.05));
+        border: 1px solid rgba(79,195,247,0.4);
+        border-left: 3px solid #4FC3F7;
     }
 </style>
 
@@ -249,6 +272,8 @@
         const date = element.getAttribute('data-date');
         const reply = element.getAttribute('data-reply');
         const repliedAt = element.getAttribute('data-replied-at');
+        const clientReply = element.getAttribute('data-client-reply');
+        const clientRepliedAt = element.getAttribute('data-client-replied-at');
         activeSource = element.getAttribute('data-source') || 'WEB';
         const isRead = element.getAttribute('data-read') === 'true';
 
@@ -292,10 +317,20 @@
             document.getElementById('replyLabel').textContent = 'RÉPONDRE AU CLIENT';
         }
 
+        // ✅ Réponse du CLIENT (nouveau)
+        const clientReplyBlock = document.getElementById('clientReplyBlock');
+        if (clientReply) {
+            clientReplyBlock.classList.remove('d-none');
+            document.getElementById('clientReplyBody').textContent = clientReply;
+            document.getElementById('clientReplyDateLabel').textContent = clientRepliedAt || '';
+        } else {
+            clientReplyBlock.classList.add('d-none');
+        }
+
         // Info canal de réponse
         const channelText = document.getElementById('replyChannelText');
         if (activeSource === 'MOBILE') {
-            channelText.textContent = "📱 La réponse sera visible dans l'application mobile du client (sous son message).";
+            channelText.textContent = "📱 La réponse sera visible dans l'application mobile du client.";
         } else {
             channelText.textContent = "📧 La réponse sera envoyée par email au client.";
         }
@@ -347,14 +382,14 @@
                 statusEl.textContent = '✅ ' + (data.message || 'Réponse enregistrée.');
                 statusEl.className = 'text-success small';
 
-                // Mise à jour de l'UI côté client
+                // Mise à jour UI
                 document.getElementById('adminReplyBody').textContent = text;
                 document.getElementById('adminReplyDateLabel').textContent = new Date().toLocaleString('fr-FR');
                 document.getElementById('adminReplyBlock').classList.remove('d-none');
                 document.getElementById('replyText').value = '';
                 updateCharCount();
 
-                // Mettre à jour la carte dans la liste
+                // Mettre à jour la carte
                 const card = document.querySelector(`.message-item[data-id="${activeId}"]`);
                 if (card) {
                     card.setAttribute('data-reply', text);
