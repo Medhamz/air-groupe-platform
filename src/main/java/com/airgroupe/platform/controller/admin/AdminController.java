@@ -1,5 +1,6 @@
 package com.airgroupe.platform.controller.admin;
 
+import com.airgroupe.platform.model.ContactMessage;
 import com.airgroupe.platform.model.NewsletterSubscriber;
 import com.airgroupe.platform.model.ServiceEntity;
 import com.airgroupe.platform.repository.ContactMessageRepository;
@@ -9,6 +10,7 @@ import com.airgroupe.platform.repository.SupportTicketRepository;
 import com.airgroupe.platform.repository.UserRepository;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -71,8 +75,110 @@ public class AdminController {
         model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
         model.addAttribute("totalProjets", 0L);
         model.addAttribute("recentMessages", contactMessageRepository.findTop5ByOrderByCreatedAtDesc());
-
         return "admin/dashboard";
+    }
+
+    // ===================== MESSAGERIE / DEVIS =====================
+
+    @GetMapping("/messages")
+    public String messagesPage(Model model) {
+        List<ContactMessage> messages = contactMessageRepository.findAllByOrderByCreatedAtDesc();
+        model.addAttribute("messages", messages);
+        model.addAttribute("unreadCount", contactMessageRepository.countByIsReadFalse());
+        model.addAttribute("pendingTicketsCount", supportTicketRepository.countByStatus("OPEN"));
+        return "admin/messages";
+    }
+
+    @GetMapping("/messages/read/{id}")
+    public String markMessageAsRead(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        contactMessageRepository.findById(id).ifPresent(msg -> {
+            msg.setIsRead(true);
+            contactMessageRepository.save(msg);
+        });
+        redirectAttributes.addFlashAttribute("successMessage", "Message marqué comme lu.");
+        return "redirect:/admin/messages";
+    }
+
+    @GetMapping("/messages/delete/{id}")
+    public String deleteMessage(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        contactMessageRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Message supprimé.");
+        return "redirect:/admin/messages";
+    }
+
+    /**
+     * Réponse AJAX depuis messages.html.
+     * - Sauvegarde adminReply + repliedAt + repliedBy en BDD
+     * - Si source == WEB  → envoie un email au client
+     * - Si source == MOBILE → rien de plus (l'app mobile verra la réponse via /api/v1/quotes/replies)
+     */
+    @PostMapping("/messages/reply")
+    @ResponseBody
+    public ResponseEntity<?> replyToMessage(@RequestBody Map<String, String> payload) {
+        try {
+            Long messageId = Long.parseLong(payload.get("messageId"));
+            String replyText = payload.get("reply");
+
+            if (replyText == null || replyText.isBlank()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("success", false, "message", "La réponse ne peut pas être vide."));
+            }
+
+            ContactMessage msg = contactMessageRepository.findById(messageId)
+                    .orElseThrow(() -> new RuntimeException("Message introuvable"));
+
+            // 1) Sauvegarde en BDD
+            msg.setAdminReply(replyText);
+            msg.setRepliedAt(LocalDateTime.now());
+            msg.setRepliedBy("admin@airgroupe.com");
+            msg.setIsRead(true);
+            contactMessageRepository.save(msg);
+
+            // 2) Si WEB → envoi email au client
+            boolean emailSent = false;
+            String emailError = null;
+            if ("WEB".equalsIgnoreCase(msg.getSource())) {
+                try {
+                    MimeMessage message = mailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                    helper.setFrom("sidimohamedhamza2@gmail.com");
+                    helper.setTo(msg.getEmail());
+                    helper.setSubject("Re: " + msg.getSubject());
+
+                    String html = "<html><body style='font-family: Arial, sans-serif; color:#333; line-height:1.6;'>"
+                            + "<h2 style='color:#134074;'>Bonjour " + (msg.getName() != null ? msg.getName() : "") + ",</h2>"
+                            + "<p>Voici notre réponse à votre demande :</p>"
+                            + "<div style='background:#f4f6f9; padding:15px; border-left:4px solid #d4af37; margin:20px 0;'>"
+                            + replyText.replaceAll("\n", "<br>")
+                            + "</div>"
+                            + "<hr style='border:none; border-top:1px solid #ddd; margin:25px 0;'>"
+                            + "<p style='color:#777; font-size:13px;'>Cordialement,<br>"
+                            + "<strong>Afrique Équipements et Services</strong></p>"
+                            + "</body></html>";
+
+                    helper.setText(html, true);
+                    mailSender.send(message);
+                    emailSent = true;
+                } catch (Exception e) {
+                    emailError = e.getMessage();
+                    System.err.println("❌ Échec envoi email : " + e.getMessage());
+                }
+            }
+
+            String successMsg = "MOBILE".equalsIgnoreCase(msg.getSource())
+                    ? "Réponse enregistrée. Elle sera visible dans l'application mobile du client."
+                    : (emailSent ? "Réponse enregistrée et email envoyé au client."
+                    : "Réponse enregistrée mais échec de l'email : " + emailError);
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", successMsg,
+                    "repliedAt", msg.getRepliedAt().toString()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("success", false, "message", "Erreur : " + e.getMessage()));
+        }
     }
 
     // ===================== SUPPORT & UTILISATEURS =====================
@@ -122,7 +228,6 @@ public class AdminController {
                                      @RequestParam(value = "adminReply", required = false) String adminReply,
                                      RedirectAttributes redirectAttributes) {
 
-        // ===================== LOGS DE DÉBOGAGE =====================
         System.out.println("========================================");
         System.out.println("=== DÉBUT updateTicketStatus ===");
         System.out.println("ticketId reçu = " + ticketId);
@@ -131,34 +236,21 @@ public class AdminController {
         System.out.println("========================================");
 
         var ticketOpt = supportTicketRepository.findById(ticketId);
-
         if (ticketOpt.isEmpty()) {
-            System.out.println("=== ❌ TICKET NON TROUVÉ : " + ticketId + " ===");
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Ticket introuvable avec l'ID : " + ticketId);
+            redirectAttributes.addFlashAttribute("errorMessage", "Ticket introuvable avec l'ID : " + ticketId);
             return "redirect:/admin/support";
         }
 
         var ticket = ticketOpt.get();
-        System.out.println("=== ✅ TICKET TROUVÉ : ID=" + ticket.getId()
-                + " | Email=" + ticket.getUserEmail()
-                + " | Sujet=" + ticket.getSubject() + " ===");
-
         ticket.setStatus(status);
 
-        // Enregistrer la réponse
         if (adminReply != null && !adminReply.isBlank()) {
-            System.out.println("=== Réponse non vide, on l'enregistre ===");
             ticket.setAdminReply(adminReply);
             ticket.setRepliedAt(java.time.LocalDateTime.now());
 
-            // Envoi de l'email au client
             try {
-                System.out.println("=== Tentative d'envoi email à : " + ticket.getUserEmail() + " ===");
-
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
                 helper.setFrom("sidimohamedhamza2@gmail.com");
                 helper.setTo(ticket.getUserEmail());
                 helper.setSubject("Réponse à votre ticket #" + ticket.getId() + " - " + ticket.getSubject());
@@ -178,24 +270,17 @@ public class AdminController {
                 helper.setText(htmlBody, true);
                 mailSender.send(message);
 
-                System.out.println("=== ✅ Email envoyé avec succès ===");
                 redirectAttributes.addFlashAttribute("successMessage",
                         "Ticket mis à jour et réponse envoyée par email à " + ticket.getUserEmail() + " !");
             } catch (Exception e) {
-                System.out.println("=== ❌ ERREUR envoi email : " + e.getMessage() + " ===");
-                e.printStackTrace();
                 redirectAttributes.addFlashAttribute("errorMessage",
                         "Ticket mis à jour mais échec de l'envoi email : " + e.getMessage());
             }
         } else {
-            System.out.println("=== Réponse vide, seul le statut est mis à jour ===");
             redirectAttributes.addFlashAttribute("successMessage", "Statut du ticket mis à jour.");
         }
 
         supportTicketRepository.save(ticket);
-        System.out.println("=== FIN updateTicketStatus - Redirection vers /admin/support ===");
-        System.out.println("========================================");
-
         return "redirect:/admin/support";
     }
 
@@ -215,7 +300,6 @@ public class AdminController {
                                  RedirectAttributes redirectAttributes) {
 
         List<NewsletterSubscriber> subscribers = newsletterRepository.findAll();
-
         if (subscribers.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Aucun abonné enregistré pour recevoir cette campagne.");
             return "redirect:/admin/newsletter";
@@ -227,16 +311,15 @@ public class AdminController {
             String htmlBody = "<html><body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>"
                     + "<div>" + formattedContent + "</div>"
                     + "<br><hr style='border: none; border-top: 1px solid #ddd; margin: 25px 0;'>"
-                    + "<!-- SIGNATURE ENTREPRISE -->"
                     + "<table style='width: 100%; max-width: 550px; font-family: Arial, sans-serif;'>"
                     + "  <tr>"
                     + "    <td style='vertical-align: middle; width: 100px; padding-right: 15px;'>"
-                    + "      <img src='cid:companyLogo' alt='Afrique Équipements et Services Logo' style='width: 90px; height: auto; display: block;' />"
+                    + "      <img src='cid:companyLogo' alt='Logo' style='width: 90px; height: auto; display: block;' />"
                     + "    </td>"
                     + "    <td style='vertical-align: middle; border-left: 3px solid #ffc107; padding-left: 15px;'>"
                     + "      <h3 style='margin: 0; color: #121824; font-size: 16px; font-weight: bold;'>Afrique Équipements et Services</h3>"
                     + "      <p style='margin: 3px 0; color: #555; font-size: 13px;'>Plateforme & Services Corporate</p>"
-                    + "      <p style='margin: 3px 0; color: #777; font-size: 12px;'>Email: <a href='mailto:aes@aes-sarlu.com' style='color: #d4a017; text-decoration: none;'>sidimohamedhamza2@gmail.com</a></p>"
+                    + "      <p style='margin: 3px 0; color: #777; font-size: 12px;'>Email: sidimohamedhamza2@gmail.com</p>"
                     + "    </td>"
                     + "  </tr>"
                     + "</table>"
@@ -247,22 +330,21 @@ public class AdminController {
             for (NewsletterSubscriber subscriber : subscribers) {
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
                 helper.setFrom("sidimohamedhamza2@gmail.com");
                 helper.setTo(subscriber.getEmail());
                 helper.setSubject(subject);
                 helper.setText(htmlBody, true);
-
                 if (logoResource.exists()) {
                     helper.addInline("companyLogo", logoResource);
                 }
-
                 mailSender.send(message);
             }
 
-            redirectAttributes.addFlashAttribute("successMessage", "Campagne envoyée avec succès à " + subscribers.size() + " abonné(s) !");
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Campagne envoyée avec succès à " + subscribers.size() + " abonné(s) !");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'envoi de la newsletter : " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Erreur lors de l'envoi de la newsletter : " + e.getMessage());
         }
 
         return "redirect:/admin/newsletter";

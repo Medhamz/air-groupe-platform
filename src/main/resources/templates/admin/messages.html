@@ -9,16 +9,14 @@
 <div th:replace="~{admin/fragments/layout :: main(~{::#page-content})}">
     <div id="page-content">
 
-        <!-- En-tête de page -->
+        <!-- En-tête -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
             <div>
                 <h1 class="h2 text-gold m-0 fw-bold">
                     <i class="fas fa-inbox me-2"></i>Messagerie & Support
                 </h1>
-                <p class="text-muted small m-0">Gérez vos communications client en temps réel</p>
+                <p class="text-muted small m-0">Répondez aux demandes de devis et messages client</p>
             </div>
-
-            <!-- Badges Statistiques -->
             <div class="d-flex gap-2">
                 <div class="cyber-card py-2 px-3 text-center">
                     <span class="d-block text-muted style-micro">TOTAL</span>
@@ -31,22 +29,17 @@
             </div>
         </div>
 
-        <!-- Application de Messagerie (2 Colonnes) -->
         <div class="row g-3" style="min-height: 70vh;">
 
-            <!-- COLONNE GAUCHE : Liste des messages -->
+            <!-- Liste des messages -->
             <div class="col-lg-5 col-xl-4">
                 <div class="cyber-card p-3 h-100 d-flex flex-column">
 
-                    <!-- Barre de Recherche -->
                     <div class="input-group mb-3">
-                        <span class="input-group-text bg-dark border-secondary text-gold">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" id="searchInput" class="form-control bg-dark border-secondary text-white" placeholder="Rechercher un contact, sujet...">
+                        <span class="input-group-text bg-dark border-secondary text-gold"><i class="fas fa-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-dark border-secondary text-white" placeholder="Rechercher...">
                     </div>
 
-                    <!-- Filtres Rapides (Tabs) -->
                     <div class="nav nav-pills nav-fill bg-dark p-1 rounded mb-3 border border-secondary style-tabs">
                         <button class="nav-link active py-1 btn-sm text-gold" data-filter="all" onclick="filterMessages('all', this)">Tous</button>
                         <button class="nav-link py-1 btn-sm text-white" data-filter="unread" onclick="filterMessages('unread', this)">
@@ -54,9 +47,7 @@
                         </button>
                     </div>
 
-                    <!-- Liste Déroulante -->
                     <div class="message-list flex-grow-1 overflow-auto pe-1" style="max-height: 580px;">
-
                         <div th:each="msg : ${messages}"
                              class="message-item cyber-card p-3 mb-2 cursor-pointer transition-all"
                              th:data-id="${msg.id}"
@@ -65,6 +56,9 @@
                              th:data-phone="${msg.phone != null ? msg.phone : ''}"
                              th:data-subject="${msg.subject}"
                              th:data-message="${msg.message}"
+                             th:data-reply="${msg.adminReply != null ? msg.adminReply : ''}"
+                             th:data-replied-at="${msg.repliedAt != null ? #temporals.format(msg.repliedAt, 'dd MMM yyyy à HH:mm') : ''}"
+                             th:data-source="${msg.source != null ? msg.source : 'WEB'}"
                              th:data-date="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd MMM yyyy à HH:mm') : '-'}"
                              th:data-read="${msg.isRead}"
                              th:classappend="${msg.isRead == null or !msg.isRead} ? 'unread-card' : ''"
@@ -73,16 +67,22 @@
                             <div class="d-flex justify-content-between align-items-start mb-1">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="avatar-circle" th:text="${msg.name != null and !msg.name.isEmpty() ? #strings.substring(msg.name,0,1).toUpperCase() : '?'}">U</div>
-                                    <span class="fw-bold text-white text-truncate" style="max-width: 130px;" th:text="${msg.name}">Nom</span>
+                                    <span class="fw-bold text-white text-truncate" style="max-width: 120px;" th:text="${msg.name}">Nom</span>
                                 </div>
-                                <span class="small text-muted" style="font-size: 0.75rem;" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM') : ''}">Date</span>
+                                <div class="d-flex gap-1 align-items-center">
+                                    <span th:if="${msg.source != null and msg.source == 'MOBILE'}" class="badge bg-primary" style="font-size:0.6rem;">APP</span>
+                                    <span th:if="${msg.source == null or msg.source == 'WEB'}" class="badge bg-secondary" style="font-size:0.6rem;">WEB</span>
+                                    <span class="small text-muted" style="font-size: 0.7rem;" th:text="${msg.createdAt != null ? #temporals.format(msg.createdAt, 'dd/MM') : ''}">Date</span>
+                                </div>
                             </div>
 
-                            <div class="fw-semibold text-gold small text-truncate mb-1" th:text="${msg.subject}">Sujet du message</div>
-                            <p class="text-muted small m-0 text-truncate" style="font-size: 0.8rem;" th:text="${msg.message}">Aperçu du contenu...</p>
+                            <div class="fw-semibold text-gold small text-truncate mb-1" th:text="${msg.subject}">Sujet</div>
+                            <p class="text-muted small m-0 text-truncate" style="font-size: 0.8rem;" th:text="${msg.message}">Aperçu...</p>
+                            <div th:if="${msg.adminReply != null}" class="mt-1 small text-success" style="font-size:0.7rem;">
+                                <i class="fas fa-check-circle me-1"></i>Répondu
+                            </div>
                         </div>
 
-                        <!-- État vide -->
                         <div id="emptyList" th:if="${messages == null or #lists.isEmpty(messages)}" class="text-center py-5 text-muted">
                             <i class="fas fa-inbox fa-2x mb-2 text-gold opacity-50"></i>
                             <p class="small m-0">Aucun message trouvé.</p>
@@ -91,27 +91,26 @@
                 </div>
             </div>
 
-            <!-- COLONNE DROITE : Vue détaillée du message -->
+            <!-- Détail -->
             <div class="col-lg-7 col-xl-8">
-                <div class="cyber-card p-4 h-100 d-flex flex-column justify-content-between" id="detailPanel">
+                <div class="cyber-card p-4 h-100 d-flex flex-column" id="detailPanel">
 
-                    <!-- Placeholder au chargement -->
                     <div id="noSelection" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted py-5">
                         <i class="fas fa-paper-plane fa-3x mb-3 text-gold opacity-25"></i>
-                        <p>Sélectionnez un message dans la liste pour afficher la discussion</p>
+                        <p>Sélectionnez un message dans la liste</p>
                     </div>
 
-                    <!-- Contenu du message (masqué par défaut) -->
                     <div id="selectedContent" class="d-none flex-grow-1 d-flex flex-column">
 
-                        <!-- Header Message -->
+                        <!-- Header -->
                         <div class="d-flex justify-content-between align-items-start border-bottom border-secondary pb-3 mb-3">
                             <div>
                                 <h4 class="text-gold fw-bold mb-1" id="detailSubject">Sujet</h4>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <strong class="text-white" id="detailName">Nom</strong>
                                     <span class="text-muted">&lt;<span id="detailEmail">email</span>&gt;</span>
                                     <span class="badge bg-dark border border-secondary text-gold" id="detailPhone"></span>
+                                    <span class="badge bg-secondary" id="detailSource">WEB</span>
                                 </div>
                             </div>
                             <div class="text-end">
@@ -120,28 +119,62 @@
                                     <a id="markReadBtn" href="#" class="btn btn-sm btn-outline-success" title="Marquer comme lu">
                                         <i class="fas fa-check"></i>
                                     </a>
-                                    <a id="deleteBtn" href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce message ?')" title="Supprimer">
+                                    <a id="deleteBtn" href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce message ?')">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Body Message -->
-                        <div class="flex-grow-1 mb-4">
-                            <label class="text-muted style-micro mb-2">MESSAGE</label>
-                            <div class="p-3 rounded bg-dark border border-secondary text-light leading-relaxed" id="detailBody" style="min-height: 180px; white-space: pre-wrap;">
+                        <!-- Fil de discussion -->
+                        <div class="flex-grow-1 mb-4 overflow-auto" style="max-height: 420px;">
+
+                            <!-- Message client -->
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="avatar-circle" id="clientAvatar">C</div>
+                                    <span class="text-muted style-micro">CLIENT — <span id="clientDateLabel"></span></span>
+                                </div>
+                                <div class="p-3 rounded bg-dark border border-secondary text-light leading-relaxed"
+                                     id="detailBody" style="white-space: pre-wrap;"></div>
                             </div>
+
+                            <!-- Réponse admin existante -->
+                            <div id="adminReplyBlock" class="mb-3 d-none">
+                                <div class="d-flex align-items-center gap-2 mb-2 justify-content-end">
+                                    <span class="text-muted style-micro"><span id="adminReplyDateLabel"></span> — ADMIN</span>
+                                    <div class="avatar-circle admin-avatar"><i class="fas fa-user-shield"></i></div>
+                                </div>
+                                <div class="p-3 rounded admin-reply-bubble text-light leading-relaxed"
+                                     id="adminReplyBody" style="white-space: pre-wrap;"></div>
+                            </div>
+
                         </div>
 
-                        <!-- Zone de Réponse Rapide -->
+                        <!-- Zone de réponse -->
                         <div class="border-top border-secondary pt-3">
-                            <label class="text-gold style-micro mb-2"><i class="fas fa-reply me-1"></i>RÉPONSE RAPIDE</label>
+                            <label class="text-gold style-micro mb-2">
+                                <i class="fas fa-reply me-1"></i>
+                                <span id="replyLabel">RÉPONDRE AU CLIENT</span>
+                            </label>
+
+                            <!-- Info : où va la réponse -->
+                            <div class="alert alert-dark border border-secondary py-2 px-3 mb-2 small" id="replyChannelInfo">
+                                <i class="fas fa-info-circle text-gold me-1"></i>
+                                <span id="replyChannelText">La réponse sera envoyée par email au client.</span>
+                            </div>
+
                             <div class="input-group">
-                                <textarea id="replyText" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="Saisissez votre réponse..."></textarea>
-                                <button type="button" class="btn btn-gold px-4" onclick="sendQuickReply()">
-                                    <i class="fas fa-paper-plane"></i>
+                                <textarea id="replyText" class="form-control bg-dark text-white border-secondary"
+                                          rows="3" maxlength="2000"
+                                          placeholder="Saisissez votre réponse..."></textarea>
+                                <button type="button" class="btn btn-gold px-4" id="sendReplyBtn" onclick="sendReply()">
+                                    <i class="fas fa-paper-plane" id="sendIcon"></i>
                                 </button>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted" id="replyStatus"></small>
+                                <small class="text-muted"><span id="charCount">0</span>/2000</small>
                             </div>
                         </div>
 
@@ -150,11 +183,14 @@
             </div>
 
         </div>
-
     </div>
 </div>
 
 <div th:replace="~{admin/fragments/layout :: scripts}"></div>
+
+<!-- CSRF meta pour AJAX (Spring Security) -->
+<meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
+<meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 <style>
     .cursor-pointer { cursor: pointer; }
@@ -165,47 +201,55 @@
         border-left: 3px solid var(--bs-warning, #ffc107) !important;
         background: rgba(212, 175, 55, 0.05);
     }
-
     .message-item:hover {
         border-color: rgba(212, 175, 55, 0.5) !important;
         transform: translateX(3px);
     }
-
     .message-item.active {
         border-color: #d4af37 !important;
         background: rgba(212, 175, 55, 0.12) !important;
     }
-
     .avatar-circle {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: #111;
-        border: 1px solid #d4af37;
-        color: #d4af37;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 0.85rem;
+        width: 32px; height: 32px; border-radius: 50%;
+        background: #111; border: 1px solid #d4af37;
+        color: #d4af37; display: flex;
+        align-items: center; justify-content: center;
+        font-weight: bold; font-size: 0.85rem;
+    }
+    .admin-avatar {
+        background: #d4af37; color: #111; border-color: #d4af37;
+    }
+    .admin-reply-bubble {
+        background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+        border: 1px solid rgba(212,175,55,0.4);
+        border-left: 3px solid #d4af37;
     }
 </style>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let activeId = null;
     let activeEmail = '';
     let activeSubject = '';
+    let activeSource = 'WEB';
+
+    const CSRF_TOKEN = document.querySelector('meta[name="_csrf"]')?.content || '';
+    const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]')?.content || 'X-CSRF-TOKEN';
 
     function selectMessage(element) {
         document.querySelectorAll('.message-item').forEach(el => el.classList.remove('active'));
         element.classList.add('active');
 
-        const id = element.getAttribute('data-id');
+        activeId = element.getAttribute('data-id');
         const name = element.getAttribute('data-name');
         activeEmail = element.getAttribute('data-email');
         const phone = element.getAttribute('data-phone');
         activeSubject = element.getAttribute('data-subject');
         const message = element.getAttribute('data-message');
         const date = element.getAttribute('data-date');
+        const reply = element.getAttribute('data-reply');
+        const repliedAt = element.getAttribute('data-replied-at');
+        activeSource = element.getAttribute('data-source') || 'WEB';
         const isRead = element.getAttribute('data-read') === 'true';
 
         document.getElementById('noSelection').classList.add('d-none');
@@ -216,28 +260,129 @@
         document.getElementById('detailSubject').textContent = activeSubject;
         document.getElementById('detailBody').textContent = message;
         document.getElementById('detailDate').textContent = date;
+        document.getElementById('clientDateLabel').textContent = date;
+        document.getElementById('clientAvatar').textContent = (name || '?').charAt(0).toUpperCase();
 
+        // Source badge
+        const srcBadge = document.getElementById('detailSource');
+        srcBadge.textContent = activeSource === 'MOBILE' ? 'APP MOBILE' : 'SITE WEB';
+        srcBadge.className = 'badge ' + (activeSource === 'MOBILE' ? 'bg-primary' : 'bg-secondary');
+
+        // Téléphone
         const phoneBadge = document.getElementById('detailPhone');
-        if(phone) {
-            phoneBadge.textContent = "Tél: " + phone;
-            phoneBadge.classList.remove('d-none');
+        if (phone) { phoneBadge.textContent = "Tél: " + phone; phoneBadge.classList.remove('d-none'); }
+        else { phoneBadge.classList.add('d-none'); }
+
+        // Actions
+        document.getElementById('deleteBtn').href = `/admin/messages/delete/${activeId}`;
+        const markReadBtn = document.getElementById('markReadBtn');
+        if (!isRead) { markReadBtn.href = `/admin/messages/read/${activeId}`; markReadBtn.classList.remove('d-none'); }
+        else { markReadBtn.classList.add('d-none'); }
+
+        // Réponse admin existante
+        const replyBlock = document.getElementById('adminReplyBlock');
+        if (reply) {
+            replyBlock.classList.remove('d-none');
+            document.getElementById('adminReplyBody').textContent = reply;
+            document.getElementById('adminReplyDateLabel').textContent = repliedAt || '';
+            document.getElementById('replyText').value = '';
+            document.getElementById('replyLabel').textContent = 'AJOUTER UNE NOUVELLE RÉPONSE';
         } else {
-            phoneBadge.classList.add('d-none');
+            replyBlock.classList.add('d-none');
+            document.getElementById('replyLabel').textContent = 'RÉPONDRE AU CLIENT';
         }
 
-        document.getElementById('deleteBtn').href = `/admin/messages/delete/${id}`;
-
-        const markReadBtn = document.getElementById('markReadBtn');
-        if(!isRead) {
-            markReadBtn.href = `/admin/messages/read/${id}`;
-            markReadBtn.classList.remove('d-none');
+        // Info canal de réponse
+        const channelText = document.getElementById('replyChannelText');
+        if (activeSource === 'MOBILE') {
+            channelText.textContent = "📱 La réponse sera visible dans l'application mobile du client (sous son message).";
         } else {
-            markReadBtn.classList.add('d-none');
+            channelText.textContent = "📧 La réponse sera envoyée par email au client.";
+        }
+
+        document.getElementById('replyStatus').textContent = '';
+        updateCharCount();
+    }
+
+    function updateCharCount() {
+        const len = document.getElementById('replyText').value.length;
+        document.getElementById('charCount').textContent = len;
+    }
+    document.getElementById('replyText').addEventListener('input', updateCharCount);
+
+    async function sendReply() {
+        const text = document.getElementById('replyText').value.trim();
+        const statusEl = document.getElementById('replyStatus');
+        const btn = document.getElementById('sendReplyBtn');
+        const icon = document.getElementById('sendIcon');
+
+        if (!text) {
+            statusEl.textContent = '⚠️ La réponse est vide.';
+            statusEl.className = 'text-warning small';
+            return;
+        }
+        if (!activeId) return;
+
+        btn.disabled = true;
+        icon.className = 'fas fa-spinner fa-spin';
+        statusEl.textContent = 'Envoi en cours...';
+        statusEl.className = 'text-muted small';
+
+        try {
+            const response = await fetch('/admin/messages/reply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [CSRF_HEADER]: CSRF_TOKEN
+                },
+                body: JSON.stringify({
+                    messageId: activeId,
+                    reply: text
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                statusEl.textContent = '✅ ' + (data.message || 'Réponse enregistrée.');
+                statusEl.className = 'text-success small';
+
+                // Mise à jour de l'UI côté client
+                document.getElementById('adminReplyBody').textContent = text;
+                document.getElementById('adminReplyDateLabel').textContent = new Date().toLocaleString('fr-FR');
+                document.getElementById('adminReplyBlock').classList.remove('d-none');
+                document.getElementById('replyText').value = '';
+                updateCharCount();
+
+                // Mettre à jour la carte dans la liste
+                const card = document.querySelector(`.message-item[data-id="${activeId}"]`);
+                if (card) {
+                    card.setAttribute('data-reply', text);
+                    card.setAttribute('data-read', 'true');
+                    card.classList.remove('unread-card');
+                    if (!card.querySelector('.reply-indicator')) {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'mt-1 small text-success reply-indicator';
+                        indicator.style.fontSize = '0.7rem';
+                        indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i>Répondu';
+                        card.appendChild(indicator);
+                    }
+                }
+            } else {
+                statusEl.textContent = '❌ ' + (data.message || 'Erreur inconnue');
+                statusEl.className = 'text-danger small';
+            }
+        } catch (e) {
+            statusEl.textContent = '❌ Erreur réseau : ' + e.message;
+            statusEl.className = 'text-danger small';
+        } finally {
+            btn.disabled = false;
+            icon.className = 'fas fa-paper-plane';
         }
     }
 
     function filterMessages(type, btn) {
-        if(btn) {
+        if (btn) {
             document.querySelectorAll('.style-tabs .nav-link').forEach(b => {
                 b.classList.remove('active', 'text-gold');
                 b.classList.add('text-white');
@@ -245,33 +390,20 @@
             btn.classList.add('active', 'text-gold');
             btn.classList.remove('text-white');
         }
-
-        const items = document.querySelectorAll('.message-item');
-        items.forEach(item => {
+        document.querySelectorAll('.message-item').forEach(item => {
             const isRead = item.getAttribute('data-read') === 'true';
-            if (type === 'all') {
-                item.style.display = 'block';
-            } else if (type === 'unread') {
-                item.style.display = !isRead ? 'block' : 'none';
-            }
+            if (type === 'all') item.style.display = 'block';
+            else if (type === 'unread') item.style.display = !isRead ? 'block' : 'none';
         });
-    }
-
-    function sendQuickReply() {
-        const text = document.getElementById('replyText').value;
-        if (!text) return;
-
-        const mailtoUrl = `mailto:${activeEmail}?subject=Re: ${encodeURIComponent(activeSubject)}&body=${encodeURIComponent(text)}`;
-        window.location.href = mailtoUrl;
     }
 
     document.getElementById('searchInput').addEventListener('input', function(e) {
         const query = e.target.value.toLowerCase();
         document.querySelectorAll('.message-item').forEach(item => {
-            const text = item.innerText.toLowerCase();
-            item.style.display = text.includes(query) ? 'block' : 'none';
+            item.style.display = item.innerText.toLowerCase().includes(query) ? 'block' : 'none';
         });
     });
+    /*]]>*/
 </script>
 
 </body>

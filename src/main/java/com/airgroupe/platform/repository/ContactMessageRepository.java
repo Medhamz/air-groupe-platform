@@ -8,9 +8,19 @@ import java.util.List;
 
 @Repository
 public interface ContactMessageRepository extends JpaRepository<ContactMessage, Long> {
-    long countByIsReadFalse();
+
+    /** Liste complète triée par date décroissante (page Messages) */
     List<ContactMessage> findAllByOrderByCreatedAtDesc();
 
-    // Ajoutez cette méthode pour le dashboard
+    /** Utilisé par l'API mobile pour récupérer les réponses aux devis */
+    List<ContactMessage> findByEmailOrderByCreatedAtDesc(String email);
+
+    /** Badge "non lus" du back-office (isRead = false) */
+    long countByIsReadFalse();
+
+    /** Badge "non lus" (isRead = null OU false) — plus sûr si la colonne est nullable */
+    long countByIsReadFalseOrIsReadIsNull();
+
+    /** 5 derniers messages affichés sur le dashboard */
     List<ContactMessage> findTop5ByOrderByCreatedAtDesc();
 }
